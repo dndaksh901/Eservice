@@ -108,7 +108,7 @@
                     <label for="admin_type">Occupation<span class="text-danger"><sup>*</sup></span></label>
                     <select class="js-example-basic-single form-control" name="occupation_id">
                         @foreach ($occupations as $occupation )
-                            <option value="{{ $occupation->id }}" {{ $profile->occupation_id == $occupation->id ? 'selected' : '' }}>{{ $occupation->occupation_name }}</option>
+                            <option value="{{ $occupation->id }}" {{ (isset($profile) && $profile->occupation_id == $occupation->id) ? 'selected' : '' }}>{{ $occupation->occupation_name }}</option>
                         @endforeach
                       </select>
                 </div>
@@ -135,11 +135,11 @@
                 </div>
                 <div class="form-group">
                     <label for="priceperhour">Price Per Hour (INR)</label>
-                    <input type="text" class="form-control" name="price_per_hour" value="{{ $profile->price_per_hour }}">
+                    <input type="text" class="form-control" name="price_per_hour" value="{{ $profile->price_per_hour ?? '' }}">
                 </div>
                 <div  class="form-group form-outline">
                     <label for="name">Address<span class="text-danger"><sup>*</sup></span></label>
-                    <textarea class="form-control" name="address" id="address" rows="5" value="{{ $profile->address }}">{{ $profile->address }}</textarea>
+                    <textarea class="form-control" name="address" id="address" rows="5" value="{{ $profile->address ?? '' }}">{{ $profile->address ?? ''}}</textarea>
                     @error('address')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -151,7 +151,7 @@
                     <label for="admin_type">State<span class="text-danger"><sup>*</sup></span></label>
                     <select class="js-example-basic-single form-control" name="state_id" id="state_id" onchange="stateChange(this.value)" >
                         @foreach ($states as $state )
-                            <option value="{{ $state->id }}" {{ $profile->state_id == $state->id ? 'selected' : '' }}>{{ $state->name }}</option>
+                            <option value="{{ $state->id }}" {{ isset($profile) && $profile->state_id == $state->id ? 'selected' : '' }}>{{ $state->name }}</option>
                         @endforeach
                       </select>
                 </div>
@@ -160,29 +160,29 @@
                     <label for="admin_type">City<span class="text-danger"><sup>*</sup></span></label>
                     <select class="js-example-basic-single form-control" name="city_id" id="city_id">
                         @foreach ($cities as $city)
-                            <option value="{{ $city->id }}" {{ $profile->city_id == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                            <option value="{{ $city->id }}" {{ isset($profile) && $profile->city_id == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
                         @endforeach
                       </select>
                 </div>
 
                 <div class="form-group">
                     <label for="pincode">Pincode</label>
-                    <input type="text" class="form-control" name="pincode" value="{{ $profile->pincode }}">
+                    <input type="text" class="form-control" name="pincode" value="{{ $profile->pincode ?? '' }}">
                 </div>
 
 
                 <div class="form-group">
                     <label for="latitude">Latitude</label>
-                    <input type="text" class="form-control" name="latitude" id="latitude" value="{{ $profile->pincode }}" readonly>
+                    <input type="text" class="form-control" name="latitude" id="latitude" value="{{ $profile->pincode ?? '' }}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="longitude">Longitude</label>
-                    <input type="text" class="form-control" name="longitude" id="longitude" value="{{ $profile->pincode }}" readonly>
+                    <input type="text" class="form-control" name="longitude" id="longitude" value="{{ $profile->pincode ?? '' }}" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="profile_description">Profile Description</label>
-                    <textarea class="form-control" id="profile_description" rows="3" name="profile_description">{{ $profile->profile_description }}</textarea>
+                    <textarea class="form-control" id="profile_description" rows="3" name="profile_description">{{ $profile->profile_description ?? '' }}</textarea>
                 </div>
 
 
