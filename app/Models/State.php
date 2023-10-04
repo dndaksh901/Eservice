@@ -2,16 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class State extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
-    protected $fillable=['name','country_id','status'];
+    protected $fillable = [
+        'id', 'country_id', 'name', 'status'
+    ];
 
-    public function country(){
-        return $this->belongsTo('App\Models\Country');
+    public function cities(): HasMany
+    {
+        return $this->hasMany(City::class);
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
     }
 }

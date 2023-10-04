@@ -1,573 +1,379 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
-@section('content')
 <style>
+    .error{
+        color:red;
+        font-weight: 600;
+        font-size: 0.7rem;
+    }
+    @media only screen and (max-width: 460px) {
 
-#search{
-    margin: 20px 0;
-}
-.grid {
-    position: relative;
-    width: 100%;
-    background: #fff;
-    color: #666666;
-    border-radius: 2px;
-    margin-bottom: 25px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.grid .grid-body {
-    padding: 15px 20px 15px 20px;
-    font-size: 0.9em;
-    line-height: 1.9em;
-}
-
-.search table tr td.rate {
-    color: #f39c12;
-    line-height: 50px;
-}
-
-.search table tr:hover {
-    cursor: pointer;
-}
-
-.search table tr td.image {
-	width: 50px;
-}
-
-.search table tr td img {
-	width: 50px;
-	height: 50px;
-}
-
-.search table tr td.rate {
-	color: #f39c12;
-	line-height: 50px;
-}
-
-.search table tr td.price {
-	font-size: 1.5em;
-	line-height: 50px;
-}
-
-.search #price1,
-.search #price2 {
-	display: inline;
-	font-weight: 600;
-}
-.pagination {
-    position: relative;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 40px;
-    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.5);
-    width: fit-content;
-    left: 50%;
-    top: 30px;
-}
-.pagination li {
-  display: inline-block;
-  list-style: none;
-}
-.pagination li a {
-  display: block;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  background-color: #fff;
-  text-align: center;
-  text-decoration: none;
-  color: #252525;
-  border-radius: 4px;
-  margin: 5px;
-  box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
-}
-.pagination li a:hover, .pagination li a.active {
-  color: #fff;
-  background-color: var(--yellow-color);
-}
-.pagination li:first-child a {
-  border-radius: 40px 0 0 40px;
-}
-.pagination li:last-child a {
-  border-radius: 0 40px 40px 0;
-}
-
-
-.nav>li>a.userdd {
-    padding: 5px 15px
-}
-.userprofile {
-	width: 100%;
-	float: left;
-	clear: both;
-	margin: 12px auto
-}
-.userprofile .userpic {
-	height: 100px;
-	width: 100px;
-	clear: both;
-	margin: 0 auto;
-	display: block;
-	border-radius: 100%;
-	box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	-webkit-box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	-ms-box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	position: relative;
-}
-.userprofile .userpic .userpicimg {
-	height: auto;
-	width: 100%;
-	border-radius: 100%;
-}
-.username {
-	font-weight: 400;
-	font-size: 20px;
-	line-height: 20px;
-	color: #000000;
-	margin-top: 20px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-.username+p {
-	color: #607d8b;
-	font-size: 13px;
-	line-height: 15px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-.settingbtn {
-	height: 30px;
-	width: 30px;
-	border-radius: 30px;
-	display: block;
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
-	line-height: 30px;
-	vertical-align: middle;
-	text-align: center;
-	padding: 0;
-	box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.15);
-	-webkit-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.15);
-	-ms-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.15);
-}
-.userprofile.small {
-	width: auto;
-	clear: both;
-	margin: 0px auto;
-}
-.userprofile.small .userpic {
-	height: 40px;
-	width: 40px;
-	margin: 0 10px 0 0;
-	display: block;
-	border-radius: 100%;
-	box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	-webkit-box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	-ms-box-shadow: 0px 3px 10px 0 rgba(0, 0, 0, 0.15);
-	position: relative;
-	float: left;
-}
-.userprofile.small .textcontainer {
-	float: left;
-	max-width: 100px;
-	padding: 0
-}
-.userprofile.small .userpic .userpicimg {
-	min-height: 100%;
-	width: 100%;
-	border-radius: 100%;
-}
-.userprofile.small .username {
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 21px;
-	color: #000000;
-	margin: 0px;
-	float: left;
-	width: 100%;
-}
-.userprofile.small .username+p {
-	color: #607d8b;
-	font-size: 13px;
-	float: left;
-	width: 100%;
-	margin: 0;
-}
-/*==============================*/
-/*====== Social Profile css =====*/
-/*==============================*/
-.countlist h3 {
-	margin: 0;
-	font-weight: 400;
-	line-height: 28px;
-}
-.countlist {
-	text-transform: uppercase
-}
-.countlist li {
-	padding: 15px 30px 15px 0;
-	font-size: 14px;
-	text-align: left;
-}
-.countlist li small {
-	font-size: 12px;
-	margin: 0
-}
-.followbtn {
-	float: right;
-	margin: 22px;
-}
-.userprofile.social {
-	background: url(http://placehold.it/500x300) no-repeat top center;
-	background-size: 100%;
-	padding: 50px 0;
-	margin: 0
-}
-.userprofile.social .username {
-	color: #ffffff
-}
-.userprofile.social .username+p {
-	color: #ffffff;
-	opacity: 0.8
-}
-.postbtn {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-	z-index: 9
-}
-.status-upload {
-	width: 100%;
-	float: left;
-	margin-bottom: 15px
-}
-.posttimeline .panel {
-	margin-bottom: 15px
-}
-.commentsblock {
-	background: #f8f9fb;
-}
-.nopaddingbtm {
-	margin-bottom: 0
-}
-/*==============================*/
-/*====== Recently connected  heading =====*/
-/*==============================*/
-.memberblock {
-	width: 100%;
-	float: left;
-	clear: both;
-	margin-bottom: 15px
-}
-.member {
-	width: 24%;
-	float: left;
-	margin: 2px 1% 2px 0;
-	background: #ffffff;
-	border: 1px solid #d8d0c3;
-	padding: 3px;
-	position: relative;
-	overflow: hidden
-}
-.memmbername {
-	position: absolute;
-	bottom: -30px;
-	background: rgba(0, 0, 0, 0.8);
-	color: #ffffff;
-	line-height: 30px;
-	padding: 0 5px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	width: 100%;
-	font-size: 11px;
-	transition: 0.5s ease all;
-}
-.member:hover .memmbername {
-	bottom: 0
-}
-.member img {
-	width: 100%;
-	transition: 0.5s ease all;
-}
-.member:hover img {
-	opacity: 0.8;
-	transform: scale(1.2)
-}
-
-.panel-default>.panel-heading {
-    color: #607D8B;
-    background-color: #ffffff;
-    font-weight: 400;
-    font-size: 15px;
-    border-radius: 0;
-    border-color: #e1eaef;
-}
-
-
-
-.btn-circle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.428571429;
-}
-
-.page-header.small {
-    position: relative;
-    line-height: 22px;
-    font-weight: 400;
-    font-size: 20px;
-}
-
-.favorite i {
-    color: #eb3147;
-}
-
-.btn i {
-    font-size: 17px;
-}
-
-.panel {
-    box-shadow: 0px 2px 10px 0 rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: 0px 2px 10px 0 rgba(0, 0, 0, 0.05);
-    -webkit-box-shadow: 0px 2px 10px 0 rgba(0, 0, 0, 0.05);
-    -ms-box-shadow: 0px 2px 10px 0 rgba(0, 0, 0, 0.05);
-    transition: all ease 0.5s;
-    -moz-transition: all ease 0.5s;
-    -webkit-transition: all ease 0.5s;
-    -ms-transition: all ease 0.5s;
-    margin-bottom: 35px;
-    border-radius: 0px;
-    position: relative;
-    border: 0;
-    display: inline-block;
-    width: 100%;
-}
-
-.panel-footer {
-    padding: 10px 15px;
-    background-color: #ffffff;
-    border-top: 1px solid #eef2f4;
-    border-bottom: 2px solid #ffc107;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    color: #607d8b;
-}
-
-
-
-.connect-detail{
-    text-decoration: none;
-    color: #212529;
-    font-weight: 600;
-}
-@media only screen and (max-width: 460px) {
     #filter-section{
-    display: none;
+        display: none;
     }
 }
 </style>
-  <div class="main-content" id="search">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<div class="container-fluid">
-<div class="row">
-
-  <!-- BEGIN SEARCH RESULT -->
-  <div class="col-md-12">
-    <div class="grid search">
-      <div class="grid-body">
-        <div class="row">
-          <!-- BEGIN FILTERS -->
-          <div class="col-md-3">
-            <h2 class="grid-title"><i class="fa fa-filter"></i> Filters</h2>
-            <hr>
-
-            <!-- BEGIN FILTER BY CATEGORY -->
-            <h4 class="filter-section my-3">Select Categories:</h4>
-            <div class="my-3" id="filter-section">
-            @foreach ($occupations as $occupation)
-            <div class="custom-control custom-radio">
-                <input type="radio" class="icheck custom-control-input" id="occupation_id.{{$occupation->id}}" name="occupation_id" value="{{$occupation->id}}">
-                <label class="custom-control-label" for="occupation_id.{{$occupation->id}}">{{ $occupation->occupation_name	 }}</label>
-              </div>
-              @endforeach
+@section('content')
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <div class="row align-items-center text-center">
+                <div class="col-md-12 col-12">
+                    <h2 class="breadcrumb-title">Search</h2>
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                {{ isset($search_occupation) ? $search_occupation->occupation_name : 'No Found' }},
+                                {{ $city }}, {{ $state }}
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <!-- END FILTER BY CATEGORY -->
-          </div>
-          <!-- END FILTERS -->
-
-          <!-- BEGIN RESULT -->
-          <div class="col-md-9">
-            <h2><i class="fa fa-file-o"></i> Result</h2>
-            <hr>
-
-            <!-- BEGIN SEARCH INPUT -->
-            <div class="input-group">
-              <input type="text" class="form-control" id="search-text">
-              <span class="input-group-btn">
-                <button class="btn btn-yellow" type="button" onclick="searchworker()" id="search-btn" disabled><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-            <!-- END SEARCH INPUT -->
-            <p>Showing all results matching <strong>{{  isset($search_occupation) ? $search_occupation->occupation_name : 'No Found' }}, {{ $city}}, {{ $state}}</strong></p>
-
-            <div class="padding"></div>
-
+    <div class="list-content">
+        <div class="container">
             <div class="row">
-              <!-- BEGIN ORDER RESULT -->
-              <div class="col-sm-6">
-                <div class="btn-group">
-                  {{-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    Order by <span class="caret"></span>
-                  </button> --}}
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Name</a></li>
-                    <li><a href="#">Date</a></li>
-                    <li><a href="#">View</a></li>
-                    <li><a href="#">Rating</a></li>
-                  </ul>
-                </div>
-              </div>
-              <!-- END ORDER RESULT -->
-
-              {{-- <div class="col-md-6 text-right">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default active"><i class="fa fa-list"></i></button>
-                  <button type="button" class="btn btn-default"><i class="fa fa-th"></i></button>
-                </div>
-              </div> --}}
-            </div>
-
-                <div class="container">
-                    <div class="row">
-
-                        @if(isset($profiles))
-                        @foreach ($profiles as $key=>$profile)
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="panel userlist">
-                              <div class="panel-body text-center">
-                                <div class="userprofile">
-                                  <div class="userpic"> <img src="{{ asset('vendor/vendor_image/'.$profile->vendor->avatar ?? 'avatar.jpg' )}}" alt="" class="userpicimg"> </div>
-                                  <h3 class="username">{{ $profile->vendor->name ?? $profile->vendor->username }}</h3>
-                                  <p>{{ $profile->city->name ?? '' }},{{ $profile->state->name ?? '' }}</p>
-                                  <p>Experience: {{ $profile->experience_year }} Years, {{ $profile->experience_month }} Months</p>
+                <div class="col-lg-4 theiaStickySidebar">
+                    <div class="listings-sidebar">
+                        <div class="card ">
+                            <h4 class="filter-section">
+                                <img src="{{ asset('assets/img/details-icon.svg') }}" alt="details-icon" />
+                                Filter
+                            </h4>
+                            <div id="filter-section">
+                                <div class="filter-content looking-input form-group">
+                                    <input type="text" class="form-control" placeholder="What are you looking for?"
+                                        id="search-text" onblur="searchworker()" />
                                 </div>
-                                <p><a href="mailto:{{ $profile->vendor->email }}" class="connect-detail">{{ $profile->vendor->email }}</a> | <a href="tel:{{ $profile->vendor->mobile }}" class="connect-detail">{{ $profile->vendor->mobile }}</a></p>
-                                {{-- <div class="socials tex-center"> <a href="" class="btn btn-circle btn-primary "><i class="fa fa-facebook"></i></a> <a href="" class="btn btn-circle btn-danger "><i class="fa fa-google-plus"></i></a> <a href="" class="btn btn-circle btn-info "><i class="fa fa-twitter"></i></a> <a href="" class="btn btn-circle btn-warning "><i class="fa fa-envelope"></i></a> </div> --}}
-                              </div>
-                              <div class="panel-footer"> <a href="" class="btn btn-link">Connect</a>
-                                {{-- <a href="" class="btn btn-link pull-right favorite"><i class="fa fa-heart-o"></i></a>  --}}
-                            </div>
-                            </div>
-                          </div>
-                          @endforeach
 
-                          @endif
-                          @if(count($profiles) == 0)
-                          <div class="col-12"><b>Not Found Someone..</b></div>
-                          @endif
-
-                            @if($profiles->count())
-                                <div class="row">
-                                    <div class="col">
-                                        {{ $profiles->links() }}
+                                <div class="filter-content form-group amenities">
+                                    <h4>Occupations</h4>
+                                    <ul>
+                                        @foreach ($occupations as $occupation)
+                                            <li>
+                                                <label class="custom_check">
+                                                    <input type="radio" id="occupation_id.{{ $occupation->id }}"
+                                                        name="occupation_id" value="{{ $occupation->occupation_name }}"
+                                                        {{ isset($search_occupation) && $search_occupation->occupation_name == $occupation->occupation_name ? 'checked' : '' }} />
+                                                    <span class="checkmark"></span> {{ $occupation->occupation_name }}
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                {{-- <div class="filter-content form-group amenities radius">
+                                    <div class="slidecontainer">
+                                        <div class="slider-info">
+                                            <h4>Radius</h4>
+                                            <div class="demo"><span>50</span> Radius</div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="filter-range">
+                                            <input type="text" class="input-range" />
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                <div class="filter-content amenities mb-0">
+                                    <h4>Price Range</h4>
+                                    <div class="form-group mb-0">
+                                        <input type="number" class="form-control" placeholder="Min" max="50000" id="min_price" name="min_price" value="{{ $min_price }}" />
+                                        <input type="number" class="form-control me-0" placeholder="Max" max="50000" id="max_price" name="max_price" value="{{ $max_price }}"/>
+                                    </div>
+                                    <div class="error" id="price_error"></div>
+                                    <div class="search-btn">
+                                        <button class="btn btn-primary" type="button"  onclick="filterButton('submit')">
+                                            <i class="fa fa-search" aria-hidden="true"></i> Search
+                                        </button>
+                                        <button class="btn btn-reset mb-0" type="button"  onclick="resetButton('reset')">
+                                            <i class="fas fa-light fa-arrow-rotate-right"></i>
+                                            Reset Filters
+                                        </button>
                                     </div>
                                 </div>
-                            @endif
-
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row sorting-div">
+                        <div class="col-lg-4 col-md-4 col-sm-4 align-items-center d-flex">
+                            <div class="count-search">
+                                <p>Showing <span>{{($profiles->currentpage()-1)*$profiles->perpage()+1}} to {{$profiles->currentpage()*$profiles->perpage()}}</span> of {{$profiles->total()}} Results</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 align-items-center">
+                            {{-- <div class="sortbyset">
+                                <span class="sortbytitle">Sort by</span>
+                                <div class="sorting-select">
+                                    <select class="form-control select" name="filter" id="price-filter">
+                                        <option value="default">Default</option>
+                                        <option value="low">Price Low to High</option>
+                                        <option value="high">Price High to Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid-listview">
+                                <ul>
+                                    <li>
+                                        <a href="listing-list-sidebar.html">
+                                            <i class="feather-list"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="listing-grid-sidebar.html" class="active">
+                                            <i class="feather-grid"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div> --}}
+                        </div>
+                    </div>
+                    <div class="blog-listview">
+                        @if(isset($profiles))
+                        @forelse ($profiles as $key=>$profile)
+                            <div class="card">
+
+                                <div class="blog-widget">
+                                    <div class="blog-img">
+                                        <a href="/">
+                                            <img src="{{ asset('vendor/vendor_image/'.$profile->vendor->avatar ?? 'avatar.jpg' )}}" class="img-fluid" alt="blog-img">
+                                        </a>
+
+                                        <div class="fav-item">
+
+                                            {{-- <span class="Featured-text">Featured</span> --}}
+                                            @if(Auth::guard('web')->check() && !empty($profile->favorite))
+                                            <a href="javascript:void(0)" class="fav-icon selected" onclick="fav('del',{{$profile->id}},{{$profile->vendor_id}},{{ Auth::id() }})">
+                                                <i class="feather-heart"></i>
+                                            </a>
+                                            @elseif(Auth::guard('web')->check() && empty($profile->favorite))
+                                            <a href="javascript:void(0)" class="fav-icon" onclick="fav('fav',{{$profile->id}},{{$profile->vendor_id}},{{ Auth::id() }})">
+                                                <i class="feather-heart"></i>
+                                            </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="bloglist-content">
+                                        <div class="card-body">
+                                            <div class="blogfeaturelink">
+                                                {{-- <div class="blog-features">
+                                                    <a href="javascript:void(0);"><span>  {!! $profile->profile_status == 1 ? '<i
+                                                        class="fa-regular fa-circle-stop text-success"></i> Available' : '<i
+                                                        class="fa-regular fa-circle-stop"></i> Not Available' !!}</span></a>
+                                                </div> --}}
+                                                <div class="blog-author">
+                                                    <div class="blog-author-img">
+                                                        <img src="{{ asset('vendor/vendor_image/'.$profile->vendor->avatar ?? 'avatar.jpg' )}}" alt="author">
+                                                    </div>
+                                                    <a href="javascript:void(0);">{{ $profile->experience_year }} Years, {{ $profile->experience_month }} Months</a>
+                                                </div>
+                                            </div>
+                                            <h6><a href="/">{{ $profile->vendor->name ?? $profile->vendor->username }}
+                                                    House</a></h6>
+                                            <div class="blog-location-details">
+                                                <div class="location-info">
+                                                    <i class="feather-map-pin"></i> {{ $profile->city->name ?? '' }},{{ $profile->state->name ?? '' }}
+                                                </div>
+
+                                               @if(Auth::guard('vendor')->check() || Auth::check())
+                                                <div class="location-info">
+                                                    <i class="feather-phone-call"></i> <a href="tel:{{ $profile->vendor->mobile }}" >{{ $profile->vendor->mobile }}</a>
+                                                </div>
+                                                <div class="location-info">
+                                                    <i class="feather-mail"></i> <a href="mailto:{{ $profile->vendor->email }}">{{ $profile->vendor->email }}</a>
+                                                </div>
+                                                @endif
+
+                                            </div>
+                                            <p class="ratings">
+                                                <span>{{ number_format($profile->rating, 1) }}</span> ( 50 Reviews )
+                                            </p>
+                                            <div class="amount-details">
+                                                <div class="amount">
+                                                    <span class="validrate">₹ {{ $profile->price_per_hour }}</span>
+                                                    <span>₹ {{ $profile->price_per_hour + rand(10,100) }}</span>
+                                                </div>
+                                                @if(Auth::guard('admin')->check())
+                                                <a href="/">View details</a>
+                                                @elseif(Auth::guard('web')->check())
+                                                <a href="{{ url('/vendor-profile/'.$profile->id) }}">View details</a>
+                                                @else
+                                                <a href="{{ url('login') }}">View details</a>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @empty
+                            <h4>No Result Found<h4>
+                        @endforelse
+                        @endif
+
+                        <div class="blog-pagination">
+                            @if ($profiles->hasPages())
+                            <nav>
+                                <ul class="pagination">
+                                    @if ($profiles->onFirstPage())
+                                    <li class="page-item previtem disabled">
+                                        <a class="page-link" href="#"
+                                        tabindex="-1"><i class="fas fa-regular fa-arrow-left"></i>
+                                            Prev</a>
+                                    </li>
+                                    @else
+                                    <li class="page-item previtem">
+                                        <a class="page-link"
+                                        href="{{ $profiles->previousPageUrl() }}"><i class="fas fa-regular fa-arrow-left"></i>
+                                              Prev</a>
+                                      </li>
+                                    @endif
+
+                                    <li class="justify-content-center pagination-center">
+                                        <div class="pagelink">
+                                            <ul>
+                                    @foreach ($profiles as $element)
+                                        @if (is_string($element))
+                                        <li class="page-item disabled">{{ $element }}</li>
+                                        @endif
+
+                                        @if (is_array($element))
+                                        @foreach ($element as $page => $url)
+                                        @if ($page == $paginator->currentPage())
+                                        <li class="page-item active">
+                                            <a class="page-link">{{ $page }}</a>
+                                        </li>
+                                        @else
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                            href="{{ $url }}">{{ $page }}</a>
+                                        </li>
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                        @endforeach
+
+                                    </ul>
+                                </div>
+                            </li>
+                                    @if($profiles->hasMorePages())
+                                    <li class="page-item nextlink">
+                                        <a class="page-link" href="{{ $profiles->nextPageUrl() }}">Next <i
+                                                class="fas fa-regular fa-arrow-right"></i></a>
+                                    </li>
+                                    @else
+                                    <li class="page-item nextlink disabled">
+                                        <a class="page-link" href="#">Next <i
+                                                class="fas fa-regular fa-arrow-right"></i></a>
+                                    </li>
+                                    @endif
+                                </ul>
+                            </nav>
+                            @endif
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
-            <!-- END TABLE RESULT -->
-
-
-          </div>
-          <!-- END RESULT -->
         </div>
-      </div>
     </div>
-  </div>
-  <!-- END SEARCH RESULT -->
-</div>
-</div>
-  </div>
 @endsection
 
 @push('js')
+    <script>
+        var location_data = JSON.parse(localStorage.getItem('currentLocation'));
 
-   <script>
-     var location_data = JSON.parse(localStorage.getItem('currentLocation'));
-        $('input:radio[name="occupation_id"]').change(
-            function(){
-                if ($(this).is(':checked')) {
+            /*filter function start */
 
-                    let occupation = $(this).val();
-                    let state = "{{ $state }}" ?? location_data.regionName;
-                    let city = "{{ $city }}" ??  location_data.cityName;
-                    let url ="{{ url('search') }}/"+occupation+'/'+state+'/'+city;
-                    window.location.href=url;
+            function filterButton($btn){
+                $('#price_error').empty();
+                let occupation =  $('input[name="occupation_id"]:checked').val();
+                let state = "{{ $state }}" ?? location_data.regionName;
+                let city = "{{ $city }}" ?? location_data.cityName;
+                let min_price = Number($('#min_price').val());
+                let max_price = Number($('#max_price').val());
+
+                if(!min_price){
+                    min_price = 0;
                 }
-        });
+                if(!max_price){
+                    max_price = 1000;
+                }
 
-        $(document).ready(function(){
+                if(max_price < min_price){
+                    $('#price_error').text(`Min price can not be greater than Max price.`)
+                }
+                let url = "{{ url('search-by-name') }}/" + occupation + '/' + city + '/' + state +'/' +min_price +'/' +max_price;
+                window.location.href = url;
+            }
+
+            function resetButton($btn){
+                $('#price_error').empty();
+                let occupation =  $('input[name="occupation_id"]:checked').val();
+                let state = "{{ $state }}" ?? location_data.regionName;
+                let city = "{{ $city }}" ?? location_data.cityName;
+
+                let url = "{{ url('search') }}/" + occupation + '/' + city + '/' + state;
+                window.location.href = url;
+            }
+
+        $(document).ready(function() {
             var newWindowWidth = $(window).width();
             if (newWindowWidth < 461) {
                 $(".filter-section").click(function(){
-                    $("#filter-section").fadeToggle('slow');
+                    $("#filter-section").fadeToggle('2000');
 
                 });
             }
 
-            $('#search-text').on('keyup', function() {
-                let occupation = $('#search-text').val();
-                    if(occupation.length < 3){
-                    $('#search-btn').attr('disabled', 'disabled');
-                    }else{
-                        $('#search-btn').removeAttr("disabled");
+     });
+
+
+     function fav(status,profile_id,vendor_id,user_id){
+alert(status);
+                $.ajax({
+                    url:"{{ url('favorite') }}",
+                    type:"post",
+                    data:{status,profile_id,vendor_id,user_id,'_token':"{{ csrf_token() }}"},
+                    success:function(data){
+                        console.log(data);
+                        if(data == 1){
+                            window.location.reload();
+                        }
                     }
-            });
+                });
+}
+        $('#search-text').keypress(function(event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                console.log(event);
+                return false;
+            }
+        });
+        $('#price-filter').onchange(function(event) {
+            let price_filter = $(this).val();
+                console.log(event);
+
 
         });
 
-        function searchworker(){
-                    let occupation = $('#search-text').val();
-
-                    if(occupation.length < 3){
-                       $('#search-btn').attr('disabled', 'disabled');
-                       return false;
-                    }else{
-                        $('#search-btn').removeAttr("disabled");
-                    }
-
-                    let state = "{{ $state }}" ?? location_data.regionName;
-                    let city = "{{ $city }}" ??  location_data.cityName;
-                    let url ="{{ url('search-by-name') }}/"+occupation+'/'+state+'/'+city;
-                    window.location.href=url;
+        function searchworker() {
+            let occupation = $('#search-text').val();
+            if (occupation.length < 3) {
+                $('#search-btn').attr('disabled', 'disabled');
+                return false;
+            } else {
+                $('#search-btn').removeAttr("disabled");
             }
 
-            let search_enter = document.getElementById("search-text");
-            search_enter.addEventListener("keydown", function (e) {
-                if(e.keyCode == 13){ //checks whether the pressed key is "Enter"
-                searchworker();
-
-            }
-         });
-
-   </script>
-
+            let state = "{{ $state }}" ?? location_data.regionName;
+            let city = "{{ $city }}" ?? location_data.cityName;
+            let url = "{{ url('search') }}/" + occupation + '/' + city + '/' +state;
+            window.location.href = url;
+        }
+    </script>
 @endpush

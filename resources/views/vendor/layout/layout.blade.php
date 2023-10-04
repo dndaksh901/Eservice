@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="{{ url('admin/css/vertical-layout-light/style.css') }}">
         <!-- endinject -->
         <link rel="shortcut icon" href="{{ asset('admin/images/favicon.png') }}" />
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
         @yield('links')
 
     </head>
@@ -37,9 +37,6 @@
             <div class="main-panel">
                 @yield('content')
                 <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                {{-- @include('vendor.layout.footer') --}}
-                <!-- partial -->
             </div>
             <!-- main-panel ends -->
         </div>
@@ -52,7 +49,7 @@
         <!-- Plugin js for this page -->
         <script src="{{ url('admin/vendors/chart.js/Chart.min.js') }}"></script>
         <script src="{{ url('admin/vendors/datatables.net/jquery.dataTables.js') }}"></script>
-        <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+        <script src="{{ url('admin/vendors/datatables.net/jquery.dataTables.min.js') }}"></script>
         <script src="{{ url('admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
         <script src="{{ url('admin/js/dataTables.select.min.js') }}"></script>
         <!-- End plugin js for this page -->
@@ -68,8 +65,10 @@
         <script src="{{ url('admin/js/Chart.roundedBarCharts.js') }}"></script>
         <!-- End custom js for this page-->
         <!-- Select 2 js-->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
+        <script src="{{ url('admin/vendors/select2/select2.min.js') }}"></script>
         <!-- End Select 2 js-->
+
         <script>
             function cl(data){
                 console.log(data);

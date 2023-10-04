@@ -6,8 +6,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Vendor\VendorController;
 use Illuminate\Http\Request;
 use Stevebauman\Location\Facades\Location;
@@ -27,6 +29,8 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 //     return view('index');
 // });
 Route::get('/', [UserController::class, 'index']);
+//Categories
+Route::get('categories',[HomeController::class,'allCategories']);
 
 Route::get('lang/home', [LangController::class, 'index']);
 Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
@@ -44,6 +48,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::view('/test', 'testpage');
+Route::view('/contact-us', 'contact');
+Route::get('/contact-us', [UserController::class, 'contactUs']);
+Route::post('/contact-us', [UserController::class, 'ContactUsForm'])->name('contact.store');
 
 Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm']);
 Route::get('/vendor/login', [LoginController::class,'showVendorLoginForm']);
@@ -59,8 +66,9 @@ Route::post('/vendor/register', [RegisterController::class,'createVendor']);
 
 //Search Skilled Workers
 Route::get('search',[VendorController::class,'searchView']);
-Route::get('search/{occupation_id?}/{state_id?}/{city_id?}',[VendorController::class,'search']);
-Route::get('search-by-name/{occupation?}/{state_id?}/{city_id?}',[VendorController::class,'searchByName']);
+Route::get('search/{occupation_id?}/{city_id?}/{state_id?}',[VendorController::class,'search']);
+Route::get('search-by-name/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}',[VendorController::class,'searchByName']);
+Route::post('search',[VendorController::class,'ajaxSearch']);
 
 Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor'])->group(function () {
 // Route::view('/vendor', 'vendor.vendor');
@@ -77,17 +85,21 @@ Route::controller(VendorController::class)->prefix('vendor')->middleware(['middl
       // Vendor update Password
       Route::match(['get','post'],'update-vendor-password','updateVendorPassword');
       // Vendor update Detail
-      Route::match(['get','post'],'update-profile-detail','updateprofileDetail');
+      Route::match(['get','post'],'profession','updateProfession');
       // Vendor update Detail
       Route::match(['get','post'],'update-personal_detail','updatePersonalDetail');
       //check Vendor current Password
       // Vendor update Detail
-      Route::match(['get','post'],'enquiry','enquiryOfUser');
+    //   Route::match(['get','post'],'enquiry','enquiryOfUser');
+    //   Route::match(['get','post'],'listing','enquiryOfListing');
       //check Vendor current Password
       Route::post('check-current-password','vendorCurrentPassword');
       //update Vendor current Password
       Route::post('update-current-password','updateVendorCurrentPassword');
 
+      Route::get('message','messageList');
+      Route::get('read-status-update/{id}','notificationStatusUpdate');
+      Route::view('profile', 'vendor.profile');
 });
 
 Route::controller(App\Http\Controllers\Admin\AdminController::class)->prefix('admin')->middleware(['middleware' => 'auth:admin'])->group(function () {
@@ -109,14 +121,22 @@ Route::controller(App\Http\Controllers\Admin\AdminController::class)->prefix('ad
      Route::get('vendors-detail','vendorList')->name('admin.vendorList');
 });
 Route::group(['middleware' => 'auth'], function () {
-
+    Route::get('vendor-profile/{id}',[VendorController::class,'vendorDetail'])->name('vendor.detail');
+    Route::post('reviews', [ReviewController::class,'index']);
+    Route::post('create-review', [ReviewController::class,'CreateReview']);
 });
 
 Route::get('logout', [LoginController::class,'logout']);
+Route::get('get-countries',[AddressController::class,'countryGet']);
 Route::get('city-by-state/{id}',[AddressController::class,'cityGet']);
 Route::get('city-by-state-by-name/{name}',[AddressController::class,'cityGetByStateName']);
 
 //Current Location Detail
 Route::get('ip-address',[UserController::class,'getIpDetail']);
+Route::get('userdata',[UserController::class,'showUser']);
+Route::get('country',[VendorController::class,'countrydata']);
+Route::post('notification',[NotificationController::class,'store'])->name('notification.store');
+Route::post('favorite',[VendorController::class,'favorite']);
 
 });
+

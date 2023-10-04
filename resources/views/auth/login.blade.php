@@ -1,109 +1,149 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('content')
 <style>
-    .divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-.h-custom {
-height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
-}
+    .active-text{
+        color:#c10037;
+    }
+    .error{
+        color:var(--bs-danger);
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
 </style>
 
-<div>
-    <section class="card vh-100">
-        <div class="container h-custom">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-md-9 col-lg-6 col-xl-5">
-              <img src="{{ asset('imgs/signin.png') }}" class="img-fluid" alt="Sample image">
+
+<main>
+    <div class="breadcrumb-bar">
+        <div class="container">
+          <div class="row align-items-center text-center">
+            <div class="col-md-12 col-12">
+
+              <h2 class="breadcrumb-title">Login</h2>
+              <nav aria-label="breadcrumb" class="page-breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">
+                    {{ isset($url) ? ucwords($url) : ""}} Login
+                  </li>
+                </ol>
+              </nav>
             </div>
-            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+          </div>
+        </div>
+      </div>
+
+      <div class="login-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-lg-5 mx-auto">
+              <div class="login-wrap">
+                <div class="interset-btn">
+                    <div class="status-toggle d-inline-flex align-items-center">
+                        <span class="@if(!isset($url)) active-text @endif">User</span>
+                        <input type="checkbox" id="check" class="check" @isset($url) checked @endisset onchange="changePage()"/>
+                        <label for="check" class="checktoggle">checkbox</label>
+                        <span class="@if(isset($url)) active-text @endif">Vendor</span>
+                    </div>
+                </div>
+                <div>
+                    @if($errors->any())
+                      <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="error">{{ $error }}</li>
+                    @endforeach
+                      </ul>
+                @endif
+                </div>
+                <div class="login-header">
+                  <h3>{{isset($url) ? 'Vendor' : 'User'}} Login</h3>
+                  {{-- <h4>Welcome Back</h4> --}}
+                  <p>Please Enter your Details</p>
+                </div>
+
                 @isset($url)
                 <form method="POST" action='{{ url("$url/login") }}' aria-label="{{ __('Login') }}">
                 @else
                 <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                 @endisset
                     @csrf
-                <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                  <h3 class="fw-bold text-center mb-3">{{ isset($url) ? ucwords($url) : ""}}  {{ __('Login') }} </h3>
-                  {{-- <button type="button" class="btn btn-primary btn-floating mx-1">
-                    <i class="fab fa-facebook-f"></i>
-                  </button> --}}
-
-                  {{-- <button type="button" class="btn btn-primary btn-floating mx-1">
-                    <i class="fab fa-twitter"></i>
-                  </button> --}}
-
-                  {{-- <button type="button" class="btn btn-primary btn-floating mx-1">
-                    <i class="fab fa-linkedin-in"></i>
-                  </button> --}}
-                </div>
-
-                {{-- <div class="divider d-flex align-items-center my-4">
-                  <p class="text-center fw-bold mx-3 mb-0">*</p>
-                </div> --}}
-
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input type="email" id="email" class="form-control form-control-lg"
-                    placeholder="Enter a valid email address" name="email"/>
-                  {{-- <label class="form-label" for="email">Email address</label> --}}
-                </div>
-
-                <!-- Password input -->
-                <div class="form-outline mb-3">
-                  <input type="password" id="password" class="form-control form-control-lg"
-                    placeholder="Enter password" name="password"/>
-                  {{-- <label class="form-label" for="password">Password</label> --}}
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center">
-                  <!-- Checkbox -->
-                  <div class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                    <label class="form-check-label" for="remember">
-                        {{ __('Remember Me') }}
-                    </label>
+                  <div class="form-group group-img">
+                    <div class="group-img">
+                      <i class="feather-mail"></i>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Email Address"
+                        name="email"
+                      />
+                    </div>
                   </div>
+                  <div class="form-group">
+                    <div class="pass-group group-img">
+                      <i class="feather-lock"></i>
+                      <input
+                        type="password"
+                        class="form-control pass-input"
+                        placeholder="Password"
+                        name="password"
+                      />
+                      <span class="toggle-password feather-eye" id="toggle-password"></span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                      <label class="custom_check">
 
-                  @if (Route::has('password.request'))
-                  <a class="btn btn-link" href="{{ route('password.request') }}">
-                      {{ __('Forgot Your Password?') }}
-                  </a>
-                   @endif
-                  {{-- <a href="#!" class="text-body">Forgot password?</a> --}}
-                </div>
+                        <input class="rememberme"
+                        type="checkbox"
+                        name="remember"
+                        id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="submit" class="btn btn-lg"
-                    style="padding-left: 2.5rem; padding-right: 2.5rem;background: var(--yellow-color);;
-                    border-color:var(--yellow-color);color:#ffffff;">Login</button>
-                  <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
+                        <span class="checkmark"></span>Remember Me
+                      </label>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                      <div class="text-md-end">
 
-                    @isset($url)
-                    <a href="{{ url("$url/register") }}" class="link-danger">{{ isset($url) ? ucwords($url) : ""}} {{ __('Register') }}</a>
-                    @else
-                    <a href="{{ route('register') }}" class="link-danger">{{ isset($url) ? ucwords($url) : ""}} {{ __('Register') }}</a>
-                    @endisset
-
-                </p>
-                </div>
-
-              </form>
+                        @if (Route::has('password.request'))
+                        <a class="forgot-link" href="{{ route('password.request') }}">
+                            {{ __('Forgot Your Password?') }}
+                        </a>
+                         @endif
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary w-100 login-btn" type="submit">
+                    Login
+                  </button>
+                  <div class="register-link text-center">
+                    <p>
+                      No account yet?
+                      @isset($url)
+                      <a href="{{ url("$url/register") }}" class="forgot-link">{{ isset($url) ? ucwords($url) : ""}} {{ __('Register') }}</a>
+                      @else
+                      <a href="{{ route('register') }}" class="forgot-link">{{ isset($url) ? ucwords($url) : ""}} {{ __('Register') }}</a>
+                      @endisset
+                    </p>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-
-      </section>
-</div>
+      </div>
+</main>
 @endsection
+
+@push('js')
+    <script>
+          function changePage() {
+         let checkbox = document.getElementById('check');
+         if (checkbox.checked) {
+          window.location.href="{{ url('vendor/login') }}";
+         } else {
+            window.location.href="{{ url('login') }}";
+         }
+      }
+    </script>
+@endpush
