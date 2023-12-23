@@ -31,7 +31,7 @@ class RedirectIfAuthenticated
             return redirect('/admin/dashboard');
         }
         if ($guard == "vendor" && Auth::guard($guard)->check()) {
-            return redirect('/vendor/dashboard');
+            return redirect('/vendor/profile');
         }
         if (Auth::guard($guard)->check()) {
             return redirect('/');

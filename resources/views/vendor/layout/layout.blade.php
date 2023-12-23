@@ -22,6 +22,8 @@
         <!-- endinject -->
         <link rel="shortcut icon" href="{{ asset('admin/images/favicon.png') }}" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+
         @yield('links')
 
     </head>
@@ -35,6 +37,7 @@
                 @include('vendor.layout.sidebar')
                 <!-- partial -->
             <div class="main-panel">
+
                 @yield('content')
                 <!-- content-wrapper ends -->
             </div>

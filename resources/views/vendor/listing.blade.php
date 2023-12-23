@@ -36,11 +36,11 @@
         <div class="container">
             <div class="row align-items-center text-center">
                 <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title">Profile</h2>
+                    <h2 class="breadcrumb-title">Message</h2>
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                            <li class="breadcrumb-item active" aria-current="page">Message</li>
                         </ol>
                     </nav>
                 </div>
@@ -57,7 +57,7 @@
             <div class="listing-content">
                 <div class="container">
                     <div id="accordion" class="accordion">
-                        <div class="card mb-0">
+                        <div class="card mb-0" id="message-card">
                             @if (isset($messages))
                                 @foreach ($messages as $key => $message)
                                     <div class="card-header collapsed {{ $message->is_read == 0 ? 'bg-color' : '' }}"
@@ -85,6 +85,10 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                <div class="d-flex justify-content-center">
+                                    {!! $messages->links() !!}
+                                </div>
+
                             @endif
                         </div>
                     </div>
@@ -98,6 +102,23 @@
 @push('js')
 
 <script>
+
+    // var page = 1;
+    // loadMore(page);
+
+    // function loadMore(page){
+    //     $.ajax({
+    //         url:"{{ url('vendor/message')}}/"+page,
+    //         type:"get",
+    //         datatype:"html",
+    //         success:function(data){
+    //             alert('test');
+    //             if(data.length!=0){
+    //             $('#message-card').append(data);
+    //             }
+    //         }
+    //     })
+    // }
     function readMessage(read,val){
     if(read != 0){
         return false;

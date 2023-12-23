@@ -66,7 +66,7 @@ class LoginController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
 
-            return redirect()->intended('/vendor/dashboard');
+            return redirect()->intended('/vendor/profile');
         }
         return back()->withInput($request->only('email', 'remember'))->withErrors([
             'approve' => 'Wrong password or this account not approved yet.',
@@ -121,7 +121,7 @@ class LoginController extends Controller
 
         if (Auth::guard('vendor')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
 
-            return redirect()->intended('/vendor/dashboard');
+            return redirect()->intended('/vendor/profile');
         }
         return back()->withInput($request->only('email', 'remember'))->withErrors([
             'approve' => 'Wrong password or this account not approved yet.',

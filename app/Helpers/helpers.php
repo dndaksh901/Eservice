@@ -47,6 +47,6 @@ function convertMdyToTimeAgo($date)
         }
 
         $diff = round($diff);
-        return $diff . " " . $strTime[$i] . "(s) ago ";
+        return $diff . " " . $strTime[$i] . "s ago ";
     }
 }

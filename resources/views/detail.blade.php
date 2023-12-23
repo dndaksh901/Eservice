@@ -1,5 +1,10 @@
 @extends('layouts.main')
 
+@section('links')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+@endsection
+
 @section('content')
     <style>
         .progress {
@@ -402,8 +407,8 @@
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">
                                     <i class="feather-phone-call addess-icon"></i> <a
-                                        href="tel:{{ !empty($profile->vendor) ? $profile->vendor->mobile : '' }}">
-                                        {{ !empty($profile->vendor) ? $profile->vendor->mobile : '' }}</a>
+                                        href="tel:{{ !empty($profile->vendor) ? $profile->vendor->mobile : '' }}"><mark>
+                                        {{ !empty($profile->vendor) ? $profile->vendor->mobile : '' }}</mark></a>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">
                                     <i class="feather-mail addess-icon"></i> <a
@@ -522,10 +527,10 @@
                         </div>
                         <div class="card-body">
                             <div class="gallery-content">
-                                <div class="row">
+                                <div  class="owl-carousel owl-theme">
                                     @if (isset($profile->profileImage))
                                         @foreach ($profile->profileImage as $key => $image)
-                                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                            <div class="">
                                                 <div class="gallery-widget">
                                                     <a href="{{ asset('vendor/profile_image/') . '/' . $image->profile_image }}"
                                                         data-fancybox="gallery-{{ $key }}" target="_black">
@@ -610,7 +615,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <textarea rows="4" class="form-control" placeholder="Write a Review*" name="review" id="review">{{ $userReview->review ?? 'null' }}</textarea>
+                                                    <textarea rows="4" class="form-control" placeholder="Write a Review*" name="review" id="review">{{ $userReview->review ?? '' }}</textarea>
                                                 </div>
                                                 <div class="reviewbox-rating">
                                                     <p><span> Rating</span>
@@ -714,7 +719,43 @@
 
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+
     <script>
+
+        // Owl Carousel
+            $(function() {
+            var owl = $(".owl-carousel");
+            owl.owlCarousel({
+                items: 1,
+                autoplay:true,
+                smartSpeed:true,
+                margin: 10,
+                loop: true,
+                nav: true,
+                // autoWidth:true,
+                // autoHeight:true,
+                responsiveClass:true,
+                responsive:{
+                    0:{
+                        items:1,
+                        nav:true
+                    },
+                    600:{
+                        items:3,
+                        nav:true,
+                        loop:false
+                    },
+                    1000:{
+                        items:5,
+                        nav:false,
+                        loop:false
+                    }
+                }
+            });
+            });
         // Review script
 
         function reviewStar(number) {

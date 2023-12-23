@@ -364,8 +364,10 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
+
                                                     <label for="profile_description">Profile Description</label>
-                                                    <textarea class="form-control" id="profile_description" rows="3" name="profile_description">{{ $profile->profile_description ?? '' }}</textarea>
+                                                    <textarea id="profile_description" rows="3" name="profile_description">{{ $profile->profile_description ?? '' }}</textarea>
+                                                    {{-- <textarea class="form-control" id="profile_description" rows="3" name="profile_description">{{ $profile->profile_description ?? '' }}</textarea> --}}
                                                 </div>
 
                                             </div>
@@ -407,8 +409,15 @@
     @endsection
 
     @push('js')
+        <script src="https://cdn.tiny.cloud/1/5kuebtof2f6mvl2hzc1ag686wjwtqdup6x44ytagtbw6expp/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+       <script>
+            tinymce.init({
+              selector: '#profile_description'
+            });
+          </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
-        <script>
+       <script>
+
             (function() {
                 navigator.geolocation.getCurrentPosition(function(position) {
                         document.getElementById("latitude").value = position.coords.latitude;

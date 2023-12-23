@@ -26,12 +26,12 @@
 
                     </li>
                     <li class="{{ request()->is('about-us') ? 'active' : '' }}">
-                        <a href="/">About us</a>
+                        <a href="{{ url('about-us') }}">About us</a>
 
                     </li>
-                    <li class="{{ request()->is('categories') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('categories') ? 'active' : '' }}">
                         <a href="{{ url('categories') }}">Categories</a>
-                    </li>
+                    </li> --}}
                     <li class="{{ request()->is('contact-us') ? 'active' : '' }}">
                         <a href="{{ url('contact-us') }}">Contact us</a>
 
@@ -101,7 +101,7 @@
                                 <span>{{ Auth::guard('vendor')->user()->name }}</span><i class="fas fa-chevron-down"></i>
                             </a>
                             <ul class="submenu">
-                                <li><a  href="{{ url('vendor/dashboard') }}">Dashboard</a></li>
+                                <li><a  href="{{ url('vendor/profile') }}">Profile</a></li>
 
                                 <li><a  href="{{ url('vendor/logout') }}"
                                     onclick="event.preventDefault();

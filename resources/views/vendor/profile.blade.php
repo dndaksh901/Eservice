@@ -184,11 +184,11 @@
                                         <div class="form-group">
                                             <label class="col-form-label">Describe Yourself</label>
                                             <div class="pass-group group-img">
-                                                <textarea rows="4" class="form-control" name="introduction">{{ Auth::guard('vendor')->user()->introduction ?? '' }}</textarea>
+                                                <textarea rows="4" class="form-control" id="introduction" name="introduction">{{ Auth::guard('vendor')->user()->introduction ?? '' }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row socialmedia-info">
-                                            <div class="col-lg-6 col-md-6"> 
+                                            <div class="col-lg-6 col-md-6">
                                                 <div class="form-group">
                                                     <label class="col-form-label">Facebook</label>
                                                     <div class="pass-group group-img">
@@ -319,6 +319,12 @@
 @endsection
 
 @push('js')
+<script src="https://cdn.tiny.cloud/1/5kuebtof2f6mvl2hzc1ag686wjwtqdup6x44ytagtbw6expp/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+     tinymce.init({
+       selector: '#introduction'
+     });
+   </script>
     <script>
         function delImage() {
             alert('run');

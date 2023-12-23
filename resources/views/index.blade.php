@@ -592,7 +592,7 @@
                             <p>SkilledWorker is dedicated to connecting businesses with highly skilled workers to meet their specific needs. With our vast network of professionals, we ensure that you have access to the right expertise for your projects. We prioritize quality and efficiency, providing reliable and experienced workers who can deliver outstanding results. At SkilledWorker, we understand the importance of finding the right talent, and we are committed to helping you succeed in your endeavors.</p>
 
                         </div>
-                        <a href="#" class="btn btn-grey">About us <i
+                        <a href="{{ url('about-us') }}" class="btn btn-grey">About us <i
                                 class="feather-arrow-right"></i></a>
                     </div>
                 </div>

@@ -171,8 +171,7 @@
                                                     <a href="javascript:void(0);">{{ $profile->experience_year }} Years, {{ $profile->experience_month }} Months</a>
                                                 </div>
                                             </div>
-                                            <h6><a href="/">{{ $profile->vendor->name ?? $profile->vendor->username }}
-                                                    House</a></h6>
+                                            <h6>{{ $profile->vendor->name ?? $profile->vendor->username }}</h6>
                                             <div class="blog-location-details">
                                                 <div class="location-info">
                                                     <i class="feather-map-pin"></i> {{ $profile->city->name ?? '' }},{{ $profile->state->name ?? '' }}
@@ -197,7 +196,9 @@
                                                     <span>₹ {{ $profile->price_per_hour + rand(10,100) }}</span>
                                                 </div>
                                                 @if(Auth::guard('admin')->check())
-                                                <a href="/">View details</a>
+                                                <a href="{{ url('login') }}">View details</a>
+                                                @elseif(Auth::guard('vendor')->check())
+                                                <a href="{{ url('/vendor-profile/'.$profile->id) }}">View details</a>
                                                 @elseif(Auth::guard('web')->check())
                                                 <a href="{{ url('/vendor-profile/'.$profile->id) }}">View details</a>
                                                 @else

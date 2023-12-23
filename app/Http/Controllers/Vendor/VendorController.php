@@ -31,21 +31,21 @@ class VendorController extends Controller
     {
 
         $userReview = '';
-       $reviews = Review::with('user', 'profile')
-       ->where('vendor_id',Auth::id())
+        $reviews = Review::with('user', 'profile')
+            ->where('vendor_id', Auth::id())
             ->orderBy('id', 'desc')
             ->paginate(10);
-        $totalreviews = Review::where('vendor_id',Auth::id())->count();
-        $totalmessage = EnquiryUser::where('vendor_id',Auth::id())->count();
+        $totalreviews = Review::where('vendor_id', Auth::id())->count();
+        $totalmessage = EnquiryUser::where('vendor_id', Auth::id())->count();
 
 
         if ($reviews) {
-            return view('vendor.dashboard', compact('reviews','totalreviews','totalmessage'));
+            return view('vendor.dashboard', compact('reviews', 'totalreviews', 'totalmessage'));
         } else {
 
 
-        return view('vendor.dashboard');
-    }
+            return view('vendor.dashboard');
+        }
     }
     /**
      * Vendor Login
@@ -294,8 +294,9 @@ class VendorController extends Controller
                         $files->move($destinationPath, $file_name);
                         // $data[] = $file_name;
 
-                        $profile_image = ProfileImage::create([
+                        $profile_image = ProfileImage::updateorCreate([
                             'vendor_id' => Auth::guard('vendor')->user()->id,
+
                             'profile_image' => $file_name
                         ]);
                     }
@@ -338,7 +339,7 @@ class VendorController extends Controller
      *Preview image of profile Image
      **/
 
-    public function PreveiwProfileImage()
+    public function PreveiwProfileImage($id = null)
     {
         $profileImages = ProfileImage::where('vendor_id', Auth::guard('vendor')->user()->id)->get();
 
@@ -527,35 +528,80 @@ class VendorController extends Controller
         }
     }
 
-    public function messageList()
+
+    public function messageList(Request $request)
     {
-        $messages = Notification::with('user', 'vendor')->where('vendor_id', Auth::id())->limit(20)->get();
+        $messages = Notification::with('user', 'vendor')->where('vendor_id', Auth::id())->orderBy('id', 'DESC')->paginate(10);
+        //  $data = '';
+        //     if($request->ajax()){
+        //         foreach($messages as $key=>$message){
+        //           $url =  asset('vendor/profile_image/avatar.jpg');
+        //           if($message->is_read == 0){
+        //             $bg_color='bg-color';
+        //             $readfunction="readMessage($message->is_read,$message->id)";
+        //             $text='text-white';
+        //           }else{
+        //             $bg_color='';
+        //             $readfunction='';
+        //             $text='';
+        //           }
+
+        //             $data .= '<div class="card-header collapsed '. $bg_color.'"
+        //             data-toggle="collapse" href="#collapse'.$key.'"
+        //             id="main-message-'.$message->id.'" onclick="'.$readfunction.'">
+        //             <a class="card-title'.$text.'"
+        //                 id="message-title-'.$message->id.'">
+        //                 <img src="'.$url.'"
+        //                     alt="profile-image" class="user-image">
+        //                 '.$message->name ?? $message->user->name.'
+        //             </a>
+        //             <span class="message-time">('.convertMdyToTimeAgo($message->created_at).')</span>
+        //         </div>
+        //       <div id="collapse'.$key.'" class="card-body collapse" data-parent="#accordion">
+        //             <div class="card">
+        //                 <div class="card-body">
+        //                     <p><strong>Name: </strong> '. $message->name ?? $message->user->name .'</p>
+        //                     <p><strong>Contact Number: </strong> '. $message->phone ?? '' .'</p>
+        //                     <p><strong>Email: </strong>'. $message->user->email ?? '' .'</p>
+        //                     <p><strong>Budget: </strong>Rs '. $message->budget ?? '' .'</p>
+        //                     <p><strong>Message: </strong>'. $message->message .'</p>
+        //                 </div>
+        //             </div>
+        //         </div>';
+        //         }
+        //         return $data;
+        //     }
         return view('vendor.listing', compact('messages'));
     }
-
+    public function reviewList()
+    {
+        return $reviews = Review::with('user')->where('vendor_id', Auth::id())->orderBy('id', 'DESC')->limit(20)->get();
+        return view('vendor.review', compact('reviews'));
+    }
     public function notificationStatusUpdate($id)
     {
         $statusUpdate = Notification::where('id', $id)->update(['is_read' => 1]);
         return 1;
     }
 
-    public function favorite(Request $request){
+    public function favorite(Request $request)
+    {
 
-        if($request->status == 'fav'){
+        if ($request->status == 'fav') {
 
             $fav = Favorite::create([
-                'profile_id' =>$request->profile_id,
+                'profile_id' => $request->profile_id,
                 'vendor_id' => $request->vendor_id,
                 'user_id' => $request->user_id
             ]);
 
-            if(isset($fav)){
+            if (isset($fav)) {
                 return 1;
             }
             return 'failed';
-        }else{
+        } else {
             $fav = Favorite::where([
-                'profile_id' =>$request->profile_id,
+                'profile_id' => $request->profile_id,
                 'vendor_id' => $request->vendor_id,
                 'user_id' => $request->user_id
             ])->delete();

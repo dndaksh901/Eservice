@@ -38,10 +38,10 @@ class UserController extends Controller
 
     public function getIpDetail()
     {
-        // $ip = request()->ip(); // Dynamic IP address
+        $ip = request()->ip(); // Dynamic IP address
         $ip = '103.223.9.47'; // Static IP address of  jalandhar
         //$ip = '101.0.49.116'; // Static IP address of mohali
-        return $data = \Location::get($ip);
+        return $data = Location::get($ip);
     }
 
     // public function showUser()

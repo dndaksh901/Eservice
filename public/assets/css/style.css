@@ -10476,7 +10476,8 @@ textarea.form-control {
 -----------------------*/
 
 .banner-five {
-    background: url("../img/banner/banner-05.png");
+    /* background: url("../img/banner/banner-05.png"); */
+    background: url("/imgs/handyman.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center bottom;

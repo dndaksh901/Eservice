@@ -1,9 +1,9 @@
 <ul class="dashborad-menus">
-    <li class="{{ request()->is('vendor/dashboard') ? 'active' : '' }}">
+    {{-- <li class="{{ request()->is('vendor/dashboard') ? 'active' : '' }}">
         <a href="{{ url('vendor/dashboard') }}">
             <i class="feather-grid"></i> <span>Dashboard</span>
         </a>
-    </li>
+    </li> --}}
     <li class="{{ request()->is('vendor/profile') ? 'active' : '' }}">
         <a href="{{ url('vendor/profile') }}">
             <i class="fa-solid fa-user"></i> <span>Profile</span>
@@ -22,14 +22,17 @@
 
     <li class="{{ request()->is('vendor/message') ? 'active' : '' }}">
         <a href="{{ url('vendor/message') }}">
-            <i class="fa-solid fa-comment-dots"></i> <span>Messages</span>
+            <?php
+               use App\Models\Notification;
+                $unread=Notification::where('vendor_id', Auth::id())->where('is_read',0)->count(); ?>
+            <i class="fa-solid fa-comment-dots"></i> <span>Messages {{ isset($unread) && $unread > 0 ? '('.$unread.')' : ''}}</span>
         </a>
     </li>
-    <li class="{{ request()->is('vendor/reviews') ? 'active' : '' }}">
+    {{-- <li class="{{ request()->is('vendor/reviews') ? 'active' : '' }}">
         <a href="{{ url('vendor/reviews') }}">
             <i class="fas fa-solid fa-star"></i> <span>Reviews</span>
         </a>
-    </li>
+    </li> --}}
     <li>
         <a href="{{ url('vendor/logout') }}"
             onclick="event.preventDefault();

@@ -5,8 +5,16 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>{{ config('app.name', 'Eservice') }}</title>
-
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ env('APP_URL') }}">
+    <title>{{ config('app.name', 'SkilledWorker') }}</title>
+    <meta name="description" content="Looking for a reliable plumber? Connect with skilled plumbers for all your plumbing needs. Fast, efficient, and licensed professionals.From carpentry projects to furniture repairs, our expert carpenters have you covered. Get the best carpentry services near you.Electrical issues? Find licensed electricians for safe and reliable solutions. We ensure your electrical systems work flawlessly.Turn your space into a masterpiece with our interior designers. Creative, experienced, and ready to transform your home or office.Auto trouble? Trust our skilled mechanics for expert repairs and maintenance. Keep your vehicle running smoothly.Boost your academic success with knowledgeable tutors,teacher,lecturer. Personalized tutoring for a brighter future.Need a reliable driver? Our professional drivers ensure secure and convenient transportation for all your needs.{{ env('APP_NAME') }}- Your trusted source for skilled workers. Connecting you with the best in the business.">
+    <meta name="keywords" content="manpower,plumber, plumbing, leak repair, pipe installation, plumbing services, plumbing company,carpenter, carpentry, woodworking, furniture repair, home renovation, carpentry services,electrician, electrical services, electrical repair, wiring, electrical installation, licensed electrician,interior designer, home decor, interior decorating, interior design services, interior design company,mechanic, auto repair, car maintenance, automotive services, vehicle repair, car mechanic,tutor, tutoring, academic support, online tutoring, subject tutoring, test prep,teacher,teaching,driver, transportation services, chauffeur, driver for hire, transportation company, private driver,rent bike,rental,immigration,consultant,designer,hire,skilled worker,expert,automation,home cleaner,servant,maid,ielts,insitute,college,painter,wall painter,car painter,personal trainer,trainer,guard,security,fashion designer,tailor">
+    <meta property="og:title" content="Skilled Worker like electrician,plumber,carpenter,driver,painter,tutor and so on are here"/>
+    <meta property="og:site_name" content="{{ env('APP_URL') }}" />
+    <meta property="og:type" content="skilledworker" />
+    {{-- <meta property="og:image" content="https://www.vocabulary.com/images/icons/facebook-75x75.gif" />     --}}
+    <meta property="og:description" content="A lecturer is someone who stands up in front of a class and gives an organized talk designed to teach you something. There are lots of lecturers at colleges and universities."/>
 
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}">
 
@@ -35,6 +43,17 @@
         @yield('content')
         @include('includes.footer')
     </div>
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11372882687">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-11372882687');
+</script>
    {{-- <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js')}}"></script> --}}
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
