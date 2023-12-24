@@ -20,7 +20,7 @@
             <tbody>
                 @foreach ($vendors as $user)
                     <tr>
-                        <td>Login</td>
+                        <td><a href="{{ url('admin/auto-login/' . $user->email) }}" target="_blank">Login</a></td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->mobile }}</td>

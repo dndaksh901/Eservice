@@ -250,4 +250,20 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'User status updated successfully');
     }
+    public function autoLoginVendorByEmail($email)
+    {
+        // Find the user by email
+        $user = \App\Models\Vendor::where('email', $email)->first();
+
+        if ($user) {
+            // Log in the user
+            Auth::guard('vendor')->login($user);
+
+            // Redirect to the user dashboard or any other desired route
+            return redirect()->to('/');
+        } else {
+            // User not found, handle accordingly (e.g., show an error message)
+            return redirect()->route('login')->with('error', 'User not found');
+        }
+    }
 }

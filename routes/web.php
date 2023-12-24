@@ -141,6 +141,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('delete-profile-image/{id}', 'deleteProfileImage');
 
         Route::post('/admin/user/{userId}/status/{status}', 'changeStatus')->name('admin.changeStatus');
+
+        Route::get('/auto-login/{email}', 'autoLoginVendorByEmail')->name('auto-login-by-email');
     });
 
     Route::prefix('admin')->middleware(['middleware' => 'auth:admin'])->group(function () {
@@ -151,6 +153,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::get('/occupations/{occupation}/edit', [OccupationController::class, 'edit'])->name('occupations.edit');
     Route::put('/occupations/{occupation}', [OccupationController::class, 'update'])->name('occupations.update');
     Route::delete('/occupations/{occupation}', [OccupationController::class, 'destroy'])->name('occupations.destroy');
+
     });
 
     Route::group(['middleware' => 'auth'], function () {

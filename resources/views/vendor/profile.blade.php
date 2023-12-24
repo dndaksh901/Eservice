@@ -42,11 +42,11 @@
                         </div>
                     @endif
                     @if (session()->has('success'))
-                        <div class="col-12 alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="col-12 alert alert-success flash-message" data-duration="5000">
                             <strong>{{ session()->get('success') }}</strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                            </button>
+                            </button> --}}
                         </div>
                     @endif
                     <div class="col-lg-9">
@@ -334,6 +334,11 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $(document).ready(function(){
+        // Hide flash messages after the specified duration
+        $('.flash-message').delay($('.flash-message').data('duration')).fadeOut(500);
+    });
 
         //Check current password
         function checkCurrentPassword(password) {

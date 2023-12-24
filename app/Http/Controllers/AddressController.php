@@ -18,7 +18,7 @@ class AddressController extends Controller
     {
         $cities = City::where('state_id', $id)
         ->where('status', 1)
-        ->where('country_id',101)
+        // ->where('country_id',101)
         ->orderBy('name', 'ASC')->get();
         return $cities;
     }

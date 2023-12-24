@@ -213,8 +213,7 @@
                                                 </div>
                                             @endif
                                             @if (session()->has('success'))
-                                                <div class="col-12 alert alert-success alert-dismissible fade show"
-                                                    role="alert">
+                                                <div class="col-12 alert alert-success flash-message" data-duration="5000">
                                                     <strong>{{ session()->get('success') }}</strong>
 
                                                 </div>
@@ -432,6 +431,11 @@
                 maxTags: 10
             });
 
+            $(document).ready(function(){
+        // Hide flash messages after the specified duration
+        $('.flash-message').delay($('.flash-message').data('duration')).fadeOut(500);
+    });
+
             function deleteImage(id) {
                 $.ajax({
                     url: "{{ url('vendor/deleteProfileImage') }}/" + id,
@@ -492,13 +496,13 @@
                     url: '{{ url('city-by-state') }}' + "/" + selectedValue,
                     type: 'get',
                     success: function(data) {
-                        // console.log(data);
+                        console.log(data);
                         $('select[name="city_id"]').empty();
                         if (data.length > 0) {
                             $.each(data, function(id, locations) {
                                 $('select[name="city_id"]').append($("<option></option>").attr("value",
                                     locations.id).attr("selected", locations.id ==
-                                    "{{ $profile->city_id }}" ? true : false).text(locations.name));
+                                    "{{ $profile->city_id ?? ''}}" ? true : false).text(locations.name));
                             });
                         } else {
                             $('select[name="city_id"]').append(`<option>No City found</option>`);
