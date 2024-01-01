@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\Admin;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Profile;
+use App\Models\State;
 use App\Models\Vendor;
 use Mockery\Expectation;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -174,11 +178,58 @@ class AdminController extends Controller
     /**
      * Check vendors list
      */
-    public function VendorStatus($id)
+    public function VendorStatus(Request $request,$id)
     {
         // return    $vendor = Profile::where('vendor_id', $id)->first();
         $vendor = Vendor::with('profile')->where('id', $id)->first();
-        return view('admin.vendor_edit', compact('vendor'));
+        $states = State::where(['country_id' => 101, 'status' => 1])
+        ->orderBy('name', 'ASC')
+        ->get();
+        return view('admin.vendor_edit', compact('vendor','states'));
+    }
+    public function VendorDetailUpdate(Request $request,$id)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required|regex:/^[\pL\s\-]+$/u',
+            'username' => 'required|regex:/^[\pL\s\-]+$/u',
+            'mobile'   => 'required|numeric|digits:10',
+            'email'   => 'required|email|unique:vendors,email,' . $id,
+            'address'  => 'required|max:255',
+            'state_id' => 'required',
+            'city_id'  => 'required',
+            'pincode'  => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('errors' , $validator->errors());
+            // You can customize the response format and status code as needed
+        }
+            // return $request->all();
+            //Update Vendor Detail
+            $vendor=Vendor::where('id',$id)
+                ->update([
+                    'name' => $request->name,
+                    'mobile' => $request->mobile,
+                    'dob' => $request->dob,
+                    'gender' => $request->gender,
+                    // 'introduction' => $request->introduction,
+                    'facebook' => $request->facebook,
+                    'twitter' => $request->twitter,
+                    'youtube' => $request->youtube,
+                    'instagram' => $request->instagram,
+                ]);
+
+                // $profile = Profile::updateOrCreate(['vendor_id' =>$id], [
+                //     'profile_description' => $request->profile_description,
+                //     'address' => $request->address,
+                //     'state_id' => $request->state_id,
+                //     'city_id' => $request->city_id,
+                //     'pincode' => $request->pincode,
+                // ]);
+
+            return redirect()->back()->with('success', 'Update Details Successfully');
+
     }
     /**
      * Check vendors image update
@@ -265,5 +316,26 @@ class AdminController extends Controller
             // User not found, handle accordingly (e.g., show an error message)
             return redirect()->route('login')->with('error', 'User not found');
         }
+    }
+
+    public function countrylist()
+    {
+        $countries = Country::paginate(20);
+        return view('admin.countries.index', compact('countries'));
+    }
+
+    public function enableDisableCountry($id)
+    {
+        $country = Country::findOrFail($id);
+        if($country->status == "active"){
+            $status ="inactive";
+        }else{
+            $status ="active";
+        }
+
+        Country::where('id',$id)->update(['status' => $status]);
+
+        return redirect()->back()
+            ->with('success', 'Country status updated successfully');
     }
 }

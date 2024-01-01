@@ -31,6 +31,7 @@
     <!-- Include DataTables Responsive extension -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/responsive.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.responsive.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
     @yield('link')
 </head>
 

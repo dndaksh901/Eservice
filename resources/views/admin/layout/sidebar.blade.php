@@ -198,6 +198,8 @@
           <div class="collapse" id="form-elements">
              <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{{ url('admin/vendors-detail') }}">List</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('admin/countries') }}">Countries</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('admin/occupations') }}">Occupations</a></li>
              </ul>
           </div>
        </li>

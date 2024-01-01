@@ -135,7 +135,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::post('update-current-password', 'updateAdminCurrentPassword');
         // Admin check vendor Detail
         Route::get('vendors-detail', 'vendorList')->name('admin.vendorList');
-        Route::get('vendors-edit/{id}', 'VendorStatus')->name('admin.vendorstatus');
+        Route::get('vendor-edit/{id}', 'VendorStatus')->name('admin.vendorstatus');
+        Route::post('vendor-update/{id}', 'VendorDetailUpdate');
         Route::post('vendor-image-update/{id}', 'vendorImageUpdate')->name('admin.vendorImageUpdate');
 
         Route::get('delete-profile-image/{id}', 'deleteProfileImage');
@@ -143,7 +144,14 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::post('/admin/user/{userId}/status/{status}', 'changeStatus')->name('admin.changeStatus');
 
         Route::get('/auto-login/{email}', 'autoLoginVendorByEmail')->name('auto-login-by-email');
+
+    Route::put('/countries/{id}/enable-disable','enableDisableCountry')
+        ->name('admin.countries.enableDisable');
+        Route::get('/countries', [AdminController::class, 'countrylist'])
+        ->name('admin.countries.index');
     });
+
+
 
     Route::prefix('admin')->middleware(['middleware' => 'auth:admin'])->group(function () {
         Route::get('/occupations', [OccupationController::class, 'index'])->name('occupations.index');

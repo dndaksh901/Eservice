@@ -34,11 +34,11 @@
             <div class="profile-content">
                 <div class="row dashboard-info">
                     @if (session()->has('error'))
-                        <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="col-12 alert alert-danger flash-message" data-duration="5000">
                             <strong>{{ session()->get('error') }}</strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                            </button>
+                            </button> --}}
                         </div>
                     @endif
                     @if (session()->has('success'))
@@ -131,9 +131,9 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="form-group">
-                                                    <label for="confirm_password">Date of Birth</label>
+                                                    <label for="dob">Date of Birth</label>
                                                     <input type="date" class="form-control" name="dob"
-                                                        value="{{ Auth::guard('vendor')->user()->dob }}">
+                                                        value="{{ Auth::guard('vendor')->user()->dob }}" id="dob">
                                                     @error('dob')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -326,6 +326,8 @@
      });
    </script>
     <script>
+
+
         function delImage() {
             alert('run');
         }

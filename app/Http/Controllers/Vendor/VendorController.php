@@ -608,4 +608,58 @@ class VendorController extends Controller
             return 1;
         }
     }
+
+     /**
+     * View update Vendor Detail Page
+     */
+    public function updatePersonalDetailByAdmin(Request $request)
+    {
+        // $profile = Profile::with('vendor', 'occupation')->where('vendor_id', Auth::guard('vendor')->id())->first();
+
+        if ($request->isMethod('post')) {
+
+            $rules = [
+                'name'     => 'required|regex:/^[\pL\s\-]+$/u',
+                'mobile'   => 'required|numeric|digits:10',
+                'avatar'    => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            ];
+
+            $this->validate($request, $rules);
+
+            // Get current profile Image
+            $image = Vendor::where('id', Auth()->guard('vendor')->user()->id)->value('avatar');
+
+            // Get Update profile Image
+            if ($files = $request->file('avatar')) {
+                $destinationPath = 'vendor/vendor_image'; // upload path
+                $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+                $files->move($destinationPath, $profileImage);
+                if (file_exists($destinationPath . '/' . $image)) {
+                    unlink($destinationPath . '/' . $image);
+                }
+                $image = "$profileImage";
+            }
+
+            //Update Vendor Detail
+
+            Vendor::where('id', Auth()->guard('vendor')->user()->id)
+                ->update([
+                    'name' => $request->name,
+                    'mobile' => $request->mobile,
+                    'dob' => $request->dob,
+                    'gender' => $request->gender,
+                    'introduction' => $request->introduction,
+                    'facebook' => $request->facebook,
+                    'twitter' => $request->twitter,
+                    'youtube' => $request->youtube,
+                    'instagram' => $request->instagram,
+                    'avatar' => $image
+                ]);
+
+            return redirect()->back()->with('success', 'Update Details Successfully');
+        }
+
+        return view('vendor.update_detail', compact('profile'));
+    }
+
 }

@@ -75,9 +75,9 @@
         }
 
         /*
-             * bootstrap-tagsinput v0.8.0
-             *
-             */
+                 * bootstrap-tagsinput v0.8.0
+                 *
+                 */
 
         .bootstrap-tagsinput {
             background-color: #fff;
@@ -291,7 +291,7 @@
                                                         @foreach ($states as $state)
                                                             <option value="{{ $state->id }}"
                                                                 {{ isset($profile) && $profile->state_id == $state->id ? 'selected' : '' }}>
-                                                                {{ $state->name }}</option>
+                                                                {{ ucfirst($state->name) }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -305,7 +305,7 @@
                                                         @foreach ($cities as $city)
                                                             <option value="{{ $city->id }}"
                                                                 {{ isset($profile) && $profile->city_id == $city->id ? 'selected' : '' }}>
-                                                                {{ $city->name }}</option>
+                                                                {{ ucfirst($city->name) }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -354,7 +354,7 @@
                                                 <div class="mb-3">
 
                                                     <input class="form-control" type="text" data-role="tagsinput"
-                                                        name="services" value={{$profile->services ?? ''}}>
+                                                        name="services" value={{ $profile->services ?? '' }}>
                                                     <small>*Enter max 10 limit</small>
                                                     @if ($errors->has('services'))
                                                         <span class="text-danger">{{ $errors->first('services') }}</span>
@@ -408,15 +408,15 @@
     @endsection
 
     @push('js')
-        <script src="https://cdn.tiny.cloud/1/5kuebtof2f6mvl2hzc1ag686wjwtqdup6x44ytagtbw6expp/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-       <script>
+        <script src="https://cdn.tiny.cloud/1/5kuebtof2f6mvl2hzc1ag686wjwtqdup6x44ytagtbw6expp/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+        <script>
             tinymce.init({
-              selector: '#profile_description'
+                selector: '#profile_description'
             });
-          </script>
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
-       <script>
-
+        <script>
             (function() {
                 navigator.geolocation.getCurrentPosition(function(position) {
                         document.getElementById("latitude").value = position.coords.latitude;
@@ -431,10 +431,10 @@
                 maxTags: 10
             });
 
-            $(document).ready(function(){
-        // Hide flash messages after the specified duration
-        $('.flash-message').delay($('.flash-message').data('duration')).fadeOut(500);
-    });
+            $(document).ready(function() {
+                // Hide flash messages after the specified duration
+                $('.flash-message').delay($('.flash-message').data('duration')).fadeOut(500);
+            });
 
             function deleteImage(id) {
                 $.ajax({
@@ -500,9 +500,16 @@
                         $('select[name="city_id"]').empty();
                         if (data.length > 0) {
                             $.each(data, function(id, locations) {
-                                $('select[name="city_id"]').append($("<option></option>").attr("value",
-                                    locations.id).attr("selected", locations.id ==
-                                    "{{ $profile->city_id ?? ''}}" ? true : false).text(locations.name));
+                                var capitalizedCityName = locations.name.charAt(0).toUpperCase() + locations
+                                    .name.slice(1);
+
+                                $('select[name="city_id"]').append(
+                                    $("<option></option>")
+                                    .attr("value", locations.id)
+                                    .attr("selected", locations.id == "{{ $profile->city_id ?? '' }}" ?
+                                        true : false)
+                                    .text(capitalizedCityName)
+                                );
                             });
                         } else {
                             $('select[name="city_id"]').append(`<option>No City found</option>`);
