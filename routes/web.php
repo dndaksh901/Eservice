@@ -66,13 +66,15 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::view('/about-us', 'about-us');
 
     Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm']);
-    Route::get('/vendor/login', [LoginController::class, 'showVendorLoginForm']);
+    Route::get('/vendor/login', [LoginController::class, 'showVendorLoginForm'])->name('vendor.login');
     Route::get('/admin/register', [RegisterController::class, 'showAdminRegisterForm']);
     Route::get('/vendor/register', [RegisterController::class, 'showVendorRegisterForm']);
 
     Route::post('/admin/login', [LoginController::class, 'adminLogin']);
-    Route::post('/vendor/login', [LoginController::class, 'vendorLogin']);
     Route::post('/admin/register', [RegisterController::class, 'createAdmin']);
+    Route::middleware(['middleware' => 'vendor.status'])->group(function () {
+    Route::post('/vendor/login', [LoginController::class, 'vendorLogin']);
+    });
     Route::post('/vendor/register', [RegisterController::class, 'createVendor']);
 
 
@@ -83,7 +85,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::get('search-by-name/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
     Route::post('search', [VendorController::class, 'ajaxSearch']);
 
-    Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor'])->group(function () {
+    Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor', 'vendor.status'])->group(function () {
         // Route::view('/vendor', 'vendor.vendor');
 
 
