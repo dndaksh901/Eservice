@@ -501,6 +501,8 @@ body {
     }
 }
 
+
+
 /* Responsiveness All devices */
 @media (min-width:768px) and (max-width:1200px){
 
@@ -596,4 +598,5 @@ body {
     .title{
      font-size: 40px;
     }
+
 }
