@@ -397,10 +397,15 @@ class VendorController extends Controller
     }
     public function search($occupation_id = null, $city_id = null, $state_id = null)
     {
-
+        $ipDetails = Session::get('ip_details');
         if ($occupation_id == null) {
             return redirect('/');
         }
+        if ($city_id == null || $state_id == null) {
+           $city_id= $ipDetails->cityName;
+           $state_id= $ipDetails->regionName;
+        }
+
         $min_price = 1;
         $max_price = 1000;
         $occupation_id = Occupation::where('occupation_name', 'LIKE', '%' . $occupation_id . '%')->orderBy('occupation_name', 'ASC')->value('id');

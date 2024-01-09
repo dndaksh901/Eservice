@@ -13,8 +13,12 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                    @isset($url)
+                    <form method="POST" action="{{ route('vendor.password.email') }}">
+                    @else
                     <form method="POST" action="{{ route('password.email') }}">
+                        @endisset
+                    {{-- <form method="POST" action="{{ route('password.email') }}"> --}}
                         @csrf
 
                         <div class="row mb-3">

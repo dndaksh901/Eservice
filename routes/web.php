@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\OccupationController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RazorpayController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Vendor\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\VendorController;
 use Illuminate\Http\Request;
 use Stevebauman\Location\Facades\Location;
@@ -192,4 +194,16 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     //razorpay
     Route::get('razorpay-payment', [RazorpayController::class, 'index']);
     Route::post('razorpay-payment', [RazorpayController::class, 'store'])->name('razorpay.payment.store');
+});
+
+// User Routes
+// Route::prefix('user')->group(function () {
+//     Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('user.password.request');
+//     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('user.password.email');
+// });
+
+// Vendor Routes
+Route::prefix('vendor')->group(function () {
+    Route::get('/forgot-password', [VendorForgotPasswordController::class, 'showLinkRequestForm'])->name('vendor.password.request');
+    Route::post('/forgot-password', [VendorForgotPasswordController::class, 'sendResetLinkEmail'])->name('vendor.password.email');
 });

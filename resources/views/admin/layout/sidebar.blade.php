@@ -211,7 +211,7 @@
           </a>
           <div class="collapse" id="contact-element">
              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{ url('admin/contact-detail') }}">List</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('admin/contact-list') }}">List</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('admin/contact-setting') }}">Contact Setting</a></li>
 
              </ul>

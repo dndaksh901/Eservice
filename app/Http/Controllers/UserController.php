@@ -13,6 +13,7 @@ use App\Models\Occupation;
 use Auth;
 use Mail;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
 
 
 class UserController extends Controller
@@ -43,7 +44,11 @@ class UserController extends Controller
         $ip = request()->ip(); // Dynamic IP address
         $ip = '103.223.9.47'; // Static IP address of  jalandhar
         //$ip = '101.0.49.116'; // Static IP address of mohali
-        return $data = \Location::get($ip);
+         $data = \Location::get($ip);
+
+          // Store the IP details in the session
+         Session::put('ip_details', $data);
+         return $data;
     }
 
     // public function showUser()

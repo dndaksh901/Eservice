@@ -106,9 +106,16 @@
                                             <div class="text-md-end">
 
                                                 @if (Route::has('password.request'))
-                                                    <a class="forgot-link" href="{{ route('password.request') }}">
-                                                        {{ __('Forgot Your Password?') }}
-                                                    </a>
+                                                @isset($url)
+                                                <a class="forgot-link" href="{{ route($url.'.password.request') }}">
+                                                    {{ __('Forgot Your Password?') }}
+                                                </a>
+                                            @else
+                                                <a class="forgot-link" href="{{ route('password.request') }}">
+                                                    {{ __('Forgot Your Password?') }}
+                                                </a>
+                                            @endisset
+
                                                 @endif
                                             </div>
                                         </div>
