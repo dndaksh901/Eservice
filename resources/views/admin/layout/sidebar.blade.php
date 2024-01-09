@@ -203,6 +203,20 @@
              </ul>
           </div>
        </li>
+       <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#contact-element" aria-expanded="false" aria-controls="form-elements">
+          <i class="icon-columns menu-icon"></i>
+          <span class="menu-title">Contact</span>
+          <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="contact-element">
+             <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="{{ url('admin/contact-detail') }}">List</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('admin/contact-setting') }}">Contact Setting</a></li>
+
+             </ul>
+          </div>
+       </li>
 
     </ul>
  </nav>

@@ -12,6 +12,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Profile;
 use App\Models\State;
+use App\Models\Contact;
 use App\Models\Vendor;
 use Mockery\Expectation;
 use Illuminate\Validation\ValidationException;
@@ -338,4 +339,5 @@ class AdminController extends Controller
         return redirect()->back()
             ->with('success', 'Country status updated successfully');
     }
+
 }

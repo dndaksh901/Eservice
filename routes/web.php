@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\OccupationController;
+use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\Vendor\VendorController;
@@ -60,10 +61,11 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::view('/test', 'testpage');
-    Route::view('/contact-us', 'contact');
+    // Route::view('/contact-us', 'contact');
     Route::get('/contact-us', [UserController::class, 'contactUs']);
     Route::post('/contact-us', [UserController::class, 'ContactUsForm'])->name('contact.store');
     Route::view('/about-us', 'about-us');
+
 
     Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm']);
     Route::get('/vendor/login', [LoginController::class, 'showVendorLoginForm'])->name('vendor.login');
@@ -73,7 +75,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::post('/admin/login', [LoginController::class, 'adminLogin']);
     Route::post('/admin/register', [RegisterController::class, 'createAdmin']);
     Route::middleware(['middleware' => 'vendor.status'])->group(function () {
-    Route::post('/vendor/login', [LoginController::class, 'vendorLogin']);
+        Route::post('/vendor/login', [LoginController::class, 'vendorLogin']);
     });
     Route::post('/vendor/register', [RegisterController::class, 'createVendor']);
 
@@ -147,23 +149,26 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
         Route::get('/auto-login/{email}', 'autoLoginVendorByEmail')->name('auto-login-by-email');
 
-    Route::put('/countries/{id}/enable-disable','enableDisableCountry')
-        ->name('admin.countries.enableDisable');
-        Route::get('/countries', [AdminController::class, 'countrylist'])
-        ->name('admin.countries.index');
+        Route::put('/countries/{id}/enable-disable', 'enableDisableCountry')
+            ->name('admin.countries.enableDisable');
+        Route::get('/countries','countrylist')->name('admin.countries.index');
+        Route::get('contact-setting', [ContactPageController::class, 'show'])->name('contact.show');
+        Route::post('/contact-setting', [ContactPageController::class, 'update'])->name('contact.update');
+        Route::get('/contact-list', [UserController::class, 'list'])->name('contact.list');
+        Route::get('contact/{id}', [UserController::class, 'show'])->name('admin.contact-show');
+        Route::get('contact/delete/{id}', [UserController::class, 'destroy'])->name('admin.destroy');
     });
 
 
 
     Route::prefix('admin')->middleware(['middleware' => 'auth:admin'])->group(function () {
         Route::get('/occupations', [OccupationController::class, 'index'])->name('occupations.index');
-    Route::get('/occupations/create', [OccupationController::class, 'create'])->name('occupations.create');
-    Route::post('/occupations', [OccupationController::class, 'store'])->name('occupations.store');
-    Route::get('/occupations/{occupation}', [OccupationController::class, 'show'])->name('occupations.show');
-    Route::get('/occupations/{occupation}/edit', [OccupationController::class, 'edit'])->name('occupations.edit');
-    Route::put('/occupations/{occupation}', [OccupationController::class, 'update'])->name('occupations.update');
-    Route::delete('/occupations/{occupation}', [OccupationController::class, 'destroy'])->name('occupations.destroy');
-
+        Route::get('/occupations/create', [OccupationController::class, 'create'])->name('occupations.create');
+        Route::post('/occupations', [OccupationController::class, 'store'])->name('occupations.store');
+        Route::get('/occupations/{occupation}', [OccupationController::class, 'show'])->name('occupations.show');
+        Route::get('/occupations/{occupation}/edit', [OccupationController::class, 'edit'])->name('occupations.edit');
+        Route::post('/occupations/{occupation}', [OccupationController::class, 'update'])->name('occupations.update');
+        Route::delete('/occupations/{occupation}', [OccupationController::class, 'destroy'])->name('occupations.destroy');
     });
 
     Route::group(['middleware' => 'auth'], function () {

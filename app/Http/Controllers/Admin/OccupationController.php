@@ -12,7 +12,7 @@ class OccupationController extends Controller
 {
     public function index()
     {
-         $occupations = Occupation::paginate(10); // You can adjust the number per page as needed
+        $occupations = Occupation::paginate(10); // You can adjust the number per page as needed
         return view('occupations.index', compact('occupations'));
     }
 
@@ -26,14 +26,14 @@ class OccupationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'occupation_name' => 'required|unique:occupations',
-            'status' => 'boolean',
+            // 'status' => 'boolean',
             // Add other validation rules for additional fields as needed
         ]);
 
         if ($validator->fails()) {
             return redirect()->route('occupations.create')
-                        ->withErrors($validator)
-                        ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
         $occupation = new Occupation();
@@ -54,15 +54,21 @@ class OccupationController extends Controller
     {
         $request->validate([
             'occupation_name' => 'required|unique:occupations,occupation_name,' . $occupation->id,
-            'status' => 'boolean',
+            // 'status' => 'boolean',
         ]);
+
+        if ($request->input('status') == "on") {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
 
         $occupation->occupation_name = $request->input('occupation_name');
         $occupation->slug = Str::slug($request->input('occupation_name')); // Update slug
-        $occupation->status = $request->input('status', false);
+        $occupation->status = $status;
         $occupation->save();
 
-
+        // return $status;
         return redirect()->route('occupations.index')->with('success', 'Occupation updated successfully.');
     }
 

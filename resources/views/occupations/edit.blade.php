@@ -12,7 +12,7 @@
 
         <form action="{{ route('occupations.update', $occupation->id) }}" method="POST">
             @csrf
-            @method('PUT') <!-- Use PUT method for updates -->
+            {{-- @method('PUT') <!-- Use PUT method for updates --> --}}
 
             <div class="form-group">
                 <label for="occupation">Occupation Name</label>
@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label for="status">Status:</label>
-                <input type="checkbox" name="status" id="status" data-toggle="switch" {{ $occupation->status ? 'checked' : '' }}>
+                <input type="checkbox" name="status" id="status" {{ $occupation->status==1 ? 'checked' : '' }}>
             </div>
 
             <!-- Add other form fields as needed -->

@@ -27,8 +27,9 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-switch@3/dist/css/bootstrap3/bootstrap-switch.min.css">
  <!-- Bootstrap v4 -->
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
-    <!-- Include DataTables Responsive extension -->
+ {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"> --}}
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ <!-- Include DataTables Responsive extension -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/responsive.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
@@ -55,12 +56,13 @@
         </div>
         <!-- page-body-wrapper ends -->
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js">
+    {{-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js">
-    </script>
+    </script> --}}
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{{ url('admin/vendors/js/vendor.bundle.base.js') }}"></script>

@@ -84,7 +84,7 @@
                             <li><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
                         </ul>
                     </li> --}}
-                    @if (!Auth::guard('vendor')->check() && !Auth::check())
+                    @if (!Auth::guard('vendor')->check() && !Auth::check() && !Auth::guard('admin')->check())
                         {{-- <li class="login-link">
                             <a href="{{ url('register') }}">register</a>
                         </li> --}}
@@ -129,10 +129,28 @@
                             </form>
                         </ul>
                     </li>
+                    @elseif (Auth::guard('admin')->check())
+                    <li class="has-submenu">
+                        <a href="#" class="profile-userlink" >
+
+                            <span>{{ Auth::guard('admin')->user()->name }}</span><i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a  href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+
+                            <li><a  href="{{ url('admin/logout') }}"
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">Logout</a></li>
+                            <form id="logout-form" action="{{ url('admin/logout') }}" method="get"
+                                class="d-none">
+                                @csrf
+                            </form>
+                        </ul>
+                    </li>
                     @endif
                 </ul>
             </div>
-            @if (!Auth::guard('vendor')->check() && !Auth::check())
+            @if (!Auth::guard('vendor')->check() && !Auth::check() && !Auth::guard('admin')->check())
                 <ul class="nav header-navbar-rht nav">
                     <li class="nav-item">
                         <div class="cta-btn">

@@ -12,6 +12,8 @@ use App\Models\Contact;
 use App\Models\Occupation;
 use Auth;
 use Mail;
+use Illuminate\Support\Carbon;
+
 
 class UserController extends Controller
 {
@@ -60,6 +62,36 @@ class UserController extends Controller
     public function contactUs()
     {
         return view('contact');
+    }
+    /**
+     * Contact us
+     */
+
+    public function list()
+    {
+       // Get the start and end of the current week
+    $startOfWeek = Carbon::now()->startOfWeek();
+    $endOfWeek = Carbon::now()->endOfWeek();
+
+    // Retrieve contacts created between the start and end of the current week
+    // $contacts = Contact::whereBetween('created_at', [$startOfWeek, $endOfWeek])->paginate(15);
+    $contacts = Contact::query()->paginate(15);
+
+    return view('admin.contact.list',compact('contacts'));
+    }
+
+    public function show($id)
+    {
+       return $message = Contact::find($id);
+
+    }
+
+    public function destroy($id)
+    {
+        // Delete the message with the given ID
+        Contact::destroy($id);
+
+        return redirect('admin/contact-list')->with('success', 'Message deleted successfully');
     }
 
     // Store Contact Form data
