@@ -107,7 +107,7 @@
 
                                                 @if (Route::has('password.request'))
                                                 @isset($url)
-                                                <a class="forgot-link" href="{{ route($url.'.password.request') }}">
+                                                <a class="forgot-link" href="{{ route('vendor.password.request') }}">
                                                     {{ __('Forgot Your Password?') }}
                                                 </a>
                                             @else

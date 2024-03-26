@@ -69,3 +69,16 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 #razorpay payment
 useremail id -dnd.aksh01@gmail.com
+
+test creds
+user    http://localhost:8000/login
+user901@hmail.com
+123456
+
+vendor  http://localhost:8000/vendor/login
+vendor@gmail.com
+123456
+
+Admin   http://localhost:8000/admin/login
+dnd.aksh901@gmail.com
+123456789
