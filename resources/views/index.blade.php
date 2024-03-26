@@ -59,7 +59,7 @@
                                                     <option value="" disabled hidden @selected(true)>
                                                         Select Expert *</option>
                                                     @foreach ($data['occupations'] as $occupation)
-                                                        <option value="{{ $occupation->occupation_name }}">
+                                                        <option value="{{ $occupation->slug }}">
                                                             {{ $occupation->occupation_name }}</option>
                                                     @endforeach
                                                 </select>
@@ -145,7 +145,7 @@
                             </div>
                         </li>
                         <li class="aos" data-aos="fade-up">
-                            <div class="categories-box">
+                            <div onclick="chooseCategory('electrician')" class="categories-box">
                                 <div class="categories-info">
                                     <span><img src="{{ asset('assets/icon/electrician.png') }}" class="img-fluid"
                                             alt="img"></span>
@@ -1318,6 +1318,24 @@
             } else {
                 $('.error-message').hide();
             }
-        })
+        });
+
+        function chooseCategory(category){
+            let location_data = JSON.parse(localStorage.getItem('currentLocation'));
+
+            let state = $('#state_id').val();
+            let city = $('#city_id').val();
+
+            if (state == null) {
+                state = location_data.regionName;
+                if (city == null) {
+                    city = location_data.cityName;
+                }
+            }
+
+
+            let url = "{{ url('category') }}/" + category + '/' + city + '/' + state;
+            window.location.href = url;
+        }
     </script>
 @endpush

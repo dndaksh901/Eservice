@@ -56,8 +56,8 @@
                                             <li>
                                                 <label class="custom_check">
                                                     <input type="radio" id="occupation_id.{{ $occupation->id }}"
-                                                        name="occupation_id" value="{{ $occupation->occupation_name }}"
-                                                        {{ isset($search_occupation) && $search_occupation->occupation_name == $occupation->occupation_name ? 'checked' : '' }} />
+                                                        name="occupation_id" value="{{ $occupation->slug }}"
+                                                        {{ isset($search_occupation) && $search_occupation->slug == $occupation->slug ? 'checked' : '' }} />
                                                     <span class="checkmark"></span> {{ $occupation->occupation_name }}
                                                 </label>
                                             </li>
@@ -308,7 +308,7 @@
                 if(max_price < min_price){
                     $('#price_error').text(`Min price can not be greater than Max price.`)
                 }
-                let url = "{{ url('search-by-name') }}/" + occupation + '/' + city + '/' + state +'/' +min_price +'/' +max_price;
+                let url = "{{ url('category') }}/" + occupation + '/' + city + '/' + state +'/' +min_price +'/' +max_price;
                 window.location.href = url;
             }
 

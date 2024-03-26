@@ -395,10 +395,10 @@ class VendorController extends Controller
     {
         return view('search');
     }
-    public function search($occupation_id = null, $city_id = null, $state_id = null)
+    public function search($occupation_slug = null, $city_id = null, $state_id = null)
     {
         $ipDetails = Session::get('ip_details');
-        if ($occupation_id == null) {
+        if ($occupation_slug == null) {
             return redirect('/');
         }
         if ($city_id == null || $state_id == null) {
@@ -408,7 +408,7 @@ class VendorController extends Controller
 
         $min_price = 1;
         $max_price = 1000;
-        $occupation_id = Occupation::where('occupation_name', 'LIKE', '%' . $occupation_id . '%')->orderBy('occupation_name', 'ASC')->value('id');
+        $occupation_id = Occupation::where('slug', 'LIKE', '%' . $occupation_slug . '%')->orderBy('occupation_name', 'ASC')->value('id');
         $profiles = Profile::with('favorite')->where('occupation_id', $occupation_id)
             ->where('profile_status', 1)
             ->where('state_id', State::where('name', $state_id)->where('status', 1)->value('id'))
@@ -435,7 +435,7 @@ class VendorController extends Controller
         if ($max_price == null) {
             $max_price = 1000;
         }
-        $occupation_id = Occupation::where('occupation_name', 'LIKE', '%' . $occupation . '%')->orderBy('occupation_name', 'ASC')->value('id');
+        $occupation_id = Occupation::where('slug', 'LIKE', '%' . $occupation . '%')->orderBy('occupation_name', 'ASC')->value('id');
 
         $profiles = Profile::where('occupation_id', $occupation_id)
             ->where('profile_status', 1)
