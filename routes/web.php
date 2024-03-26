@@ -85,8 +85,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
     //Search Skilled Workers
     Route::get('search', [VendorController::class, 'searchView']);
-    Route::get('search/{occupation_id?}/{city_id?}/{state_id?}', [VendorController::class, 'search']);
-    Route::get('search-by-name/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
+    Route::get('search/{occupation_slug?}/{city_id?}/{state_id?}', [VendorController::class, 'search']);
+    Route::get('category/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
     Route::post('search', [VendorController::class, 'ajaxSearch']);
 
     Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor', 'vendor.status'])->group(function () {
