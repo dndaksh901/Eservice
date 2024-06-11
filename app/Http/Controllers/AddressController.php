@@ -30,4 +30,9 @@ class AddressController extends Controller
         })->where('status', 1)->orderBy('name', 'ASC')->get();
         return $cities;
     }
+
+    public function getActiveCountries(Request $request) {
+        $countries = Country::where('id', $request->country_id)->first();
+        return response()->json($countries);
+    }
 }

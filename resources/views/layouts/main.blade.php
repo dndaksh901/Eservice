@@ -81,6 +81,11 @@
     <script src="{{ url('admin/js/dataTables.select.min.js') }}"></script>
 
     <script>
+         function capitalizeWords(str) {
+                    return str.replace(/\b\w/g, function(char) {
+                        return char.toUpperCase();
+                    });
+                }
         window.onload = (event) => {
             $.ajax({
                 url: "{{ url('ip-address') }}",
@@ -88,18 +93,60 @@
                 success: function(data) {
                     localStorage.removeItem("currentLocation");
                     localStorage.setItem("currentLocation", JSON.stringify(data));
+                    localStorage.setItem("country", data.countryName);
                 }
             })
+            // Function to capitalize the first letter of each word
 
-            // $.ajax({
-            //     url: "{{ url('get-countries') }}",
-            //     type: 'get',
-            //     success: function(data) {
-            //         console.log(data);
-            //     }
-            // })
+
+            $.ajax({
+                url: "{{ url('get-countries') }}",
+                type: 'get',
+                success: function(data) {
+                    if(data != ''){
+                        let html = '';
+                        let selected = '';
+                        $.each(data, function(key, value) {
+                            if(localStorage.getItem("country") != null){
+                                var currentCountry = localStorage.getItem("country");
+                                if(capitalizeWords(value.name) == currentCountry){
+                                    selected = 'selected';
+                                }else{
+                                    selected = '';
+                                }
+
+                                html +=`<option value="${value.id}" ${selected}>${capitalizeWords(value.name)}</option>`;
+                            }
+                        });
+                        $('#header-country-select').append(html);
+                    }
+                }
+            })
         };
-    </script>
+
+        $(document).ready(function() {
+    $('#header-country-select').change(function() {
+       let countryId = $(this).val();
+        console.log(countryId);
+
+        $.ajax({
+            url: "api/active-countries",
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                country_id: countryId,
+            },
+            success: function(response) {
+                if(response !=''){
+                    localStorage.setItem("country", capitalizeWords(response.name));
+                    console.log(response.name)
+                }
+            }
+        });
+    });
+});
+
+        </script>
     @stack('js')
 </body>
 
