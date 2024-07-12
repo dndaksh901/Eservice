@@ -164,7 +164,7 @@
             <ul class="nav header-navbar-rht">
                 <li class="nav-item">
                     <select id="header-country-select" class="form-select" aria-label="Country select">
-                        <option selected>Select Country</option>
+                        <option selected>Select Countrys</option>
                     </select>
                 </li>
             </ul>
