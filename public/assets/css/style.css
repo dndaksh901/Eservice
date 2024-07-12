@@ -10480,7 +10480,7 @@ textarea.form-control {
     background: url("/imgs/handyman.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center bottom;
+    background-position: bottom bottom;
 }
 
 section.banner-section.banner-five:before {

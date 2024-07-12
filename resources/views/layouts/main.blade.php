@@ -81,72 +81,70 @@
     <script src="{{ url('admin/js/dataTables.select.min.js') }}"></script>
 
     <script>
-         function capitalizeWords(str) {
-                    return str.replace(/\b\w/g, function(char) {
-                        return char.toUpperCase();
-                    });
-                }
-        window.onload = (event) => {
+    $(document).ready(function() {
+        // Function to capitalize the first letter of each word
+        function capitalizeWords(str) {
+            return str.replace(/\b\w/g, function(char) {
+                return char.toUpperCase();
+            });
+        }
+
+        // Function to fetch IP address and set local storage
+        function fetchIPAddress() {
             $.ajax({
                 url: "{{ url('ip-address') }}",
                 type: 'get',
                 success: function(data) {
-                    localStorage.removeItem("currentLocation");
                     localStorage.setItem("currentLocation", JSON.stringify(data));
-                    localStorage.setItem("country", data.countryName);
+                    localStorage.setItem("country", capitalizeWords(data.countryName));
+                    populateCountrySelect(data.countryName);
                 }
-            })
-            // Function to capitalize the first letter of each word
+            });
+        }
 
-
+        // Function to populate country select dropdown
+        function populateCountrySelect(currentCountry) {
             $.ajax({
                 url: "{{ url('get-countries') }}",
                 type: 'get',
                 success: function(data) {
-                    if(data != ''){
+                    if (data && data.length > 0) {
                         let html = '';
-                        let selected = '';
                         $.each(data, function(key, value) {
-                            if(localStorage.getItem("country") != null){
-                                var currentCountry = localStorage.getItem("country");
-                                if(capitalizeWords(value.name) == currentCountry){
-                                    selected = 'selected';
-                                }else{
-                                    selected = '';
-                                }
-
-                                html +=`<option value="${value.id}" ${selected}>${capitalizeWords(value.name)}</option>`;
-                            }
+                            let selected = (capitalizeWords(value.name) === currentCountry) ? 'selected' : '';
+                            html += `<option value="${value.id}" ${selected}>${capitalizeWords(value.name)}</option>`;
                         });
-                        $('#header-country-select').append(html);
+                        $('#header-country-select').html(html);
+
                     }
                 }
-            })
-        };
+            });
+        }
 
-        $(document).ready(function() {
-    $('#header-country-select').change(function() {
-       let countryId = $(this).val();
-        console.log(countryId);
+        // Initial fetch IP address and populate country select on page load
+        fetchIPAddress();
 
-        $.ajax({
-            url: "api/active-countries",
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                country_id: countryId,
-            },
-            success: function(response) {
-                if(response !=''){
-                    localStorage.setItem("country", capitalizeWords(response.name));
-                    console.log(response.name)
+        // Event listener for country select change
+        $('#header-country-select').change(function() {
+            let countryId = $(this).val();
+            $.ajax({
+                url: "api/active-countries",
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    country_id: countryId,
+                },
+                success: function(response) {
+                    if (response) {
+                        localStorage.setItem("country", capitalizeWords(response.name));
+                        window.location.href="{{ url('/') }}";
+                    }
                 }
-            }
+            });
         });
-    });
-});
 
-        </script>
+    });
+</script>
     @stack('js')
 </body>
 
