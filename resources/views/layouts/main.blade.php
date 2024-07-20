@@ -33,7 +33,6 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
-
     @yield('links')
 </head>
 
@@ -47,13 +46,13 @@
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11372882687">
 </script>
-<script>
+{{-- <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'AW-11372882687');
-</script>
+</script> --}}
    {{-- <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js')}}"></script> --}}
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
@@ -79,6 +78,7 @@
     {{-- <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script> --}}
     <script src="{{ url('admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
     <script src="{{ url('admin/js/dataTables.select.min.js') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
 
     <script>
     $(document).ready(function() {

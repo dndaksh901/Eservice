@@ -99,6 +99,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="search-input">
+                                        <div class="form-group mb-0">
+                                            <div class="group-img">
+                                                <input id="autocomplete" placeholder="Enter your address" type="text" />
+                                                <label for="autocomplete">Address:</label>
+
+                                                    <input type="hidden" id="street_number" name="street_number">
+                                                    <input type="hidden" id="route" name="route">
+                                                    <input type="hidden" id="locality" name="locality">
+                                                    <input type="hidden" id="administrative_area_level_1" name="administrative_area_level_1">
+                                                    <input type="hidden" id="postal_code" name="postal_code">
+                                                    <input type="hidden" id="country" name="country">
+
+
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="search-btn">
                                         <button class="btn btn-primary" type="submit">
                                             <i class="fa fa-search" aria-hidden="true"></i><span id="search-text"> Search
@@ -600,665 +617,6 @@
         </div>
     </section>
 
-
-{{-- <section class="gallery-section-five">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="section-heading heading-five aos" data-aos="fade-up">
-                <h2>Best Place on Earth</h2>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 col-sm-12 aos" data-aos="fade-up">
-            <div class="gal-wrap">
-                <img src="assets/img/gallery/gallery-1.jpg" class="img-fluid" alt="img">
-                <div class="city-overlay city-five-overlay">
-                    <div class="city-name">
-                        <h5>Oceania / Africa / US </h5>
-                        <p>The collection of the Department of Africa.</p>
-                    </div>
-                    <div class="rating d-flex">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 aos" data-aos="fade-up">
-            <div class="gal-wrap">
-                <img src="assets/img/gallery/gallery-2.jpg" class="img-fluid" alt="img">
-                <div class="city-overlay city-five-overlay">
-                    <div class="city-name">
-                        <h5>Oceania</h5>
-                    </div>
-                    <div class="rating d-flex">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="gal-wrap">
-                <img src="assets/img/gallery/gallery-3.jpg" class="img-fluid" alt="img">
-                <div class="city-overlay city-five-overlay">
-                    <div class="city-name">
-                        <h5>Africa </h5>
-                    </div>
-                    <div class="rating d-flex">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 aos" data-aos="fade-up">
-            <div class="gal-wrap">
-                <img src="assets/img/gallery/gallery-4.jpg" class="img-fluid" alt="img">
-                <div class="city-overlay city-five-overlay">
-                    <div class="city-name">
-                        <h5>Oceania </h5>
-                    </div>
-                    <div class="rating d-flex">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="gal-wrap">
-                <img src="assets/img/gallery/gallery-5.jpg" class="img-fluid" alt="img">
-                <div class="city-overlay city-five-overlay">
-                    <div class="city-name">
-                        <h5>Africa / US </h5>
-                    </div>
-                    <div class="rating d-flex">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-
-
-<section class="business-section">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="section-heading heading-five aos" data-aos="fade-up">
-                <h2>Latest Ads</h2>
-            </div>
-        </div>
-    </div>
-    <div class="owl-carousel business-slider grid-view">
-        <div class="card business-card aos" data-aos="fade-up">
-            <div class="blog-widget">
-                <div class="blog-img">
-                    <a href="service-details.html">
-                        <img src="assets/img/latest/latest-01.jpg" class="img-fluid" alt="blog-img">
-                    </a>
-                    <div class="fav-item  justify-content-end">
-                        <a href="javascript:void(0)" class="fav-icon">
-                            <i class="feather-heart"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="bloglist-content">
-                    <div class="card-body">
-                        <span class="Featured-text">Featured</span>
-                        <div class="grid-author">
-                            <img src="assets/img/profiles/avatar-03.jpg" alt="author">
-                        </div>
-                        <div class="blogfeaturelink">
-                            <div class="blog-features">
-                                <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                        Cinema</span></a>
-                            </div>
-                            <div class="blog-author text-end">
-                                <span><i class="feather-map-pin"></i> Paris</span>
-                            </div>
-                        </div>
-                        <h6><a href="service-details.html">Cinema</a></h6>
-                        <div class="amount-details">
-                            <div class="amount">
-                                <span class="validrate">$350</span>
-                                <span>$450</span>
-                            </div>
-                            <div class="ratings">
-                                <span>4.7</span> (50)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card business-card aos" data-aos="fade-up">
-            <div class="blog-widget">
-                <div class="blog-img">
-                    <a href="service-details.html">
-                        <img src="assets/img/latest/latest-02.jpg" class="img-fluid" alt="blog-img">
-                    </a>
-                    <div class="fav-item  justify-content-end">
-                        <a href="javascript:void(0)" class="fav-icon">
-                            <i class="feather-heart"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="bloglist-content">
-                    <div class="card-body">
-                        <span class="Featured-text">Featured</span>
-                        <div class="grid-author">
-                            <img src="assets/img/profiles/avatar-02.jpg" alt="author">
-                        </div>
-                        <div class="blogfeaturelink">
-                            <div class="blog-features">
-                                <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                        Lodging</span></a>
-                            </div>
-                            <div class="blog-author text-end">
-                                <span><i class="feather-map-pin"></i> New York</span>
-                            </div>
-                        </div>
-                        <h6><a href="service-details.html">Lodging</a></h6>
-                        <div class="amount-details">
-                            <div class="amount">
-                                <span class="validrate">$370</span>
-                                <span>$470</span>
-                            </div>
-                            <div class="ratings">
-                                <span>4.7</span> (50)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card business-card aos" data-aos="fade-up">
-            <div class="blog-widget">
-                <div class="blog-img">
-                    <a href="service-details.html">
-                        <img src="assets/img/latest/latest-03.jpg" class="img-fluid" alt="blog-img">
-                    </a>
-                    <div class="fav-item  justify-content-end">
-                        <a href="javascript:void(0)" class="fav-icon">
-                            <i class="feather-heart"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="bloglist-content">
-                    <div class="card-body">
-                        <span class="Featured-text">Featured</span>
-                        <div class="grid-author">
-                            <img src="assets/img/profiles/avatar-04.jpg" alt="author">
-                        </div>
-                        <div class="blogfeaturelink">
-                            <div class="blog-features">
-                                <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                        Outdoors</span></a>
-                            </div>
-                            <div class="blog-author text-end">
-                                <span><i class="feather-map-pin"></i> Australia</span>
-                            </div>
-                        </div>
-                        <h6><a href="service-details.html">Outdoors</a></h6>
-                        <div class="amount-details">
-                            <div class="amount">
-                                <span class="validrate">$300</span>
-                                <span>$450</span>
-                            </div>
-                            <div class="ratings">
-                                <span>4.7</span> (50)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card business-card aos" data-aos="fade-up">
-            <div class="blog-widget">
-                <div class="blog-img">
-                    <a href="service-details.html">
-                        <img src="assets/img/latest/latest-04.jpg" class="img-fluid" alt="blog-img">
-                    </a>
-                    <div class="fav-item  justify-content-end">
-                        <a href="javascript:void(0)" class="fav-icon">
-                            <i class="feather-heart"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="bloglist-content">
-                    <div class="card-body">
-                        <span class="Featured-text">Featured</span>
-                        <div class="grid-author">
-                            <img src="assets/img/profiles/avatar-05.jpg" alt="author">
-                        </div>
-                        <div class="blogfeaturelink">
-                            <div class="blog-features">
-                                <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                        Automotive</span></a>
-                            </div>
-                            <div class="blog-author text-end">
-                                <span><i class="feather-map-pin"></i> Texas</span>
-                            </div>
-                        </div>
-                        <h6><a href="service-details.html">Automotive</a></h6>
-                        <div class="amount-details">
-                            <div class="amount">
-                                <span class="validrate">$250</span>
-                                <span>$370</span>
-                            </div>
-                            <div class="ratings">
-                                <span>4.7</span> (50)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card business-card aos" data-aos="fade-up">
-            <div class="blog-widget">
-                <div class="blog-img">
-                    <a href="service-details.html">
-                        <img src="assets/img/latest/latest-02.jpg" class="img-fluid" alt="blog-img">
-                    </a>
-                    <div class="fav-item  justify-content-end">
-                        <a href="javascript:void(0)" class="fav-icon">
-                            <i class="feather-heart"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="bloglist-content">
-                    <div class="card-body">
-                        <span class="Featured-text">Featured</span>
-                        <div class="grid-author">
-                            <img src="assets/img/profiles/avatar-06.jpg" alt="author">
-                        </div>
-                        <div class="blogfeaturelink">
-                            <div class="blog-features">
-                                <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                        Lodging</span></a>
-                            </div>
-                            <div class="blog-author text-end">
-                                <span><i class="feather-map-pin"></i> Florida</span>
-                            </div>
-                        </div>
-                        <h6><a href="service-details.html">Lodging</a></h6>
-                        <div class="amount-details">
-                            <div class="amount">
-                                <span class="validrate">$330</span>
-                                <span>$350</span>
-                            </div>
-                            <div class="ratings">
-                                <span>4.7</span> (50)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-
-
-<section class="pricing-plan">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="section-heading heading-five price-head-five aos" data-aos="fade-up">
-                <h2>Our Pricing Plan</h2>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-3 d-flex col-md-6">
-            <div class="price-card price-three price-five flex-fill">
-                <div class="price-head">
-                    <div class="price-level">
-                        <h6>Intro</h6>
-                    </div>
-                </div>
-                <div class="price-body">
-                    <ul>
-                        <li class="active">Upload Video up to 720p Resolution</li>
-                        <li class="inactive">Attachment & Post Scheduling</li>
-                        <li class="inactive">Set your rates</li>
-                        <li class="inactive">Exclusive Deals</li>
-                        <li class="inactive">Advanced Statistics</li>
-                    </ul>
-                    <h4>$123 <span>/ month</span></h4>
-                    <div>
-                        <a href="login.html" class="btn viewdetails-btn">Choose Plan <i
-                                class="feather-arrow-right ms-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 d-flex col-md-6">
-            <div class="price-card price-three price-five flex-fill">
-                <div class="price-head">
-                    <div class="price-level">
-                        <h6>Basic</h6>
-                    </div>
-                </div>
-                <div class="price-body">
-                    <ul>
-                        <li class="active">Upload Video up to 720p Resolution</li>
-                        <li class="active">Attachment & Post Scheduling</li>
-                        <li class="active">Set your rates</li>
-                        <li class="inactive">Exclusive Deals</li>
-                        <li class="inactive">Advanced Statistics</li>
-                    </ul>
-                    <h4>$123 <span>/ month</span></h4>
-                    <div>
-                        <a href="login.html" class="btn viewdetails-btn">Choose Plan <i
-                                class="feather-arrow-right ms-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 d-flex col-md-6">
-            <div class="price-card price-three price-five flex-fill active">
-                <div class="price-head">
-                    <div class="price-level">
-                        <h6>Popular</h6>
-                        <span>Save $40</span>
-                    </div>
-                </div>
-                <div class="price-body">
-                    <ul>
-                        <li class="active">Upload Video up to 720p Resolution</li>
-                        <li class="active">Attachment & Post Scheduling</li>
-                        <li class="active">Set your rates</li>
-                        <li class="active">Exclusive Deals</li>
-                        <li class="inactive">Advanced Statistics</li>
-                    </ul>
-                    <h4>$123 <span>/ month</span></h4>
-                    <div>
-                        <a href="login.html" class="btn viewdetails-btn">Choose Plan <i
-                                class="feather-arrow-right ms-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 d-flex col-md-6">
-            <div class="price-card price-three price-five flex-fill">
-                <div class="price-head">
-                    <div class="price-level">
-                        <h6>Enterprise</h6>
-                    </div>
-                </div>
-                <div class="price-body">
-                    <ul>
-                        <li class="active">Upload Video up to 720p Resolution</li>
-                        <li class="active">Attachment & Post Scheduling</li>
-                        <li class="active">Set your rates</li>
-                        <li class="active">Exclusive Deals</li>
-                        <li class="active">Advanced Statistics</li>
-                    </ul>
-                    <h4>$123 <span>/ month</span></h4>
-                    <div>
-                        <a href="login.html" class="btn viewdetails-btn">Choose Plan <i
-                                class="feather-arrow-right ms-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-
-
-<section class="testimonial-five-section">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="section-heading heading-five aos" data-aos="fade-up">
-                <h2>Our Customer’s Says</h2>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="owl-carousel testi-five-slider">
-                <div class="testimonial-info testi-four testi-five aos" data-aos="fade-up">
-                    <div class="testimonialslider-content">
-                        <span><i class="fa-solid fa-quote-left"></i></span>
-                        <h6>It was a wonderful experience</h6>
-                        <p>Omnis totam molestiae delectus nemo alias nesciunt harum et. Nobis dolorum excepturi quod
-                            vel. Sunt est qui ab non dolores repellat rem impedit dolores. Ut ea rerum cum eum.
-                            Alias dolores tempore illo accusantium est et voluptatem voluptas</p>
-                    </div>
-                    <div class="testimonialslider-heading d-flex">
-                        <div class="testi-img">
-                            <img src="assets/img/testimonial-1.jpg" class="img-fluid" alt="testi-img">
-                        </div>
-                        <div class="testi-author">
-                            <h6>Dev</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-info testi-four testi-five aos" data-aos="fade-up">
-                    <div class="testimonialslider-content">
-                        <span><i class="fa-solid fa-quote-left"></i></span>
-                        <h6>It was a very good experience</h6>
-                        <p>Omnis totam molestiae delectus nemo alias nesciunt harum et. Nobis dolorum excepturi quod
-                            vel. Sunt est qui ab non dolores repellat rem impedit dolores. Ut ea rerum cum eum.
-                            Alias dolores tempore illo accusantium est et voluptatem voluptas</p>
-                    </div>
-                    <div class="testimonialslider-heading d-flex">
-                        <div class="testi-img">
-                            <img src="assets/img/testimonial-2.jpg" class="img-fluid" alt="testi-img">
-                        </div>
-                        <div class="testi-author">
-                            <h6>Esther Hills</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-info testi-four testi-five aos" data-aos="fade-up">
-                    <div class="testimonialslider-content">
-                        <span><i class="fa-solid fa-quote-left"></i></span>
-                        <h6>It was a good experience</h6>
-                        <p>Omnis totam molestiae delectus nemo alias nesciunt harum et. Nobis dolorum excepturi quod
-                            vel. Sunt est qui ab non dolores repellat rem impedit dolores. Ut ea rerum cum eum.
-                            Alias dolores tempore illo accusantium est et voluptatem voluptas</p>
-                    </div>
-                    <div class="testimonialslider-heading d-flex">
-                        <div class="testi-img">
-                            <img src="assets/img/profiles/avatar-06.jpg" class="img-fluid" alt="testi-img">
-                        </div>
-                        <div class="testi-author">
-                            <h6>Hannah Schmitt</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-
-
-<section class="latest-blog-five">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="section-heading heading-five aos" data-aos="fade-up">
-                <h2>Our Latest Blog</h2>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-            <div class="articles-grid w-100">
-                <div class="articles-info">
-                    <div class="articles-left">
-                        <a href="javascript:void(0);">
-                            <div class="articles-img">
-                                <img src="assets/img/blog/blog-16.jpg" class="img-fluid" alt="">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="articles-right">
-                        <div class="articles-content">
-                            <ul class="articles-list nav">
-                                <li>
-                                    <i class="feather-user"></i> John Doe
-                                </li>
-                                <li>
-                                    <i class="feather-calendar"></i> 13 Aug, 2023
-                                </li>
-                            </ul>
-                            <h4>
-                                <a href="javascript:void(0);">Lorem ipsum dolor amet, adipiscing ut labore </a>
-                            </h4>
-                            <p>Sed perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                laudantium</p>
-                            <a href="javascript:void(0);" class="btn articles-read-more">Read More<i
-                                    class="feather-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-            <div class="articles-grid w-100">
-                <div class="articles-info">
-                    <div class="articles-left">
-                        <a href="javascript:void(0);">
-                            <div class="articles-img">
-                                <img src="assets/img/blog/blog-17.jpg" class="img-fluid" alt="">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="articles-right">
-                        <div class="articles-content">
-                            <ul class="articles-list nav">
-                                <li>
-                                    <i class="feather-user"></i> Darren Elder
-                                </li>
-                                <li>
-                                    <i class="feather-calendar"></i> 10 Sep, 2023
-                                </li>
-                            </ul>
-                            <h4>
-                                <a href="javascript:void(0);">Lorem ipsum dolor amet, adipiscing ut labore </a>
-                            </h4>
-                            <p>Sed perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                laudantium</p>
-                            <a href="javascript:void(0);" class="btn articles-read-more">Read More<i
-                                    class="feather-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-            <div class="articles-grid w-100">
-                <div class="articles-info">
-                    <div class="articles-left">
-                        <a href="javascript:void(0);">
-                            <div class="articles-img">
-                                <img src="assets/img/blog/blog-18.jpg" class="img-fluid" alt="">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="articles-right">
-                        <div class="articles-content">
-                            <ul class="articles-list nav">
-                                <li>
-                                    <i class="feather-user"></i> Ruby Perrin
-                                </li>
-                                <li>
-                                    <i class="feather-calendar"></i> 30 Oct, 2023
-                                </li>
-                            </ul>
-                            <h4>
-                                <a href="javascript:void(0);">Lorem ipsum dolor amet, adipiscing ut labore </a>
-                            </h4>
-                            <p>Sed perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                laudantium</p>
-                            <a href="javascript:void(0);" class="btn articles-read-more">Read More<i
-                                    class="feather-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 d-flex aos" data-aos="fade-up">
-            <div class="articles-grid w-100">
-                <div class="articles-info">
-                    <div class="articles-left">
-                        <a href="javascript:void(0);">
-                            <div class="articles-img">
-                                <img src="assets/img/blog/blog-19.jpg" class="img-fluid" alt="">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="articles-right">
-                        <div class="articles-content">
-                            <ul class="articles-list nav">
-                                <li>
-                                    <i class="feather-user"></i> John Doe
-                                </li>
-                                <li>
-                                    <i class="feather-calendar"></i> 22 Sep 2023
-                                </li>
-                            </ul>
-                            <h4>
-                                <a href="javascript:void(0);">Lorem ipsum dolor consectetur adipiscing </a>
-                            </h4>
-                            <p>Sed perspiciatis unde omnis iste voluptatem accusantium doloremque laudantium, totam
-                                rem aperiam</p>
-                            <a href="javascript:void(0);" class="btn articles-read-more">Read More<i
-                                    class="feather-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-
-
-<section class="stay-tuned stay-turn-five">
-<div class="container">
-    <div class="stay-with-us">
-        <h3>Stay Tuned With Us</h3>
-        <p>Subcribe to our newletter and never miss our latest news and promotions. Our newsletter is sent once a
-            week, every thursday.</p>
-        <form>
-            <div class="form-group">
-                <div class="group-img">
-                    <i class="feather-mail"></i>
-                    <input type="text" class="form-control" placeholder="Enter Email Address">
-                </div>
-            </div>
-            <button class="btn btn-primary" type="submit"> Subscribe</button>
-        </form>
-    </div>
-</div>
-</section> --}}
-
-
 @endsection
 
 @push('js')
@@ -1338,4 +696,43 @@
             window.location.href = url;
         }
     </script>
+   <script>
+    function initialize() {
+        var input = document.getElementById('autocomplete');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function () {
+            var place = autocomplete.getPlace();
+            var addressComponents = place.address_components;
+
+            addressComponents.forEach(function(component) {
+                var addressType = component.types[0];
+                var val = component.long_name;
+
+                switch (addressType) {
+                    case 'street_number':
+                        document.getElementById('street_number').value = val;
+                        break;
+                    case 'route':
+                        document.getElementById('route').value = val;
+                        break;
+                    case 'locality':
+                        document.getElementById('locality').value = val;
+                        break;
+                    case 'administrative_area_level_1':
+                        document.getElementById('administrative_area_level_1').value = val;
+                        break;
+                    case 'postal_code':
+                        document.getElementById('postal_code').value = val;
+                        break;
+                    case 'country':
+                        document.getElementById('country').value = val;
+                        break;
+                }
+            });
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 @endpush
