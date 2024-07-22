@@ -31,71 +31,77 @@
         }
     </style>
 
-    <section class="banner-section banner-five">
-        <div class="container">
-            <div class="home-banner">
-                <div class="row align-items-center">
-                    <div class="col-lg-12 mx-auto">
-                        <div class="section-search aos" data-aos="fade-up">
-                            <h1>SkilledWorker - The Experts You Need</h1>
-                            <p>Providing skilled workers for all your needs</p>
-                            <div class="search-box">
-                                @if (count($errors) > 0)
-                                    @foreach ($errors->all() as $error)
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            {{ $error }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close"></button>
-                                        </div>
-                                    @endforeach
-                                @endif
-                                <form id="search-form" class="form-block d-flex">
-
-                                    <div class="search-input line">
-                                        <div class="form-group mb-0">
-                                            <div class="group-img">
-                                                <select class="form-control select category-select" name="occupation_id"
-                                                    id="occupation_id">
-                                                    <option value="" disabled hidden @selected(true)>
-                                                        Select Expert *</option>
-                                                    @foreach ($data['occupations'] as $occupation)
-                                                        <option value="{{ $occupation->slug }}">
-                                                            {{ $occupation->occupation_name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <i class="feather-user"></i>
-                                            </div>
-                                        </div>
-                                        <div class="error-message"><span class="err-text" id="err-occupation">Select
-                                                Occupation</span></div>
+<section class="banner-section banner-five">
+    <div class="container">
+        <div class="home-banner">
+            <div class="row align-items-center">
+                <div class="col-lg-12 mx-auto">
+                    <div class="section-search aos" data-aos="fade-up">
+                        <h1>SkilledWorker - The Experts You Need</h1>
+                        <p>Providing skilled workers for all your needs</p>
+                        <div class="search-box">
+                            @if (count($errors) > 0)
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
                                     </div>
-                                    <div class="search-input">
-                                        <div class="form-group mb-0">
-                                            <div class="group-img">
-                                                <input id="autocomplete" placeholder="Enter your address" type="text" class="form-control" required/>
-                                                    <input type="hidden" id="street_number" name="street_number">
-                                                    <input type="hidden" id="route" name="route">
-                                                    <input type="hidden" id="locality" name="locality">
-                                                    <input type="hidden" id="administrative_area_level_1" name="administrative_area_level_1">
-                                                    <input type="hidden" id="postal_code" name="postal_code">
-                                                    <input type="hidden" id="country" name="country">
-                                            </div>
+                                @endforeach
+                            @endif
+                            <form id="search-form" action="{{ url('search') }}" method="POST" class="form-block d-flex">
+                                @csrf
+                                <div class="search-input line">
+                                    <div class="form-group mb-0">
+                                        <div class="group-img">
+                                            <select class="form-control select category-select" name="occupation_id"
+                                                id="occupation_id" required>
+                                                <option value="" disabled hidden @selected(true)>
+                                                    Select Expert *</option>
+                                                @foreach ($data['occupations'] as $occupation)
+                                                    <option value="{{ $occupation->slug }}">
+                                                        {{ $occupation->occupation_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <i class="feather-user"></i>
                                         </div>
                                     </div>
-                                    <div class="search-btn">
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-search" aria-hidden="true"></i>
-                                            <span id="search-text">Search</span>
-                                        </button>
+                                    <div class="error-message"><span class="err-text" id="err-occupation">Select
+                                            Occupation</span></div>
+                                </div>
+                                <div class="search-input">
+                                    <div class="form-group mb-0">
+                                        <div class="group-img">
+                                            <input id="autocomplete" placeholder="Enter your address" type="text" class="form-control" required/>
+                                                <input type="hidden" id="latitude" name="latitude">
+                                                <input type="hidden" id="longitude" name="longitude">
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="search-input">
+                                    <div class="form-group mb-0">
+                                        <select class="form-control select" name="radius" id="radius" required>
+                                            <option value="5">5 km</option>
+                                            <option value="10" selected>10 km</option>
+                                            <option value="20">20 km</option>
+                                            <option value="50">50 km</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="search-btn">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                        <span id="search-text">Search</span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="category-five-section">
         <div class="container">
@@ -222,341 +228,6 @@
     </section>
 
 
-    {{-- <section class="business-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="section-heading heading-five aos" data-aos="fade-up">
-                        <h2>Trending Business Places</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="owl-carousel business-slider grid-view">
-                <div class="card business-card aos" data-aos="fade-up">
-                    <div class="blog-widget">
-                        <div class="blog-img">
-                            <a href="service-details.html">
-                                <img src="assets/img/business/business-01.jpg" class="img-fluid" alt="blog-img">
-                            </a>
-                            <div class="fav-item  justify-content-end">
-                                <a href="javascript:void(0)" class="fav-icon">
-                                    <i class="feather-heart"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="bloglist-content">
-                            <div class="card-body">
-                                <span class="Featured-text">Featured</span>
-                                <div class="grid-author">
-                                    <img src="assets/img/profiles/avatar-03.jpg" alt="author">
-                                </div>
-                                <div class="blogfeaturelink">
-                                    <div class="blog-features">
-                                        <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                                Restaurant</span></a>
-                                    </div>
-                                    <div class="blog-author text-end">
-                                        <span><i class="feather-map-pin"></i> Paris</span>
-                                    </div>
-                                </div>
-                                <h6><a href="service-details.html">Mattone Restaurant</a></h6>
-                                <div class="amount-details">
-                                    <div class="amount">
-                                        <span class="validrate">$350</span>
-                                        <span>$450</span>
-                                    </div>
-                                    <div class="ratings">
-                                        <span>4.7</span> (50)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card business-card aos" data-aos="fade-up">
-                    <div class="blog-widget">
-                        <div class="blog-img">
-                            <a href="service-details.html">
-                                <img src="assets/img/business/business-02.jpg" class="img-fluid" alt="blog-img">
-                            </a>
-                            <div class="fav-item  justify-content-end">
-                                <a href="javascript:void(0)" class="fav-icon">
-                                    <i class="feather-heart"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="bloglist-content">
-                            <div class="card-body">
-                                <span class="Featured-text">Featured</span>
-                                <div class="grid-author">
-                                    <img src="assets/img/profiles/avatar-02.jpg" alt="author">
-                                </div>
-                                <div class="blogfeaturelink">
-                                    <div class="blog-features">
-                                        <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                                Fitness</span></a>
-                                    </div>
-                                    <div class="blog-author text-end">
-                                        <span><i class="feather-map-pin"></i> New York</span>
-                                    </div>
-                                </div>
-                                <h6><a href="service-details.html">Gym Equipment</a></h6>
-                                <div class="amount-details">
-                                    <div class="amount">
-                                        <span class="validrate">$370</span>
-                                        <span>$470</span>
-                                    </div>
-                                    <div class="ratings">
-                                        <span>4.7</span> (50)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card business-card aos" data-aos="fade-up">
-                    <div class="blog-widget">
-                        <div class="blog-img">
-                            <a href="service-details.html">
-                                <img src="assets/img/business/business-03.jpg" class="img-fluid" alt="blog-img">
-                            </a>
-                            <div class="fav-item  justify-content-end">
-                                <a href="javascript:void(0)" class="fav-icon">
-                                    <i class="feather-heart"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="bloglist-content">
-                            <div class="card-body">
-                                <span class="Featured-text">Featured</span>
-                                <div class="grid-author">
-                                    <img src="assets/img/profiles/avatar-04.jpg" alt="author">
-                                </div>
-                                <div class="blogfeaturelink">
-                                    <div class="blog-features">
-                                        <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                                Beauty Care</span></a>
-                                    </div>
-                                    <div class="blog-author text-end">
-                                        <span><i class="feather-map-pin"></i> Australia</span>
-                                    </div>
-                                </div>
-                                <h6><a href="service-details.html">Beauty Parlour</a></h6>
-                                <div class="amount-details">
-                                    <div class="amount">
-                                        <span class="validrate">$300</span>
-                                        <span>$450</span>
-                                    </div>
-                                    <div class="ratings">
-                                        <span>4.7</span> (50)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card business-card aos" data-aos="fade-up">
-                    <div class="blog-widget">
-                        <div class="blog-img">
-                            <a href="service-details.html">
-                                <img src="assets/img/business/business-04.jpg" class="img-fluid" alt="blog-img">
-                            </a>
-                            <div class="fav-item  justify-content-end">
-                                <a href="javascript:void(0)" class="fav-icon">
-                                    <i class="feather-heart"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="bloglist-content">
-                            <div class="card-body">
-                                <span class="Featured-text">Featured</span>
-                                <div class="grid-author">
-                                    <img src="assets/img/profiles/avatar-05.jpg" alt="author">
-                                </div>
-                                <div class="blogfeaturelink">
-                                    <div class="blog-features">
-                                        <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                                Shopping</span></a>
-                                    </div>
-                                    <div class="blog-author text-end">
-                                        <span><i class="feather-map-pin"></i> Texas</span>
-                                    </div>
-                                </div>
-                                <h6><a href="service-details.html">Shop Mall</a></h6>
-                                <div class="amount-details">
-                                    <div class="amount">
-                                        <span class="validrate">$250</span>
-                                        <span>$370</span>
-                                    </div>
-                                    <div class="ratings">
-                                        <span>4.7</span> (50)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card business-card aos" data-aos="fade-up">
-                    <div class="blog-widget">
-                        <div class="blog-img">
-                            <a href="service-details.html">
-                                <img src="assets/img/business/business-02.jpg" class="img-fluid" alt="blog-img">
-                            </a>
-                            <div class="fav-item  justify-content-end">
-                                <a href="javascript:void(0)" class="fav-icon">
-                                    <i class="feather-heart"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="bloglist-content">
-                            <div class="card-body">
-                                <span class="Featured-text">Featured</span>
-                                <div class="grid-author">
-                                    <img src="assets/img/profiles/avatar-06.jpg" alt="author">
-                                </div>
-                                <div class="blogfeaturelink">
-                                    <div class="blog-features">
-                                        <a href="javascript:void(0)"><span> <i class="fa-regular fa-circle-stop"></i>
-                                                Gym</span></a>
-                                    </div>
-                                    <div class="blog-author text-end">
-                                        <span><i class="feather-map-pin"></i> Florida</span>
-                                    </div>
-                                </div>
-                                <h6><a href="service-details.html">Gym Equipment</a></h6>
-                                <div class="amount-details">
-                                    <div class="amount">
-                                        <span class="validrate">$330</span>
-                                        <span>$350</span>
-                                    </div>
-                                    <div class="ratings">
-                                        <span>4.7</span> (50)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="feature-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="section-heading heading-five aos" data-aos="fade-up">
-                        <h2>Featured Cities</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="city-box aos" data-aos="fade-up">
-                        <div class="citi-img">
-                            <a href="#">
-                                <img src="assets/img/city/city-01.jpg" class="img-fluid" alt="img">
-                            </a>
-                        </div>
-                        <div class="city-overlay">
-                            <div class="city-name">
-                                <h5>New York</h5>
-                                <ul>
-                                    <li><i class="feather-map-pin"></i> 10 Cities</li>
-                                    <li><i class="feather-map"></i> 30+ Listing</li>
-                                </ul>
-                            </div>
-                            <div class="rating d-flex">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="city-box aos" data-aos="fade-up">
-                        <div class="citi-img">
-                            <a href="#">
-                                <img src="assets/img/city/city-02.jpg" class="img-fluid" alt="img">
-                            </a>
-                        </div>
-                        <div class="city-overlay">
-                            <div class="city-name">
-                                <h5>London</h5>
-                                <ul>
-                                    <li><i class="feather-map-pin"></i> 15 Cities</li>
-                                    <li><i class="feather-map"></i> 23+ Listing</li>
-                                </ul>
-                            </div>
-                            <div class="rating d-flex">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="city-box aos" data-aos="fade-up">
-                        <div class="citi-img">
-                            <a href="#">
-                                <img src="assets/img/city/city-03.jpg" class="img-fluid" alt="img">
-                            </a>
-                        </div>
-                        <div class="city-overlay">
-                            <div class="city-name">
-                                <h5>Korea</h5>
-                                <ul>
-                                    <li><i class="feather-map-pin"></i> 12 Cities</li>
-                                    <li><i class="feather-map"></i> 32+ Listing</li>
-                                </ul>
-                            </div>
-                            <div class="rating d-flex">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="city-box aos" data-aos="fade-up">
-                        <div class="citi-img">
-                            <a href="#">
-                                <img src="assets/img/city/city-04.jpg" class="img-fluid" alt="img">
-                            </a>
-                        </div>
-                        <div class="city-overlay">
-                            <div class="city-name">
-                                <h5>Malaysia</h5>
-                                <ul>
-                                    <li><i class="feather-map-pin"></i> 18 Cities</li>
-                                    <li><i class="feather-map"></i> 24+ Listing</li>
-                                </ul>
-                            </div>
-                            <div class="rating d-flex">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
-
     <section class="adventure-section">
         <div class="container">
             <div class="row">
@@ -587,53 +258,54 @@
 
 @push('js')
     <script>
-        function stateChange(selectedValue) {
-            //make the ajax call
-            $('select[name="city_id"]').html('');
 
-            $.ajax({
-                url: '{{ url('city-by-state-by-name') }}' + "/" + selectedValue,
-                type: 'get',
-                success: function(data) {
+    //     $('#search-form').submit(function(e) {
+    //     e.preventDefault();
 
-                    if (data.length > 0) {
-                        $.each(data, function(id, locations) {
-                            $('select[name="city_id"]').append($("<option></option>").attr("value",
-                                locations.name).text(locations.name).addClass('capitalise'));
-                        });
-                    } else {
-                        $('select[name="city_id"]').append(`<option>No City found</option>`);
-                    }
-                }
-            });
-        }
+    //     let occupation = $('#occupation_id').val();
+    //     let address = $('#autocomplete').val();
+    //     let latitude = $('#latitude').val();
+    //     let longitude = $('#longitude').val();
+    //     let radius = $('#radius').val();
+    //     // Validate occupation selection
+    //     if (!occupation) {
+    //         $('#err-occupation').show();
+    //         return false;
+    //     } else {
+    //         $('#err-occupation').hide();
+    //     }
 
-        $('#search-form').submit(function(e) {
-            e.preventDefault();
-            let location_data = JSON.parse(localStorage.getItem('currentLocation'));
-            let occupation = $('#occupation_id').val();
-            let state = $('#state_id').val();
-            let city = $('#city_id').val();
-            // console.log(location_data.regionCode);
-            if (occupation == null) {
-                $('.error-message').show();
-                return false;
-            } else {
-                $('.error-message').hide();
-            }
+    //     // Validate address
+    //     if (!address) {
+    //         alert('Please enter an address.');
+    //         return false;
+    //     }
+    //     if (!radius) {
+    //         alert('Please select an radius.');
+    //         return false;
+    //     }
 
-            if (state == null) {
-                state = location_data.regionName;
-                if (city == null) {
-                    city = location_data.cityName;
-                }
-            }
-
-
-            let url = "{{ url('search') }}/" + occupation + '/' + city + '/' + state;
-            window.location.href = url;
-        });
-
+    //     // Send AJAX request to the server
+    //     $.ajax({
+    //         url: "{{ url('search') }}",
+    //         method: "POST",
+    //         data: {
+    //             _token: '{{ csrf_token() }}',
+    //             occupation_id: occupation,
+    //             latitude: latitude,
+    //             longitude: longitude,
+    //             radius: radius
+    //         },
+    //         success: function(response) {
+    //             // Handle success - perhaps redirect to results page or display results
+    //             window.location.href = response.redirect_url;
+    //         },
+    //         error: function(xhr) {
+    //             // Handle error
+    //             alert('An error occurred. Please try again.');
+    //         }
+    //     });
+    // });
 
         $('#occupation_id').change(function() {
             let occupation = $('#occupation_id').val();
@@ -663,42 +335,20 @@
         }
     </script>
    <script>
-    function initialize() {
-        var input = document.getElementById('autocomplete');
-        var autocomplete = new google.maps.places.Autocomplete(input);
+     function initAutocomplete() {
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {
+            types: ['geocode']
+        });
+        autocomplete.setFields(['address_component', 'geometry']);
 
-        autocomplete.addListener('place_changed', function () {
+        autocomplete.addListener('place_changed', function() {
             var place = autocomplete.getPlace();
-            var addressComponents = place.address_components;
-
-            addressComponents.forEach(function(component) {
-                var addressType = component.types[0];
-                var val = component.long_name;
-
-                switch (addressType) {
-                    case 'street_number':
-                        document.getElementById('street_number').value = val;
-                        break;
-                    case 'route':
-                        document.getElementById('route').value = val;
-                        break;
-                    case 'locality':
-                        document.getElementById('locality').value = val;
-                        break;
-                    case 'administrative_area_level_1':
-                        document.getElementById('administrative_area_level_1').value = val;
-                        break;
-                    case 'postal_code':
-                        document.getElementById('postal_code').value = val;
-                        break;
-                    case 'country':
-                        document.getElementById('country').value = val;
-                        break;
-                }
-            });
+            if (place.geometry) {
+                $('#latitude').val(place.geometry.location.lat());
+                $('#longitude').val(place.geometry.location.lng());
+            }
         });
     }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', initAutocomplete);
 </script>
 @endpush

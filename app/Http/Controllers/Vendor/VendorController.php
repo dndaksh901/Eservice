@@ -449,29 +449,57 @@ class VendorController extends Controller
     }
 
 
+    // public function ajaxSearch(Request $request)
+    // {
+
+    //     $occupation = $request->occupation;
+    //     $state = $request->state;
+    //     $city = $request->city;
+    //     $min_price = $request->min_price;
+    //     $max_price = $request->max_price;
+
+    //     if ($occupation == null) {
+    //         return redirect('/');
+    //     }
+
+    //     $occupation_id = Occupation::where('occupation_name', 'LIKE', '%' . $occupation . '%')->orderBy('occupation_name', 'ASC')->value('id');
+
+    //     $profiles = Profile::where('occupation_id', $occupation_id)
+    //         ->where('state_id', State::where('name', $state)->where('status', 1)->value('id'))
+    //         ->where('city_id', City::where('name', $city)->where('status', 1)->value('id'))
+    //         ->whereBetween('price_per_hour', [$min_price, $max_price])
+    //         ->paginate('10');
+
+    //     return $profiles;
+    // }
+
     public function ajaxSearch(Request $request)
-    {
+{
+    $request->validate([
+        'occupation_id' => 'required',
+        'latitude' => 'required|numeric',
+        'longitude' => 'required|numeric',
+         'radius' => 'required|numeric'
+    ]);
+    $latitude = $request->input('latitude');
+    $longitude = $request->input('longitude');
+    $occupation_id = $request->input('occupation_id');
+    $radius = $request->input('radius');
 
-        $occupation = $request->occupation;
-        $state = $request->state;
-        $city = $request->city;
-        $min_price = $request->min_price;
-        $max_price = $request->max_price;
+    // Query to find vendors near the provided coordinates
+    $profile = Profile::selectRaw("*, ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance", [$latitude, $longitude, $latitude])
+        ->where('occupation_id', $occupation_id)
+        ->having('distance', '<', $radius)
+        ->orderBy('distance')
+        ->get();
 
-        if ($occupation == null) {
-            return redirect('/');
-        }
-
-        $occupation_id = Occupation::where('occupation_name', 'LIKE', '%' . $occupation . '%')->orderBy('occupation_name', 'ASC')->value('id');
-
-        $profiles = Profile::where('occupation_id', $occupation_id)
-            ->where('state_id', State::where('name', $state)->where('status', 1)->value('id'))
-            ->where('city_id', City::where('name', $city)->where('status', 1)->value('id'))
-            ->whereBetween('price_per_hour', [$min_price, $max_price])
-            ->paginate('10');
-
-        return $profiles;
-    }
+    // Return the vendors as a JSON response
+    return response()->json([
+        'success' => true,
+        'vendors' => $profile,
+        'redirect_url' => url('search_results') // Adjust this URL as needed
+    ]);
+}
 
     public function countrydata()
     {
