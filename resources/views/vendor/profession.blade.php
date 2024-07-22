@@ -297,12 +297,24 @@
                                                 <textarea class="form-control" placeholder="Enter your description here" name="profile_description" id="profile_description" rows="2">{{ $profile->profile_description ?? '' }}</textarea>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-12">
-                                            <label for="profile_description">Profile Image</label>
-                                            <div class="upload-profile">
-                                                <input type="file" class="form-control" id="profile-img" name="avatar">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="form-group">
+                                                <label for="file">Works Image</label>
+                                                <input type="file" class="form-control" id="file-input"
+                                                    onchange="loadPreview(this)" name="avatar[]" accept="image/*"
+                                                    multiple>
+                                                <small class="text-mute">Note*: Max. 5 Images will be
+                                                    uploaded(formats png, jpg, jpeg) </small>
+                                                @error('avatar')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                                <div id="preview-output"></div>
+                                                <div id="error-preview-image"></div>
+                                                <br>
+
                                             </div>
-                                        </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                 </form>

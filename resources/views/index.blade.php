@@ -72,54 +72,20 @@
                                     <div class="search-input">
                                         <div class="form-group mb-0">
                                             <div class="group-img">
-                                                <select class="form-control select state-select" name="state_id"
-                                                    id="state_id" onchange="stateChange(this.value)">
-                                                    <option value="" disabled @selected(true)
-                                                        style="color:#999">
-                                                        Select State</option>
-                                                    @foreach ($data['states'] as $state)
-                                                        <option value="{{ $state->name }}">{{ ucfirst($state->name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <i class="feather-map-pin"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="search-input">
-                                        <div class="form-group mb-0">
-                                            <div class="group-img">
-                                                <select class="form-control select city-select" name="city_id"
-                                                    id="city_id">
-                                                    <option value="" disabled hidden @selected(true)
-                                                        style="color:#999">
-                                                        Select City</option>
-                                                </select>
-                                                <i class="feather-map-pin"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="search-input">
-                                        <div class="form-group mb-0">
-                                            <div class="group-img">
-                                                <input id="autocomplete" placeholder="Enter your address" type="text" />
-                                                <label for="autocomplete">Address:</label>
-
+                                                <input id="autocomplete" placeholder="Enter your address" type="text" class="form-control" required/>
                                                     <input type="hidden" id="street_number" name="street_number">
                                                     <input type="hidden" id="route" name="route">
                                                     <input type="hidden" id="locality" name="locality">
                                                     <input type="hidden" id="administrative_area_level_1" name="administrative_area_level_1">
                                                     <input type="hidden" id="postal_code" name="postal_code">
                                                     <input type="hidden" id="country" name="country">
-
-
                                             </div>
                                         </div>
                                     </div>
                                     <div class="search-btn">
                                         <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-search" aria-hidden="true"></i><span id="search-text"> Search
-                                            </span>
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                            <span id="search-text">Search</span>
                                         </button>
                                     </div>
                                 </form>

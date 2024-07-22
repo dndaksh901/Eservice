@@ -248,11 +248,7 @@ class VendorController extends Controller
 
             $rules = [
                 'occupation_id' => 'required',
-                'address' => 'required|max:255',
-                'state_id' => 'required',
-                'city_id' => 'required',
-                'pincode' => 'required',
-
+                'address' => 'required|max:400',
             ];
             $tags = explode(",", $request->tags);
             $validator = Validator::make(request()->all(), $rules);
@@ -319,9 +315,9 @@ class VendorController extends Controller
                 'services' => $request->services,
                 'price_per_hour' => $request->price_per_hour,
                 'address' => $request->address,
-                'state_id' => $request->state_id,
-                'city_id' => $request->city_id,
-                'pincode' => $request->pincode,
+                // 'state_id' => $request->state_id,
+                // 'city_id' => $request->city_id,
+                // 'pincode' => $request->pincode,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
                 'expired_at' => $expired_date
