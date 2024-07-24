@@ -31,7 +31,7 @@ class Profile extends Model
         'expired_at'
     ];
 
-    protected $with = ['vendor','occupation','profileImage','state','country','city'];
+    protected $with = ['vendor','occupation','profileImage'];
 
     public function vendor(){
         return $this->belongsTo('App\Models\Vendor');

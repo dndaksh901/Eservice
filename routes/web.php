@@ -43,7 +43,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     // Route::get('/', function () {
     //     return view('index');
     // });
-    Route::get('/', [UserController::class, 'index']);
+    Route::get('/', [UserController::class, 'index'])->name('home');
     //Categories
     Route::get('categories', [HomeController::class, 'allCategories']);
 
@@ -84,10 +84,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
 
 
     //Search Skilled Workers
-    Route::get('search', [VendorController::class, 'searchView']);
-    Route::get('search/{occupation_slug?}/{city_id?}/{state_id?}', [VendorController::class, 'search']);
-    Route::get('category/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
-    Route::post('search', [VendorController::class, 'ajaxSearch']);
+    // Route::get('search', [VendorController::class, 'searchView']);
+    // Route::get('search/{occupation_slug?}/{city_id?}/{state_id?}', [VendorController::class, 'search']);
+    // Route::get('category/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
+    Route::get('search', [VendorController::class, 'SearchProfile']);
 
     Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor', 'vendor.status'])->group(function () {
         // Route::view('/vendor', 'vendor.vendor');

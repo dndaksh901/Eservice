@@ -473,32 +473,43 @@ class VendorController extends Controller
     //     return $profiles;
     // }
 
-    public function ajaxSearch(Request $request)
+
+    public function SearchProfile(Request $request)
 {
+    // Validate the incoming request data
     $request->validate([
         'occupation_id' => 'required',
         'latitude' => 'required|numeric',
         'longitude' => 'required|numeric',
-         'radius' => 'required|numeric'
+        'radius' => 'required|numeric',
     ]);
+
     $latitude = $request->input('latitude');
     $longitude = $request->input('longitude');
     $occupation_id = $request->input('occupation_id');
     $radius = $request->input('radius');
+    $min_price = $request->input('min_price');
+    $max_price = $request->input('max_price');
 
-    // Query to find vendors near the provided coordinates
-    $profile = Profile::selectRaw("*, ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance", [$latitude, $longitude, $latitude])
+    // Fetch occupations for the filter form
+    $occupations = Occupation::orderBy('occupation_name', 'ASC')->take(25)->get();
+
+    // Calculate distance using the Haversine formula
+    $profiles = Profile::selectRaw("*, (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance", [$latitude, $longitude, $latitude])
         ->where('occupation_id', $occupation_id)
         ->having('distance', '<', $radius)
+        ->when($min_price, function ($query, $min_price) {
+            return $query->where('price_per_hour', '>=', $min_price);
+        })
+        ->when($max_price, function ($query, $max_price) {
+            return $query->where('price_per_hour', '<=', $max_price);
+        })
         ->orderBy('distance')
-        ->get();
+        ->paginate(10); // Change the number to whatever fits your requirement
 
-    // Return the vendors as a JSON response
-    return response()->json([
-        'success' => true,
-        'vendors' => $profile,
-        'redirect_url' => url('search_results') // Adjust this URL as needed
-    ]);
+        $message = $profiles->isEmpty() ? 'No profiles found.' : null;
+
+     return view('search', compact('profiles', 'occupations', 'latitude', 'longitude', 'radius', 'occupation_id', 'min_price', 'max_price', 'message'));
 }
 
     public function countrydata()

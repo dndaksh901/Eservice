@@ -49,8 +49,8 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form id="search-form" action="{{ url('search') }}" method="POST" class="form-block d-flex">
-                                @csrf
+                            <form id="search-form" action="{{ url('search') }}" method="get" class="form-block d-flex">
+
                                 <div class="search-input line">
                                     <div class="form-group mb-0">
                                         <div class="group-img">
@@ -59,7 +59,7 @@
                                                 <option value="" disabled hidden @selected(true)>
                                                     Select Expert *</option>
                                                 @foreach ($data['occupations'] as $occupation)
-                                                    <option value="{{ $occupation->slug }}">
+                                                    <option value="{{ $occupation->id }}">
                                                         {{ $occupation->occupation_name }}</option>
                                                 @endforeach
                                             </select>
@@ -258,55 +258,6 @@
 
 @push('js')
     <script>
-
-    //     $('#search-form').submit(function(e) {
-    //     e.preventDefault();
-
-    //     let occupation = $('#occupation_id').val();
-    //     let address = $('#autocomplete').val();
-    //     let latitude = $('#latitude').val();
-    //     let longitude = $('#longitude').val();
-    //     let radius = $('#radius').val();
-    //     // Validate occupation selection
-    //     if (!occupation) {
-    //         $('#err-occupation').show();
-    //         return false;
-    //     } else {
-    //         $('#err-occupation').hide();
-    //     }
-
-    //     // Validate address
-    //     if (!address) {
-    //         alert('Please enter an address.');
-    //         return false;
-    //     }
-    //     if (!radius) {
-    //         alert('Please select an radius.');
-    //         return false;
-    //     }
-
-    //     // Send AJAX request to the server
-    //     $.ajax({
-    //         url: "{{ url('search') }}",
-    //         method: "POST",
-    //         data: {
-    //             _token: '{{ csrf_token() }}',
-    //             occupation_id: occupation,
-    //             latitude: latitude,
-    //             longitude: longitude,
-    //             radius: radius
-    //         },
-    //         success: function(response) {
-    //             // Handle success - perhaps redirect to results page or display results
-    //             window.location.href = response.redirect_url;
-    //         },
-    //         error: function(xhr) {
-    //             // Handle error
-    //             alert('An error occurred. Please try again.');
-    //         }
-    //     });
-    // });
-
         $('#occupation_id').change(function() {
             let occupation = $('#occupation_id').val();
             if (occupation == null) {
@@ -316,23 +267,7 @@
             }
         });
 
-        function chooseCategory(category){
-            let location_data = JSON.parse(localStorage.getItem('currentLocation'));
 
-            let state = $('#state_id').val();
-            let city = $('#city_id').val();
-
-            if (state == null) {
-                state = location_data.regionName;
-                if (city == null) {
-                    city = location_data.cityName;
-                }
-            }
-
-
-            let url = "{{ url('category') }}/" + category + '/' + city + '/' + state;
-            window.location.href = url;
-        }
     </script>
    <script>
      function initAutocomplete() {
