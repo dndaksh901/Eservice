@@ -255,8 +255,8 @@
                                             <div class="form-group form-outline">
                                                 <label for="name">Full Address<span class="text-danger"><sup>*</sup></span></label>
                                                 <input class="form-control" name="address" id="autocomplete"value="{{ $profile->address ?? '' }}" placeholder = "full address">
-                                                <input type="text" class="form-control" name="latitude" id="latitude" value="{{ $profile->latitude ?? '' }}" readonly>
-                                                <input type="text" class="form-control" name="longitude" id="longitude" value="{{ $profile->longitude ?? '' }}" readonly>
+                                                <input type="hidden" class="form-control" name="latitude" id="latitude" value="{{ $profile->latitude ?? '' }}" readonly>
+                                                <input type="hidden" class="form-control" name="longitude" id="longitude" value="{{ $profile->longitude ?? '' }}" readonly>
                                                 @error('address')
                                                 <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
@@ -470,7 +470,7 @@ $(document).ready(function(e) {
     let autocomplete;
     let userSelectedAddress = false; // Flag to track if the user selected an address
 
-    function initialize() {
+    function initializeprofile() {
         autocomplete = new google.maps.places.Autocomplete(autocompleteInput, {
             types: ['geocode']
         });
@@ -514,7 +514,7 @@ $(document).ready(function(e) {
         });
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', initializeprofile);
 </script>
 
 

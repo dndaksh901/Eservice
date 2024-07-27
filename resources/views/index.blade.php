@@ -75,6 +75,9 @@
                                             <input id="autocomplete" placeholder="Enter your address" type="text" class="form-control" required/>
                                                 <input type="hidden" id="latitude" name="latitude">
                                                 <input type="hidden" id="longitude" name="longitude">
+                                                <input id="city" name="city" type="hidden"></input>
+                                                <input id="state"  name="state"type="hidden"></input>
+                                                <input id="country"  name="country" type="hidden"></input>
                                         </div>
                                     </div>
                                 </div>
@@ -269,7 +272,8 @@
 
 
     </script>
-   <script>
+
+   {{-- <script>
      function initAutocomplete() {
         var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {
             types: ['geocode']
@@ -279,11 +283,12 @@
         autocomplete.addListener('place_changed', function() {
             var place = autocomplete.getPlace();
             if (place.geometry) {
+            console.log(place);
                 $('#latitude').val(place.geometry.location.lat());
                 $('#longitude').val(place.geometry.location.lng());
             }
         });
     }
     google.maps.event.addDomListener(window, 'load', initAutocomplete);
-</script>
+</script> --}}
 @endpush

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2024 at 04:42 PM
--- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.2
+-- Generation Time: Jul 27, 2024 at 10:22 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,14 +29,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admins` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `vendor_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mobile` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'dummy_avatar.jpg',
+  `username` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `vendor_id` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `mobile` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL DEFAULT 'dummy_avatar.jpg',
   `remember_token` int(255) DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -60,8 +60,8 @@ INSERT INTO `admins` (`id`, `username`, `name`, `type`, `vendor_id`, `email`, `p
 CREATE TABLE `cities` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `state_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `name` varchar(255) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -48479,7 +48479,7 @@ INSERT INTO `cities` (`id`, `state_id`, `name`, `status`, `created_at`, `updated
 CREATE TABLE `client_status` (
   `id` int(10) NOT NULL,
   `status` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `client_status`
@@ -48499,10 +48499,10 @@ INSERT INTO `client_status` (`id`, `status`) VALUES
 
 CREATE TABLE `contacts` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -48523,8 +48523,8 @@ INSERT INTO `contacts` (`id`, `name`, `email`, `subject`, `message`, `created_at
 
 CREATE TABLE `contact_pages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `availability` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` text NOT NULL,
+  `availability` text NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -48545,8 +48545,10 @@ INSERT INTO `contact_pages` (`id`, `address`, `availability`, `status`, `created
 
 CREATE TABLE `countries` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `name` varchar(255) NOT NULL,
+  `symbol` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `currency` varchar(100) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -48556,253 +48558,253 @@ CREATE TABLE `countries` (
 -- Dumping data for table `countries`
 --
 
-INSERT INTO `countries` (`id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'afghanistan', 'active', '2023-07-16 07:36:22', '2023-12-30 02:16:20', NULL),
-(2, 'albania', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(3, 'algeria', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(4, 'american samoa', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(5, 'andorra', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(6, 'angola', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(7, 'anguilla', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(8, 'antarctica', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(9, 'antigua and barbuda', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(10, 'argentina', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(11, 'armenia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(12, 'aruba', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(13, 'australia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(14, 'austria', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(15, 'azerbaijan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(16, 'bahamas the', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(17, 'bahrain', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(18, 'bangladesh', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(19, 'barbados', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(20, 'belarus', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(21, 'belgium', 'inactive', '2023-07-16 07:36:22', '2023-12-27 09:59:35', NULL),
-(22, 'belize', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(23, 'benin', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(24, 'bermuda', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(25, 'bhutan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(26, 'bolivia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(27, 'bosnia and herzegovina', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(28, 'botswana', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(29, 'bouvet island', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(30, 'brazil', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(31, 'british indian ocean territory', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(32, 'brunei', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(33, 'bulgaria', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(34, 'burkina faso', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(35, 'burundi', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(36, 'cambodia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(37, 'cameroon', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(38, 'canada', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(39, 'cape verde', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(40, 'cayman islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(41, 'central african republic', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(42, 'chad', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(43, 'chile', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(44, 'china', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(45, 'christmas island', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(46, 'cocos (keeling) islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(47, 'colombia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(48, 'comoros', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(49, 'congo', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(50, 'congo the democratic republic of the', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(51, 'cook islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(52, 'costa rica', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(53, 'cote d\'ivoire (ivory coast)', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(54, 'croatia (hrvatska)', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(55, 'cuba', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(56, 'cyprus', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(57, 'czech republic', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(58, 'denmark', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(59, 'djibouti', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(60, 'dominica', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(61, 'dominican republic', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(62, 'east timor', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(63, 'ecuador', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(64, 'egypt', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(65, 'el salvador', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(66, 'equatorial guinea', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(67, 'eritrea', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(68, 'estonia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(69, 'ethiopia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(70, 'external territories of australia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(71, 'falkland islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(72, 'faroe islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(73, 'fiji islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(74, 'finland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(75, 'france', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(76, 'french guiana', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(77, 'french polynesia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(78, 'french southern territories', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(79, 'gabon', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(80, 'gambia the', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(81, 'georgia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(82, 'germany', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(83, 'ghana', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(84, 'gibraltar', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(85, 'greece', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(86, 'greenland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(87, 'grenada', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(88, 'guadeloupe', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(89, 'guam', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(90, 'guatemala', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(91, 'guernsey and alderney', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(92, 'guinea', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(93, 'guinea-bissau', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(94, 'guyana', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(95, 'haiti', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(96, 'heard and mcdonald islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(97, 'honduras', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(98, 'hong kong s.a.r.', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(99, 'hungary', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(100, 'iceland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(101, 'india', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(102, 'indonesia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(103, 'iran', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(104, 'iraq', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(105, 'ireland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(106, 'israel', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(107, 'italy', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(108, 'jamaica', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(109, 'japan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(110, 'jersey', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(111, 'jordan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(112, 'kazakhstan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(113, 'kenya', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(114, 'kiribati', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(115, 'korea north', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(116, 'korea south', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(117, 'kuwait', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(118, 'kyrgyzstan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(119, 'laos', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(120, 'latvia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(121, 'lebanon', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(122, 'lesotho', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(123, 'liberia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(124, 'libya', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(125, 'liechtenstein', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(126, 'lithuania', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(127, 'luxembourg', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(128, 'macau s.a.r.', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(129, 'macedonia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(130, 'madagascar', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(131, 'malawi', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(132, 'malaysia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(133, 'maldives', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(134, 'mali', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(135, 'malta', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(136, 'man (isle of)', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(137, 'marshall islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(138, 'martinique', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(139, 'mauritania', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(140, 'mauritius', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(141, 'mayotte', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(142, 'mexico', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(143, 'micronesia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(144, 'moldova', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(145, 'monaco', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(146, 'mongolia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(147, 'montserrat', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(148, 'morocco', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(149, 'mozambique', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(150, 'myanmar', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(151, 'namibia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(152, 'nauru', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(153, 'nepal', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(154, 'netherlands antilles', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(155, 'netherlands the', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(156, 'new caledonia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(157, 'new zealand', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(158, 'nicaragua', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(159, 'niger', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(160, 'nigeria', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(161, 'niue', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(162, 'norfolk island', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(163, 'northern mariana islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(164, 'norway', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(165, 'oman', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(166, 'pakistan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(167, 'palau', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(168, 'palestinian territory occupied', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(169, 'panama', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(170, 'papua new guinea', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(171, 'paraguay', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(172, 'peru', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(173, 'philippines', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(174, 'pitcairn island', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(175, 'poland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(176, 'portugal', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(177, 'puerto rico', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(178, 'qatar', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(179, 'reunion', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(180, 'romania', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(181, 'russia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(182, 'rwanda', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(183, 'saint helena', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(184, 'saint kitts and nevis', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(185, 'saint lucia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(186, 'saint pierre and miquelon', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(187, 'saint vincent and the grenadines', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(188, 'samoa', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(189, 'san marino', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(190, 'sao tome and principe', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(191, 'saudi arabia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(192, 'senegal', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(193, 'serbia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(194, 'seychelles', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(195, 'sierra leone', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(196, 'singapore', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(197, 'slovakia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(198, 'slovenia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(199, 'smaller territories of the uk', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(200, 'solomon islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(201, 'somalia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(202, 'south africa', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(203, 'south georgia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(204, 'south sudan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(205, 'spain', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(206, 'sri lanka', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(207, 'sudan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(208, 'suriname', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(209, 'svalbard and jan mayen islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(210, 'swaziland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(211, 'sweden', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(212, 'switzerland', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(213, 'syria', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(214, 'taiwan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(215, 'tajikistan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(216, 'tanzania', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(217, 'thailand', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(218, 'togo', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(219, 'tokelau', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(220, 'tonga', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(221, 'trinidad and tobago', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(222, 'tunisia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(223, 'turkey', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(224, 'turkmenistan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(225, 'turks and caicos islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(226, 'tuvalu', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(227, 'uganda', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(228, 'ukraine', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(229, 'united arab emirates', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(230, 'united kingdom', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(231, 'united states', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(232, 'united states minor outlying islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(233, 'uruguay', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(234, 'uzbekistan', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(235, 'vanuatu', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(236, 'vatican city state (holy see)', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(237, 'venezuela', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(238, 'vietnam', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(239, 'virgin islands (british)', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(240, 'virgin islands (us)', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(241, 'wallis and futuna islands', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(242, 'western sahara', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(243, 'yemen', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(244, 'yugoslavia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(245, 'zambia', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
-(246, 'zimbabwe', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL);
+INSERT INTO `countries` (`id`, `name`, `symbol`, `currency`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'afghanistan', '₾', 'Afghan Afghani', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(2, 'albania', 'Lek', 'Albanian Lek', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(3, 'algeria', 'د.ج', 'Algerian Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(4, 'american samoa', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(5, 'andorra', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(6, 'angola', 'Kz', 'Angolan Kwanza', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(7, 'anguilla', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(8, 'antarctica', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(9, 'antigua and barbuda', '$', 'East Caribbean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(10, 'argentina', '$', 'Argentine Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(11, 'armenia', '֏', 'Armenian Dram', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(12, 'aruba', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(13, 'australia', 'A$', 'Australian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(14, 'austria', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(15, 'azerbaijan', '₼', 'Azerbaijani Manat', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(16, 'bahamas the', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(17, 'bahrain', 'ب.د', 'Bahraini Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(18, 'bangladesh', '৳', 'Bangladeshi Taka', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(19, 'barbados', '$', 'Barbadian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(20, 'belarus', 'Br', 'Belarusian Ruble', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(21, 'belgium', '€', 'Euro', 'inactive', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(22, 'belize', '$', 'Belize Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(23, 'benin', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(24, 'bermuda', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(25, 'bhutan', 'Nu.', 'Bhutanese Ngultrum', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(26, 'bolivia', 'Bs', 'Bolivian Boliviano', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(27, 'bosnia and herzegovina', 'KM', 'Bosnia and Herzegovina Convertible Mark', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(28, 'botswana', 'P', 'Botswana Pula', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(29, 'bouvet island', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(30, 'brazil', 'R$', 'Brazilian Real', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(31, 'british indian ocean territory', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(32, 'brunei', '$', 'Brunei Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(33, 'bulgaria', 'лв', 'Bulgarian Lev', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(34, 'burkina faso', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(35, 'burundi', 'Fr', 'Burundian Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(36, 'cambodia', '៛', 'Cambodian Riel', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(37, 'cameroon', 'Fr', 'Central African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(38, 'canada', 'C$', 'Canadian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(39, 'cape verde', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(40, 'cayman islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(41, 'central african republic', 'Fr', 'Central African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(42, 'chad', 'Fr', 'Central African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(43, 'chile', '$', 'Chilean Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(44, 'china', '¥', 'Chinese Yuan', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(45, 'christmas island', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(46, 'cocos (keeling) islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(47, 'colombia', '$', 'Colombian Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(48, 'comoros', 'Fr', 'Comorian Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(49, 'congo', 'Fr', 'Central African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(50, 'congo the democratic republic of the', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(51, 'cook islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(52, 'costa rica', '₡', 'Costa Rican Colón', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(53, 'cote d\'ivoire (ivory coast)', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(54, 'croatia (hrvatska)', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(55, 'cuba', '₱', 'Cuban Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(56, 'cyprus', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(57, 'czech republic', 'Kč', 'Czech Koruna', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(58, 'denmark', 'kr', 'Danish Krone', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(59, 'djibouti', 'Fr', 'Djiboutian Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(60, 'dominica', '$', 'East Caribbean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(61, 'dominican republic', '$', 'Dominican Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(62, 'east timor', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(63, 'ecuador', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(64, 'egypt', 'E£', 'Egyptian Pound', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(65, 'el salvador', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(66, 'equatorial guinea', 'Fr', 'Central African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(67, 'eritrea', 'Nkf', 'Eritrean Nakfa', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(68, 'estonia', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(69, 'ethiopia', 'Br', 'Ethiopian Birr', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(70, 'external territories of australia', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(71, 'falkland islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(72, 'faroe islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(73, 'fiji islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(74, 'finland', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(75, 'france', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(76, 'french guiana', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(77, 'french polynesia', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(78, 'french southern territories', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(79, 'gabon', 'Fr', 'Central African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(80, 'gambia the', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(81, 'georgia', '₾', 'Georgian Lari', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(82, 'germany', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(83, 'ghana', '₵', 'Ghanaian Cedi', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(84, 'gibraltar', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(85, 'greece', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(86, 'greenland', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(87, 'grenada', '$', 'East Caribbean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(88, 'guadeloupe', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(89, 'guam', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(90, 'guatemala', 'Q', 'Guatemalan Quetzal', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(91, 'guernsey and alderney', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(92, 'guinea', 'Fr', 'Guinean Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(93, 'guinea-bissau', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(94, 'guyana', '$', 'Guyanese Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(95, 'haiti', 'G', 'Haitian Gourde', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(96, 'heard and mcdonald islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(97, 'honduras', 'L', 'Honduran Lempira', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(98, 'hong kong s.a.r.', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(99, 'hungary', 'Ft', 'Hungarian Forint', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(100, 'iceland', 'kr', 'Icelandic Króna', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(101, 'india', '₹', 'Indian Rupee', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(102, 'indonesia', 'Rp', 'Indonesian Rupiah', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(103, 'iran', '﷼', 'Iranian Rial', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(104, 'iraq', 'ع.د', 'Iraqi Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(105, 'ireland', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(106, 'israel', '₪', 'Israeli New Shekel', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(107, 'italy', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(108, 'jamaica', '$', 'Jamaican Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:27', NULL),
+(109, 'japan', '¥', 'Japanese Yen', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(110, 'jersey', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(111, 'jordan', 'د.أ', 'Jordanian Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(112, 'kazakhstan', '₸', 'Kazakhstani Tenge', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(113, 'kenya', 'KSh', 'Kenyan Shilling', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(114, 'kiribati', 'A$', 'Australian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(115, 'korea north', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(116, 'korea south', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(117, 'kuwait', 'د.ك', 'Kuwaiti Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(118, 'kyrgyzstan', 'с', 'Kyrgystani Som', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(119, 'laos', '₭', 'Lao Kip', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(120, 'latvia', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(121, 'lebanon', 'ل.ل', 'Lebanese Pound', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(122, 'lesotho', 'L', 'Lesotho Loti', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(123, 'liberia', '$', 'Liberian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(124, 'libya', 'د.ل', 'Libyan Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(125, 'liechtenstein', 'CHF', 'Swiss Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(126, 'lithuania', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(127, 'luxembourg', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(128, 'macau s.a.r.', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(129, 'macedonia', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(130, 'madagascar', 'Ar', 'Malagasy Ariary', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(131, 'malawi', 'MK', 'Malawian Kwacha', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(132, 'malaysia', 'RM', 'Malaysian Ringgit', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(133, 'maldives', 'Rf', 'Maldivian Rufiyaa', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(134, 'mali', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(135, 'malta', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(136, 'man (isle of)', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(137, 'marshall islands', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(138, 'martinique', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(139, 'mauritania', 'UM', 'Mauritanian Ouguiya', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(140, 'mauritius', '₨', 'Mauritian Rupee', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(141, 'mayotte', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(142, 'mexico', '$', 'Mexican Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(143, 'micronesia', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(144, 'moldova', 'L', 'Moldovan Leu', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(145, 'monaco', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(146, 'mongolia', '₮', 'Mongolian Tugrik', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(147, 'montserrat', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(148, 'morocco', 'د.م.', 'Moroccan Dirham', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(149, 'mozambique', 'MT', 'Mozambican Metical', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(150, 'myanmar', 'Ks', 'Burmese Kyat', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(151, 'namibia', 'N$', 'Namibian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(152, 'nauru', 'A$', 'Australian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(153, 'nepal', 'Rs', 'Nepalese Rupee', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(154, 'netherlands antilles', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(155, 'netherlands the', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(156, 'new caledonia', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(157, 'new zealand', 'NZ$', 'New Zealand Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(158, 'nicaragua', 'C$', 'Nicaraguan Córdoba', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(159, 'niger', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(160, 'nigeria', '₦', 'Nigerian Naira', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(161, 'niue', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(162, 'norfolk island', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(163, 'northern mariana islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(164, 'norway', 'kr', 'Norwegian Krone', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(165, 'oman', 'ر.ع.', 'Omani Rial', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(166, 'pakistan', 'Rs', 'Pakistani Rupee', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(167, 'palau', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(168, 'palestinian territory occupied', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(169, 'panama', 'B/.', 'Panamanian Balboa', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(170, 'papua new guinea', 'K', 'Papua New Guinean Kina', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(171, 'paraguay', '₲', 'Paraguayan Guarani', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(172, 'peru', 'S/', 'Peruvian Sol', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(173, 'philippines', '₱', 'Philippine Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(174, 'pitcairn island', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(175, 'poland', 'zł', 'Polish Zloty', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(176, 'portugal', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(177, 'puerto rico', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(178, 'qatar', 'ر.ق', 'Qatari Rial', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(179, 'reunion', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(180, 'romania', 'lei', 'Romanian Leu', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(181, 'russia', '₽', 'Russian Ruble', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(182, 'rwanda', 'Fr', 'Rwandan Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(183, 'saint helena', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(184, 'saint kitts and nevis', '$', 'East Caribbean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(185, 'saint lucia', '$', 'East Caribbean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(186, 'saint pierre and miquelon', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(187, 'saint vincent and the grenadines', '$', 'East Caribbean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(188, 'samoa', 'SAT', 'Samoan Tala', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(189, 'san marino', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(190, 'sao tome and principe', 'Db', 'São Tomé and Príncipe Dobra', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(191, 'saudi arabia', 'ر.س', 'Saudi Riyal', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(192, 'senegal', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(193, 'serbia', 'дин.', 'Serbian Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(194, 'seychelles', '₨', 'Seychellois Rupee', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(195, 'sierra leone', 'Le', 'Sierra Leonean Leone', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(196, 'singapore', 'S$', 'Singapore Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(197, 'slovakia', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(198, 'slovenia', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(199, 'smaller territories of the uk', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(200, 'solomon islands', 'SI$', 'Solomon Islands Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(201, 'somalia', 'Sh', 'Somali Shilling', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(202, 'south africa', 'R', 'South African Rand', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(203, 'south georgia', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(204, 'south sudan', '£', 'South Sudanese Pound', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(205, 'spain', '€', 'Euro', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(206, 'sri lanka', 'Rs', 'Sri Lankan Rupee', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(207, 'sudan', 'ج.س.', 'Sudanese Pound', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(208, 'suriname', '$', 'Surinamese Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(209, 'svalbard and jan mayen islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(210, 'swaziland', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(211, 'sweden', 'kr', 'Swedish Krona', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(212, 'switzerland', 'CHF', 'Swiss Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(213, 'syria', 'ل.س', 'Syrian Pound', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(214, 'taiwan', 'NT$', 'New Taiwan Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(215, 'tajikistan', 'SM', 'Tajikistani Somoni', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(216, 'tanzania', 'TSh', 'Tanzanian Shilling', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(217, 'thailand', '฿', 'Thai Baht', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(218, 'togo', 'Fr', 'West African CFA Franc', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(219, 'tokelau', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(220, 'tonga', 'T$', 'Tongan Paʻanga', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(221, 'trinidad and tobago', '$', 'Trinidad and Tobago Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(222, 'tunisia', 'د.ت', 'Tunisian Dinar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(223, 'turkey', '₺', 'Turkish Lira', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(224, 'turkmenistan', 'T', 'Turkmenistani Manat', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(225, 'turks and caicos islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(226, 'tuvalu', 'A$', 'Australian Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(227, 'uganda', 'USh', 'Ugandan Shilling', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(228, 'ukraine', '₴', 'Ukrainian Hryvnia', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(229, 'united arab emirates', 'د.إ', 'United Arab Emirates Dirham', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(230, 'united kingdom', '£', 'Pound Sterling', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(231, 'united states', '$', 'US Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(232, 'united states minor outlying islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(233, 'uruguay', '$', 'Uruguayan Peso', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(234, 'uzbekistan', 'лв', 'Uzbekistani Som', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(235, 'vanuatu', 'VT', 'Vanuatu Vatu', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(236, 'vatican city state (holy see)', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(237, 'venezuela', 'Bs', 'Venezuelan Bolívar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(238, 'vietnam', '₫', 'Vietnamese Dong', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(239, 'virgin islands (british)', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(240, 'virgin islands (us)', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(241, 'wallis and futuna islands', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(242, 'western sahara', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(243, 'yemen', 'ر.ي', 'Yemeni Rial', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(244, 'yugoslavia', '', '', 'active', '2023-07-16 07:36:22', '2023-07-16 07:36:22', NULL),
+(245, 'zambia', 'ZK', 'Zambian Kwacha', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL),
+(246, 'zimbabwe', 'Z$', 'Zimbabwean Dollar', 'active', '2023-07-16 07:36:22', '2024-07-27 02:49:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -48825,7 +48827,7 @@ CREATE TABLE `enquiry_users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -48835,11 +48837,11 @@ CREATE TABLE `enquiry_users` (
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -48856,7 +48858,7 @@ CREATE TABLE `favorite` (
   `user_id` int(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `favorite`
@@ -48873,7 +48875,7 @@ INSERT INTO `favorite` (`id`, `profile_id`, `vendor_id`, `user_id`, `created_at`
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -48914,7 +48916,7 @@ CREATE TABLE `notification` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notification`
@@ -48937,7 +48939,7 @@ CREATE TABLE `occupations` (
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `occupations`
@@ -48989,8 +48991,8 @@ INSERT INTO `occupations` (`id`, `occupation_name`, `slug`, `status`, `created_a
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -49002,12 +49004,12 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `payments` (
   `id` int(10) UNSIGNED NOT NULL,
-  `r_payment_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `method` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `currency` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `vendor_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `amount` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `json_response` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `r_payment_id` varchar(255) NOT NULL,
+  `method` varchar(255) NOT NULL,
+  `currency` varchar(255) NOT NULL,
+  `vendor_email` varchar(255) NOT NULL,
+  `amount` varchar(255) NOT NULL,
+  `json_response` longtext NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49020,8 +49022,8 @@ CREATE TABLE `payments` (
 
 CREATE TABLE `permissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `guard_name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49034,11 +49036,11 @@ CREATE TABLE `permissions` (
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
   `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -49062,31 +49064,31 @@ CREATE TABLE `profiles` (
   `rating` float DEFAULT 0,
   `ranking_id` int(100) DEFAULT 1,
   `price_per_hour` int(11) DEFAULT NULL,
-  `address` varchar(255) NOT NULL,
+  `address` longtext NOT NULL,
   `website_url` varchar(255) DEFAULT NULL,
-  `country_id` int(100) NOT NULL DEFAULT 101,
-  `state_id` int(100) NOT NULL,
-  `city_id` int(100) NOT NULL,
+  `country_id` int(100) DEFAULT 101,
+  `state_id` int(100) DEFAULT NULL,
+  `city_id` int(100) DEFAULT NULL,
   `latitude` decimal(8,6) DEFAULT NULL,
   `longitude` decimal(9,6) DEFAULT NULL,
-  `pincode` varchar(100) NOT NULL,
+  `pincode` varchar(100) DEFAULT NULL,
   `profile_status` int(11) NOT NULL DEFAULT 0,
   `expired_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `profiles`
 --
 
 INSERT INTO `profiles` (`id`, `vendor_id`, `occupation_id`, `experience_year`, `experience_month`, `profile_description`, `services`, `rating`, `ranking_id`, `price_per_hour`, `address`, `website_url`, `country_id`, `state_id`, `city_id`, `latitude`, `longitude`, `pincode`, `profile_status`, `expired_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 8, 2, 11, '<p>Experience overseeing, training, and scheduling personnel. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.</p>', NULL, 2, 1, 200, 'B-IX 449/153new santokhpura', 'https://www.google.com/', 101, 11, 711, '31.347583', '75.594935', '144002', 1, NULL, '2023-02-08 15:41:14', '2023-12-24 05:48:16', NULL),
-(2, 2, 8, 3, 0, 'Experience overseeing, training, and scheduling personnel. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.', NULL, 3.5, 1, 275, 'B-IX 449/144\r\nnew santokhpura', NULL, 101, 32, 3203, '31.347583', '75.594935', '144001', 1, NULL, '2023-04-25 15:15:41', '2023-04-24 18:30:00', NULL),
-(3, 2, 10, 1, 5, 'Experience overseeing, training, and scheduling personnel. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.', NULL, 5, 1, 50, 'B-IX 449/144\r\nnew santokhpura', NULL, 101, 6, 7323, '31.347583', '75.594935', '144001', 1, NULL, '2023-04-25 15:15:41', '2023-04-24 18:30:00', NULL),
-(4, 52, 8, 2, 0, '<p><strong>Experience overseeing, training, and scheduling personnel</strong>. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.</p>', 'wiring,repairing,installing', 4, 1, 100, 'B-IX 449/244\r\nnew santokhpura', 'https://laravel-news.com/laravel-debugbar', 101, 32, 1, '30.716409', '76.711210', '14004', 1, '2023-10-31 18:30:00', '2023-07-16 03:32:38', '2023-12-13 09:42:21', NULL),
-(5, 3, 37, 3, 0, NULL, 'services,cooling', 0, 1, NULL, 'B-IX 449/153\r\nnew santokhpura', NULL, 101, 32, 3203, '31.322931', '75.582669', '144001', 0, '2024-03-23 18:30:00', '2023-12-24 01:44:49', '2023-12-24 01:46:59', NULL);
+(1, 1, 3, 3, 5, '<p>Experience overseeing, training, and scheduling personnel. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.</p>', 'house repair,furniture', 2, 1, 200, 'Sahibzada Ajit Singh Nagar, Punjab, India', 'https://www.google.com/', 101, 11, 711, 30.704649, 76.717873, '144002', 1, '2024-10-23 18:30:00', '2023-02-08 15:41:14', '2024-07-24 09:51:16', NULL),
+(2, 2, 8, 3, 0, 'Experience overseeing, training, and scheduling personnel. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.', NULL, 3.5, 1, 275, 'B-IX 449/144\r\nnew santokhpura', NULL, 101, 32, 3203, 31.347583, 75.594935, '144001', 1, NULL, '2023-04-25 15:15:41', '2023-04-24 18:30:00', NULL),
+(3, 2, 10, 1, 5, 'Experience overseeing, training, and scheduling personnel. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.', NULL, 5, 1, 50, 'B-IX 449/144\r\nnew santokhpura', NULL, 101, 6, 7323, 31.347583, 75.594935, '144001', 1, NULL, '2023-04-25 15:15:41', '2023-04-24 18:30:00', NULL),
+(4, 52, 8, 2, 0, '<p><strong>Experience overseeing, training, and scheduling personnel</strong>. Proficient with the direct installation of wiring at construction and other sites. Good interpersonal skills; able to interface with clients, project managers, and team members. Fully certified in electrical engineering by a reputable college.</p>', 'wiring,repairing,installing', 4, 1, 100, 'B-IX 449/244new santokhpura', 'https://laravel-news.com/laravel-debugbar', 101, 32, 1, 30.716437, 76.711241, '14004', 1, '2023-10-31 18:30:00', '2023-07-16 03:32:38', '2024-07-22 10:50:22', NULL),
+(5, 3, 37, 3, 0, NULL, 'services,cooling', 0, 1, NULL, 'B-IX 449/153\r\nnew santokhpura', NULL, 101, 32, 3203, 31.322931, 75.582669, '144001', 0, '2024-03-23 18:30:00', '2023-12-24 01:44:49', '2023-12-24 01:46:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -49102,7 +49104,7 @@ CREATE TABLE `profile_images` (
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `profile_images`
@@ -49110,7 +49112,8 @@ CREATE TABLE `profile_images` (
 
 INSERT INTO `profile_images` (`id`, `vendor_id`, `profile_id`, `profile_image`, `status`, `created_at`, `updated_at`) VALUES
 (1, 52, NULL, '169002513978.png', 1, '2023-07-22 05:55:39', '2023-07-22 05:55:39'),
-(2, 52, NULL, '169002513940.png', 1, '2023-07-22 05:55:39', '2023-07-22 05:55:39');
+(4, 52, NULL, '172166494274.jpg', 1, '2024-07-22 10:45:42', '2024-07-22 10:45:42'),
+(5, 52, NULL, '172166522221.png', 1, '2024-07-22 10:50:22', '2024-07-22 10:50:22');
 
 -- --------------------------------------------------------
 
@@ -49124,7 +49127,7 @@ CREATE TABLE `rankings` (
   `earn_points` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -49142,7 +49145,7 @@ CREATE TABLE `reviews` (
   `status` int(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reviews`
@@ -49159,8 +49162,8 @@ INSERT INTO `reviews` (`id`, `profile_id`, `vendor_id`, `user_id`, `rating`, `re
 
 CREATE TABLE `roles` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `guard_name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49178,7 +49181,7 @@ CREATE TABLE `roles_types` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -49189,8 +49192,8 @@ CREATE TABLE `roles_types` (
 CREATE TABLE `states` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `country_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `name` varchar(255) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -53337,11 +53340,11 @@ INSERT INTO `states` (`id`, `country_id`, `name`, `status`, `created_at`, `updat
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -53351,7 +53354,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'aksh', 'user901@gmail.com', NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', 'CVm2aEngDFI3uhzhso17GPNhxo6ZQHlf8hOm4x5wxEsAEQVJ0WmHtel2khc9', '2022-08-29 09:50:58', '2022-08-29 09:50:58');
+(1, 'aksh', 'user901@gmail.com', NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', 'pTQdRgKHaWqSYeM1mjGawhpsGxUzG1h60ZuDop0LviJrIJrAeVgY5r6MSMFz', '2022-08-29 09:50:58', '2022-08-29 09:50:58');
 
 -- --------------------------------------------------------
 
@@ -53361,21 +53364,21 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 
 CREATE TABLE `vendors` (
   `id` int(100) NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `dob` date DEFAULT NULL,
-  `gender` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `facebook` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `twitter` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `youtube` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `instagram` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `introduction` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` varchar(100) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `facebook` varchar(255) DEFAULT NULL,
+  `twitter` varchar(255) DEFAULT NULL,
+  `youtube` varchar(255) DEFAULT NULL,
+  `instagram` varchar(255) DEFAULT NULL,
+  `introduction` longtext DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `remember_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(255) DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -53387,57 +53390,57 @@ CREATE TABLE `vendors` (
 --
 
 INSERT INTO `vendors` (`id`, `username`, `avatar`, `dob`, `gender`, `name`, `mobile`, `email`, `facebook`, `twitter`, `youtube`, `instagram`, `introduction`, `password`, `email_verified_at`, `remember_token`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'olarkin', '20231202102732.jpg', '2023-12-07', 'male', 'Jennyfer Okuneva', '2561562665', 'abalistreri@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$pgQvrGBJKdJnh4B5d0pq1e8UQ1gsre0GWDjwtlA1rKDUz8zb/xb.e', '2023-05-07 09:09:32', 'jIERHMfF76mUxNAZNGSO09B2xxKsHtcDTjcgQrWHabLmZvpeZcH7THIijMWT', 1, '2023-05-07 09:09:36', '2023-12-24 06:18:28', NULL),
-(2, 'maude.zemlak', '20230312084615.jpg', '2017-05-19', 'male', 'Dr. Rogelio Pacocha II', '(858) 234-4305', 'annamarie69@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$FBCTBHVlX3S08ftQBx6jfOT0ZRvS3y.2oAO5EGgL/9Ex952Cr8ZVK', '2023-05-07 09:09:30', 'uPUBjConIKhW7jv3bJu5rd9SFDuqgaaiXLyNb0LdnDyiELQjtngfU78lhsmH', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(3, 'xschulist', '20230312084615.jpg', '1985-01-21', 'male', 'Mr. Stan Braun I', '1-608-253-3998', 'annetta59@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$EWdM1v7yKbIpRNu8nEPD6udYYiazE0QpSy3mxYUodYN1CeKUsltgy', '2023-05-07 09:09:32', 'fHfDphubP5SikcYkbB5F9leEfqcCVdxgJ6sRfU2BSD0pPSJAhbqQoyHJDyy9', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(4, 'hhaley', '20230312084615.jpg', '1971-11-27', 'male', 'Dr. Clay Veum PhD', '1-360-722-2741', 'august74@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$67Uf2KO4r7eyG3ZW.TlhV.XeocpEtHxgf40PGl/jXOmqCaVlqkGXG', '2023-05-07 09:09:30', 'Zy3IJKKTTH', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(5, 'imurray', '20230312084615.jpg', '2003-07-09', 'male', 'Mr. Damon Collier', '(845) 785-6963', 'austen07@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$DtQtxwuORo7uxAuBwP7WTuZk8NjHptteYyeO4C9EbXgf8kEcrkGou', '2023-05-07 09:09:34', 'mNI0kJk334', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(6, 'predovic.randal', '20230312084615.jpg', '2003-04-30', 'male', 'Omari Keebler', '+1.610.424.4307', 'beulah74@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$lj6pK9TVBJyxHqSCpNxtauvl6oDOwfqSiP61Cuk4LKHtNRbdXQCMy', '2023-05-07 09:09:31', 'SVdsS4imOF', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(7, 'dickinson.loyal', '20230312084615.jpg', '1972-06-29', 'male', 'Dr. Keon Aufderhar', '1-772-965-2737', 'bradford98@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$MX020J7N9xqhgX/FEWCoT.UqWd7ozLq6bgiZrHgm.UPeQVSt060l.', '2023-05-07 09:09:34', 'iP9B6UOQ5b', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(8, 'bcrona', '20230312084615.jpg', '1993-11-11', 'male', 'Marques Hartmann', '959-826-9256', 'brakus.breanne@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$MS7fV/Xq.U65Ib07DOUGT.mF7BrMcjMf8rvLekmBbz8N0Is73UJM2', '2023-05-07 09:09:31', 'OT2mSWz9gr', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(9, 'alabadie', '20230312084615.jpg', '1970-11-05', 'male', 'Kristofer Toy', '+1-940-708-0771', 'cecelia98@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$yn2rQyKc1zD7tLvDA.LHmuJFeCkepvpzUXhN5FY9PvhWS888xw2f6', '2023-05-07 09:09:35', 'i4NcxIF90A', 0, '2023-05-07 09:09:38', '2023-05-07 09:09:38', NULL),
-(10, 'nhaley', '20230312084615.jpg', '2010-09-13', 'male', 'Mr. Baylee Kiehn Jr.', '+1-734-442-0836', 'cframi@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$HKdAzDXkbsdR24WGW/WJ9u0cQS7FaiDf1aNPeSiaF1D6RnmklYaPa', '2023-05-07 09:09:34', 'AgGXMqJLhN', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(11, 'tiana32', '20230312084615.jpg', '2010-08-14', 'male', 'Dr. Gillian Johnson', '1-430-717-7926', 'cormier.esmeralda@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$psxcVrBdhtCPCRaOlr1Izu8HYuGErdWYh8K7JLa51UiJ6I6R5haD2', '2023-05-07 09:09:33', 'x8VmTq0nxe', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(12, 'durgan.clarissa', '20230312084615.jpg', '1979-07-01', 'male', 'Deion Feest MD', '(458) 668-2330', 'cornelius60@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$SyQVzomQLweRfUn7LvCdfuuSkTPOKgAQhKP/C2XUQ0/yY.JKXfKKC', '2023-05-07 09:09:34', '9MetvA8l9e', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(13, 'amanda60', '20230312084615.jpg', '1981-06-01', 'male', 'Casper Hilpert', '+1-320-433-1905', 'dstoltenberg@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$tA4JKElFWMX/2RpKCqd8eOk8jcJQfAkbJVidmk2jX6g.NdPii624S', '2023-05-07 09:09:33', 'IOlMpRO0s3', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(14, 'valentine16', '20230312084615.jpg', '2018-12-30', 'female', 'Rebecca Rolfson', '251-559-0400', 'ekunze@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$ESDotS9//w0PMwvQwKh2a.TFIWfeVPxAESW62j.wbZrM00GVV3GB6', '2023-05-07 09:09:31', '27twIyWQ26', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(15, 'goldner.stefanie', '20230312084615.jpg', '1985-08-23', 'male', 'Walter Powlowski', '786-728-1564', 'enrique21@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$Te7APMx/tvk/pbx.5KEdp.XzLeANCgpP5K1I3dZoNGVQsmDYcVH0G', '2023-05-07 09:09:35', 'DZQehse7EX', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(16, 'hhuels', '20230312084615.jpg', '1970-12-09', 'male', 'Kristoffer Heller', '+1 (669) 865-9124', 'erau@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$k/w9JWN5CcctOViX5ZW60OvwtaHyu9fAeJedmbqMlUlU8rGtyGiyG', '2023-05-07 09:09:33', 'Y8buijx1Ey', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(17, 'laurianne39', '20230312084615.jpg', '1997-07-16', 'male', 'Ezequiel Cronin', '575.538.7056', 'esperanza94@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$qQaC7ix0YYw0nJOUSafgPO.m4YklRgraykwjDO8yNofjG/E0uaHGq', '2023-05-07 09:09:31', 'ggiNOa8ydM', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(18, 'michele04', '20230312084615.jpg', '1975-03-05', 'male', 'Alphonso Stanton', '+1-779-521-0944', 'franco41@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$i5BQS6ggPTQ6zGbLczzr0.MHTVkb2Yll/1KI/58jCJ9UKf2xbXV3K', '2023-05-07 09:09:31', 'CNHQsN4KgD', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(19, 'steuber.carmen', '20230312084615.jpg', '1979-10-20', 'male', 'Mr. Jarrod Orn', '1-973-772-5838', 'gjakubowski@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$1R5dX8E0l4n71LBGxkQfDOmIBWO32ryt.qHcpB2SGjuwMLNs9Qsii', '2023-05-07 09:09:33', 'oc0M90dxAX', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(20, 'rau.antonia', '20230312084615.jpg', '1976-06-29', 'male', 'Richie Sipes PhD', '1-313-489-2946', 'gleuschke@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$3zE2wrz0WNfVTVIRKDef.OYABdB8.gEVDgbFSHIjUKYcRal9TjIpi', '2023-05-07 09:09:33', 'u160trH6bD', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(21, 'orn.lesly', '20230312084615.jpg', '2006-01-18', 'male', 'Fritz Lindgren', '+15319161393', 'glover.alysson@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$nm0V1LO4MSFYsyoFHk2JFexLmTOCzAsXxOHCtKKym2T4gxMJLUSUe', '2023-05-07 09:09:31', 'PG6Pd7n7Nc', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(22, 'heidenreich.derrick', '20230312084615.jpg', '1982-09-05', 'female', 'Angeline Rau Jr.', '+1 (432) 206-5476', 'hhodkiewicz@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$t9JWPPghG.IfrhbSiAtdduPQ4.JKR1Q5jbONpceT1b5V6yOXLzfE.', '2023-05-07 09:09:33', 'x0QnAU5mZm', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(23, 'johnpaul74', '20230312084615.jpg', '2010-05-11', 'female', 'Alexandria Vandervort', '1-715-438-6231', 'hodkiewicz.felicity@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$0.BXVnhhkvK1KDuxhrdU2.BwJFaJinm8m/6YUVy3JzBZY.WbzoVIi', '2023-05-07 09:09:34', 'OfeZePCTT2', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(24, 'sklocko', '20230312084615.jpg', '1995-09-23', 'male', 'Mr. Hilario Glover', '+13462135675', 'ilegros@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$prLhHZskAmT98FLvZ3AvEOVz.vGZ5QtX3hTnvVQEW/7dm/Pnae1Iu', '2023-05-07 09:09:32', 'Skx4phrl7C', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(25, 'carolyne.gerlach', '20230312084615.jpg', '1971-11-09', 'male', 'Mr. Antone Walsh V', '+1 (828) 734-6149', 'isabelle81@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$YavcWi.q0D.WLkKc7xpGDOhCzeG9JU7Vnnf.s6TRBhGi0neaPzEjO', '2023-05-07 09:09:30', 'lGWw89qwDb', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(26, 'zcormier', '20230312084615.jpg', '2011-11-11', 'female', 'Gladyce Marvin Sr.', '+1-445-830-8075', 'jacobi.jailyn@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$KGUnQOpLIU7tzMyiStUQX.OpP9DZeBI7mGqS6SyRUUrPWsehbAiSW', '2023-05-07 09:09:33', 'ctwjdspwEv', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(27, 'annalise.lubowitz', '20230312084615.jpg', '2013-08-19', 'female', 'Adella Kuhn', '(323) 744-1307', 'jdooley@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$BBUGxcSCBNcLkUabcC/Xkuy4vQZmXtabC/8PRB8jJo1jOpcsUxqSO', '2023-05-07 09:09:30', 'oZEhKvRKhz', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(28, 'gmcglynn', '20230312084615.jpg', '1970-09-14', 'female', 'Marian Crona', '+1-762-244-3031', 'josiane08@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$8Quf4ZuQ94ku8gnNNs4aVOXg35pFuBriv2f/ddIFTbSwdVsRD8aeW', '2023-05-07 09:09:32', 'DQujwMUHwK', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(1, 'olarkin', '20231202102732.jpg', '2023-12-07', 'male', 'Jennyfer Okuneva', '2561562665', 'abalistreri@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'uQaXn6RZ5U0EKVSMVl49JcO20KhXeSuSjr9eDFSlhgHgmcA3tgWJS700on9F', 1, '2023-05-07 09:09:36', '2023-12-24 06:18:28', NULL),
+(2, 'maude.zemlak', '20230312084615.jpg', '2017-05-19', 'male', 'Dr. Rogelio Pacocha II', '(858) 234-4305', 'annamarie69@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:30', 'UxXJ6p4Y0mhxYyNP2QX7fDKcuonYc0UXGketTuulBwPcaqZbYPGcG9lMW6kQ', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(3, 'xschulist', '20230312084615.jpg', '1985-01-21', 'male', 'Mr. Stan Braun I', '1-608-253-3998', 'annetta59@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'fHfDphubP5SikcYkbB5F9leEfqcCVdxgJ6sRfU2BSD0pPSJAhbqQoyHJDyy9', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(4, 'hhaley', '20230312084615.jpg', '1971-11-27', 'male', 'Dr. Clay Veum PhD', '1-360-722-2741', 'august74@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:30', 'Zy3IJKKTTH', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(5, 'imurray', '20230312084615.jpg', '2003-07-09', 'male', 'Mr. Damon Collier', '(845) 785-6963', 'austen07@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'mNI0kJk334', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(6, 'predovic.randal', '20230312084615.jpg', '2003-04-30', 'male', 'Omari Keebler', '+1.610.424.4307', 'beulah74@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'SVdsS4imOF', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(7, 'dickinson.loyal', '20230312084615.jpg', '1972-06-29', 'male', 'Dr. Keon Aufderhar', '1-772-965-2737', 'bradford98@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'iP9B6UOQ5b', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(8, 'bcrona', '20230312084615.jpg', '1993-11-11', 'male', 'Marques Hartmann', '959-826-9256', 'brakus.breanne@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'OT2mSWz9gr', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(9, 'alabadie', '20230312084615.jpg', '1970-11-05', 'male', 'Kristofer Toy', '+1-940-708-0771', 'cecelia98@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:35', 'i4NcxIF90A', 0, '2023-05-07 09:09:38', '2023-05-07 09:09:38', NULL),
+(10, 'nhaley', '20230312084615.jpg', '2010-09-13', 'male', 'Mr. Baylee Kiehn Jr.', '+1-734-442-0836', 'cframi@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'AgGXMqJLhN', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(11, 'tiana32', '20230312084615.jpg', '2010-08-14', 'male', 'Dr. Gillian Johnson', '1-430-717-7926', 'cormier.esmeralda@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'x8VmTq0nxe', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(12, 'durgan.clarissa', '20230312084615.jpg', '1979-07-01', 'male', 'Deion Feest MD', '(458) 668-2330', 'cornelius60@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', '9MetvA8l9e', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(13, 'amanda60', '20230312084615.jpg', '1981-06-01', 'male', 'Casper Hilpert', '+1-320-433-1905', 'dstoltenberg@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'IOlMpRO0s3', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(14, 'valentine16', '20230312084615.jpg', '2018-12-30', 'female', 'Rebecca Rolfson', '251-559-0400', 'ekunze@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', '27twIyWQ26', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(15, 'goldner.stefanie', '20230312084615.jpg', '1985-08-23', 'male', 'Walter Powlowski', '786-728-1564', 'enrique21@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:35', 'DZQehse7EX', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(16, 'hhuels', '20230312084615.jpg', '1970-12-09', 'male', 'Kristoffer Heller', '+1 (669) 865-9124', 'erau@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'Y8buijx1Ey', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(17, 'laurianne39', '20230312084615.jpg', '1997-07-16', 'male', 'Ezequiel Cronin', '575.538.7056', 'esperanza94@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'ggiNOa8ydM', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(18, 'michele04', '20230312084615.jpg', '1975-03-05', 'male', 'Alphonso Stanton', '+1-779-521-0944', 'franco41@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'CNHQsN4KgD', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(19, 'steuber.carmen', '20230312084615.jpg', '1979-10-20', 'male', 'Mr. Jarrod Orn', '1-973-772-5838', 'gjakubowski@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'oc0M90dxAX', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(20, 'rau.antonia', '20230312084615.jpg', '1976-06-29', 'male', 'Richie Sipes PhD', '1-313-489-2946', 'gleuschke@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'u160trH6bD', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(21, 'orn.lesly', '20230312084615.jpg', '2006-01-18', 'male', 'Fritz Lindgren', '+15319161393', 'glover.alysson@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'PG6Pd7n7Nc', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(22, 'heidenreich.derrick', '20230312084615.jpg', '1982-09-05', 'female', 'Angeline Rau Jr.', '+1 (432) 206-5476', 'hhodkiewicz@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'x0QnAU5mZm', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(23, 'johnpaul74', '20230312084615.jpg', '2010-05-11', 'female', 'Alexandria Vandervort', '1-715-438-6231', 'hodkiewicz.felicity@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'OfeZePCTT2', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(24, 'sklocko', '20230312084615.jpg', '1995-09-23', 'male', 'Mr. Hilario Glover', '+13462135675', 'ilegros@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'Skx4phrl7C', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(25, 'carolyne.gerlach', '20230312084615.jpg', '1971-11-09', 'male', 'Mr. Antone Walsh V', '+1 (828) 734-6149', 'isabelle81@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:30', 'lGWw89qwDb', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(26, 'zcormier', '20230312084615.jpg', '2011-11-11', 'female', 'Gladyce Marvin Sr.', '+1-445-830-8075', 'jacobi.jailyn@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'ctwjdspwEv', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(27, 'annalise.lubowitz', '20230312084615.jpg', '2013-08-19', 'female', 'Adella Kuhn', '(323) 744-1307', 'jdooley@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:30', 'oZEhKvRKhz', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(28, 'gmcglynn', '20230312084615.jpg', '1970-09-14', 'female', 'Marian Crona', '+1-762-244-3031', 'josiane08@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'DQujwMUHwK', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
 (29, 'jyoti', '20230312084615.jpg', '1990-07-12', 'female', 'Jyoti', '7696396741', 'jyoti@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', NULL, NULL, 0, '2023-04-24 18:30:00', '2023-04-24 18:30:00', NULL),
-(30, 'smertz', '20230312084615.jpg', '1973-08-04', 'male', 'Ramon Nikolaus', '+1 (386) 783-8417', 'katelin58@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$h8.VGXrXQFZjkRU6/nHyz.lArWCCgVN0DXLXK2yF2K/9.NWzfaI5e', '2023-05-07 09:09:32', 'I2l6FBd6pa', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(31, 'gladys.goyette', '20230312084615.jpg', '1980-04-06', 'male', 'Reece Barrows', '+1 (661) 443-8077', 'laverne49@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$lclNnEAylinOeQocoYFjuu4SZg5duBTTN8g92qJ6l.A4kR9S2lKx6', '2023-05-07 09:09:31', 'lC75fi2gwt', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(32, 'reynolds.viola', '20230312084615.jpg', '2012-11-29', 'male', 'Houston Towne Jr.', '(580) 358-5393', 'lbartoletti@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$u3WkiZ6yX7mg0b1zgjWdTOV.QS.wfX6xTIsqcXuT1Q8AMT6/OqtGC', '2023-05-07 09:09:32', 'PDYG5ahHM6', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(33, 'preichel', '20230312084615.jpg', '2008-02-21', 'male', 'Gunnar Feil', '330-484-6689', 'lbrekke@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$Mtnw1dNHkul1AdmNTalaK.N3nFp.kjnETEedhIkqdBcNK86YnXwfm', '2023-05-07 09:09:30', 'FcNy9RqJtY', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(34, 'colt89', '20230312084615.jpg', '1981-06-06', 'male', 'Dr. Vito Larson', '+1-917-502-5466', 'ledner.rae@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$ex16LKqdBzQtG4Fp1/ArruaIR6WERBVVYVQG6UoBluCwxqL8.JLn6', '2023-05-07 09:09:33', 'gbc0ejZeyR', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(35, 'adolphus.jerde', '20230312084615.jpg', '1974-01-18', 'female', 'Jacinthe Dickinson', '949.639.6016', 'madyson.franecki@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$RS4GMO0KXQXlY5MEE5fIAewAdY1EyO749jl3RDXqBtVljtFsTAUyq', '2023-05-07 09:09:32', 'GlKzFRxBIF', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(36, 'shanie.weissnat', '20230312084615.jpg', '1979-05-05', 'male', 'Prof. Nasir Monahan', '662-341-0226', 'margot.bruen@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$lIOoukqeNAcFC7ye6BHlV.IUndnCqDv2hHoeChLIMupaM8io0YZFi', '2023-05-07 09:09:34', 'AluK9vH3kS', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(37, 'herman.selina', '20230312084615.jpg', '1989-01-29', 'female', 'Madge Toy', '1-253-904-9346', 'mikel.goyette@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$ygvSbtAZOHF78wX83nX7Ge1Qq0.nhvSkXlJmCjwJm52naow7WLLR.', '2023-05-07 09:09:34', 'XcZw61oyZW', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(38, 'price52', '20230312084615.jpg', '2002-11-21', 'male', 'Gaston Lehner', '864-210-5537', 'milan.hettinger@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$hXl4zmllHKejV1ZIzcJomOK5jQ4uML51jgcSyfwG5YJB8JaOdHR/i', '2023-05-07 09:09:32', 'NwtYyIG0o9', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(39, 'hand.mervin', '20230312084615.jpg', '1997-11-10', 'female', 'Brionna Tromp', '520.908.9934', 'misty.terry@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$Db9cnd20H68RLYizVv6HleqkHbgXsIewkixx1IfoVhWv0IliRj2bW', '2023-05-07 09:09:31', '8Bn8eAqo5X', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(40, 'gilda.johnson', '20230312084615.jpg', '2016-10-27', 'female', 'Burnice Sipes', '+1.248.430.4970', 'paula.denesik@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$XGZ86GryyHJP6xvDNXDQjubpNzEk7a0H4FwvuCUwDlu8HkYqegXYK', '2023-05-07 09:09:33', 'rI6xo7D2yk', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(41, 'schultz.darien', '20230312084615.jpg', '1982-07-29', 'female', 'Naomie Pfeffer', '458-702-6211', 'pbernier@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$.C7Fs/lSkM8dlDTmswoN2OE4caYXrV9id3SVi2rd7Hw4FTTkfIyUS', '2023-05-07 09:09:34', 'ZvCeCVuPM5', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(42, 'krystina.ratke', '20230312084615.jpg', '1971-05-03', 'male', 'Prof. Torrey Windler III', '1-260-963-4437', 'qkohler@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$09ZarCusIumz2K/.90TCROUSG0aKKeA1zv7RHsCPBA7L6fQChAMWa', '2023-05-07 09:09:30', 'XLmy0IqCwN', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
-(43, 'jhalvorson', '20230312084615.jpg', '1970-05-07', 'female', 'Tamia Littel', '734.201.9971', 'qpagac@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$dVUqNLs6Gkn2gC7.rSoO2etQnVy7ilN7AeTLUX/HWhRc3MX1QXoZq', '2023-05-07 09:09:34', 'NF0IzHdJnU', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(44, 'altenwerth.enrique', '20230312084615.jpg', '2009-03-16', 'male', 'Stefan Cartwright', '726.493.7384', 'ray26@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$T6x62z0Mo1DE0.DhXkUu4uS7C9i7bouCmD8rJ8o75XHppsG43GFUq', '2023-05-07 09:09:32', 'CCI55Z1mRk', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(45, 'waylon13', '20230312084615.jpg', '2014-04-25', 'male', 'Manuela Flatley', '323.356.4454', 'reyna90@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$QveiJquEwhP/YjzMWD3TMeMu9/l1UHzcYQMAc.Po8TtIabDPbFw4a', '2023-05-07 09:09:31', 'ZlDGRPnkSc', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(46, 'jose19', '20230312084615.jpg', '1983-04-09', 'female', 'Amie Hamill', '1-346-741-6382', 'rosamond.hintz@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$AA3o6sOF6g3/LaLZYSFwfe2mdc9KTHPNte6svoqkxnQxvwJZwD5Eu', '2023-05-07 09:09:32', 'UZFrUqHSvj', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(47, 'shaina.hermann', '20230312084615.jpg', '1987-02-28', 'male', 'Mr. Louie Zboncak', '+1 (224) 880-7582', 'salvador60@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$RGof/IuWzijG8gIlBzPGGOtq4KsxVxv1FBtq2WVvSnVGaCuaeIxUe', '2023-05-07 09:09:35', 'POEPsQsSVX', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
-(48, 'ewintheiser', '20230312084615.jpg', '1987-03-24', 'female', 'Fannie Keebler', '434-325-1022', 'schuster.jimmy@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$tHRgK.j.xLZFLR1PWi/j9eKgRkYkJ2IaHzdd4ypRXb.RqQIsP/sQq', '2023-05-07 09:09:31', 't60jt3KO9g', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(49, 'ruben44', '20231221160352.jpg', '1975-10-19', 'female', 'Adelia Klocko', '+1.352.326.6747', 'sschoen@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$x3zrdI4Ljm0xzSTjRfCVP.5ZGEG0rEK8pCbzztrK8ES3IV1YSqJ6C', '2023-05-07 09:09:31', 'dtHkxcB8O3', 1, '2023-05-07 09:09:35', '2023-12-21 11:04:52', NULL),
-(50, 'jones.kaycee', '20230312084615.jpg', '1990-08-21', 'female', 'Gwendolyn Huel', '(651) 304-9296', 'swaniawski.stacy@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$KTFkCepPvGLRZ3SA11wVaOCuPE8QQMY75.VXUdXPyJsVVhdCVbPR6', '2023-05-07 09:09:32', 'jPnlXKcWKb', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
-(51, 'tillman59', '20230312084615.jpg', '1973-12-09', 'female', 'Prof. Dorothea Kunze Sr.', '1-281-720-8750', 'toy.aiyana@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$q7FfdZeKsXNevvguUQWkieptNzkzA45KglaUuP2Pk.pS5RWC7Doca', '2023-05-07 09:09:31', 'CDNQBVDfeY', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(30, 'smertz', '20230312084615.jpg', '1973-08-04', 'male', 'Ramon Nikolaus', '+1 (386) 783-8417', 'katelin58@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'I2l6FBd6pa', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(31, 'gladys.goyette', '20230312084615.jpg', '1980-04-06', 'male', 'Reece Barrows', '+1 (661) 443-8077', 'laverne49@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'lC75fi2gwt', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(32, 'reynolds.viola', '20230312084615.jpg', '2012-11-29', 'male', 'Houston Towne Jr.', '(580) 358-5393', 'lbartoletti@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'PDYG5ahHM6', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(33, 'preichel', '20230312084615.jpg', '2008-02-21', 'male', 'Gunnar Feil', '330-484-6689', 'lbrekke@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:30', 'FcNy9RqJtY', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(34, 'colt89', '20230312084615.jpg', '1981-06-06', 'male', 'Dr. Vito Larson', '+1-917-502-5466', 'ledner.rae@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'gbc0ejZeyR', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(35, 'adolphus.jerde', '20230312084615.jpg', '1974-01-18', 'female', 'Jacinthe Dickinson', '949.639.6016', 'madyson.franecki@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'GlKzFRxBIF', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(36, 'shanie.weissnat', '20230312084615.jpg', '1979-05-05', 'male', 'Prof. Nasir Monahan', '662-341-0226', 'margot.bruen@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'AluK9vH3kS', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(37, 'herman.selina', '20230312084615.jpg', '1989-01-29', 'female', 'Madge Toy', '1-253-904-9346', 'mikel.goyette@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'XcZw61oyZW', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(38, 'price52', '20230312084615.jpg', '2002-11-21', 'male', 'Gaston Lehner', '864-210-5537', 'milan.hettinger@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'NwtYyIG0o9', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(39, 'hand.mervin', '20230312084615.jpg', '1997-11-10', 'female', 'Brionna Tromp', '520.908.9934', 'misty.terry@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', '8Bn8eAqo5X', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(40, 'gilda.johnson', '20230312084615.jpg', '2016-10-27', 'female', 'Burnice Sipes', '+1.248.430.4970', 'paula.denesik@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:33', 'rI6xo7D2yk', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(41, 'schultz.darien', '20230312084615.jpg', '1982-07-29', 'female', 'Naomie Pfeffer', '458-702-6211', 'pbernier@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'ZvCeCVuPM5', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(42, 'krystina.ratke', '20230312084615.jpg', '1971-05-03', 'male', 'Prof. Torrey Windler III', '1-260-963-4437', 'qkohler@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:30', 'XLmy0IqCwN', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
+(43, 'jhalvorson', '20230312084615.jpg', '1970-05-07', 'female', 'Tamia Littel', '734.201.9971', 'qpagac@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:34', 'NF0IzHdJnU', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(44, 'altenwerth.enrique', '20230312084615.jpg', '2009-03-16', 'male', 'Stefan Cartwright', '726.493.7384', 'ray26@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'CCI55Z1mRk', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(45, 'waylon13', '20230312084615.jpg', '2014-04-25', 'male', 'Manuela Flatley', '323.356.4454', 'reyna90@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'ZlDGRPnkSc', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(46, 'jose19', '20230312084615.jpg', '1983-04-09', 'female', 'Amie Hamill', '1-346-741-6382', 'rosamond.hintz@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'UZFrUqHSvj', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(47, 'shaina.hermann', '20230312084615.jpg', '1987-02-28', 'male', 'Mr. Louie Zboncak', '+1 (224) 880-7582', 'salvador60@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:35', 'POEPsQsSVX', 0, '2023-05-07 09:09:37', '2023-05-07 09:09:37', NULL),
+(48, 'ewintheiser', '20230312084615.jpg', '1987-03-24', 'female', 'Fannie Keebler', '434-325-1022', 'schuster.jimmy@example.com', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 't60jt3KO9g', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(49, 'ruben44', '20231221160352.jpg', '1975-10-19', 'female', 'Adelia Klocko', '+1.352.326.6747', 'sschoen@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'dtHkxcB8O3', 1, '2023-05-07 09:09:35', '2023-12-21 11:04:52', NULL),
+(50, 'jones.kaycee', '20230312084615.jpg', '1990-08-21', 'female', 'Gwendolyn Huel', '(651) 304-9296', 'swaniawski.stacy@example.net', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:32', 'jPnlXKcWKb', 0, '2023-05-07 09:09:36', '2023-05-07 09:09:36', NULL),
+(51, 'tillman59', '20230312084615.jpg', '1973-12-09', 'female', 'Prof. Dorothea Kunze Sr.', '1-281-720-8750', 'toy.aiyana@example.org', NULL, NULL, NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', '2023-05-07 09:09:31', 'CDNQBVDfeY', 0, '2023-05-07 09:09:35', '2023-05-07 09:09:35', NULL),
 (52, 'vasu', '20230709092201.jpg', '1994-09-29', 'male', 'vasu sharma', '7696396712', 'vendor@gmail.com', 'https://www.facebook.com/', 'https://twitter.com/', NULL, NULL, NULL, '$2y$10$m63u7WwPi6wr3Oc4jMgfV.yha62OrrjkFPzKnivXfh.vesOlcZP4S', NULL, NULL, 1, '2022-12-01 10:45:43', '2024-02-27 08:59:52', NULL);
 
 --
@@ -53706,7 +53709,7 @@ ALTER TABLE `profiles`
 -- AUTO_INCREMENT for table `profile_images`
 --
 ALTER TABLE `profile_images`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `rankings`

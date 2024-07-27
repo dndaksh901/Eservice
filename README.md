@@ -82,3 +82,8 @@ vendor@gmail.com
 Admin   http://localhost:8000/admin/login
 dnd.aksh901@gmail.com
 123456789
+
+
+
+git command
+git add . && git commit -m "code update on index and search" && git pull && git push

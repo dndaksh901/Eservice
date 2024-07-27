@@ -88,11 +88,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     // Route::get('search/{occupation_slug?}/{city_id?}/{state_id?}', [VendorController::class, 'search']);
     // Route::get('category/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
     Route::get('search', [VendorController::class, 'SearchProfile']);
-
     Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor', 'vendor.status'])->group(function () {
         // Route::view('/vendor', 'vendor.vendor');
-
-
         // Profile images show and delete
         Route::get('previewImage', 'PreveiwProfileImage');
         Route::get('deleteProfileImage/{id}', 'DeletePreveiwProfileImage');
@@ -125,7 +122,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     });
 
     Route::controller(App\Http\Controllers\Admin\AdminController::class)->prefix('admin')->middleware(['middleware' => 'auth:admin'])->group(function () {
-
+        // Admin dashboard
         Route::view('/admin', 'admin.admin');
         //Admin dashboard
         Route::get('dashboard', 'dashboard')->name('admin.dashboard');
@@ -144,13 +141,11 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('vendor-edit/{id}', 'VendorStatus')->name('admin.vendorstatus');
         Route::post('vendor-update/{id}', 'VendorDetailUpdate');
         Route::post('vendor-image-update/{id}', 'vendorImageUpdate')->name('admin.vendorImageUpdate');
-
         Route::get('delete-profile-image/{id}', 'deleteProfileImage');
-
-        Route::post('/admin/user/{userId}/status/{status}', 'changeStatus')->name('admin.changeStatus');
-
-        Route::get('/auto-login/{email}', 'autoLoginVendorByEmail')->name('auto-login-by-email');
-
+        Route::post('/admin/user/{userId}/status/{status}', 'changeStatus')
+            ->name('admin.changeStatus');
+        Route::get('/auto-login/{email}', 'autoLoginVendorByEmail')
+            ->name('auto-login-by-email');
         Route::put('/countries/{id}/enable-disable', 'enableDisableCountry')
             ->name('admin.countries.enableDisable');
         Route::get('/countries','countrylist')->name('admin.countries.index');
