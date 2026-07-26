@@ -5,10 +5,11 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2.12",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^10.0",
+        "livewire/livewire": "^3.5",
         "laravel/sanctum": "^2.14",
         "laravel/scout": "^10.6",
         "laravel/tinker": "^2.7",

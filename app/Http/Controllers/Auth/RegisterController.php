@@ -46,7 +46,7 @@ class RegisterController extends Controller
 
 
 
-    protected function create(Request $request)
+    public function register(Request $request)
     {
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
@@ -54,7 +54,7 @@ class RegisterController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'min:6', 'confirmed'],
         ]);
-    
+
         // If validation fails, redirect back with errors
         if ($validator->fails()) {
             return redirect()
@@ -62,14 +62,14 @@ class RegisterController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-    
+
         // If validation passes, create the vendor
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-    
+
         // Redirect to the intended page after successful registration
         return redirect()->intended('login');
     }
@@ -81,7 +81,7 @@ class RegisterController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'min:6', 'confirmed'],
         ]);
-    
+
         // If validation fails, redirect back with errors
         if ($validator->fails()) {
             return redirect()
@@ -89,14 +89,14 @@ class RegisterController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-    
+
         // If validation passes, create the vendor
         Admin::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-    
+
         // Redirect to the intended page after successful registration
         return redirect()->intended('admin/login');
     }
@@ -108,7 +108,7 @@ class RegisterController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'min:6', 'confirmed'],
         ]);
-    
+
         // If validation fails, redirect back with errors
         if ($validator->fails()) {
             return redirect()
@@ -116,14 +116,14 @@ class RegisterController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-    
+
         // If validation passes, create the vendor
         Vendor::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-    
+
         // Redirect to the intended page after successful registration
         return redirect()->intended('vendor/login');
     }

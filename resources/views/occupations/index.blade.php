@@ -12,7 +12,8 @@
             </div>
         @endif
 
-        <table class="table" id="occupationsTable">
+
+        <table id="occupationsTable" class="table display expandable-table" style="width:100%">
             <thead>
                 <tr>
                     <th>ID</th>

@@ -388,7 +388,7 @@
                 e.preventDefault();
                 var formData = new FormData(this);
                 console.log(formData);
-                alert('test');
+
                 $.ajax({
                     url: $(this).attr('action'),
                     type: $(this).attr('method'),
