@@ -83,7 +83,7 @@
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Vendor Personal Information</h4>
-              <form action="{{ url('vendor/update-personal_detail') }}" method="post" class="forms-sample" enctype="multipart/form-data">
+              <form action="{{ url('vendor/update-personal-detail') }}" method="post" class="forms-sample" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>

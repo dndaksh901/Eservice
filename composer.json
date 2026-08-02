@@ -2,34 +2,35 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2.12",
-        "fruitcake/laravel-cors": "^2.0.5",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^10.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "intervention/image": "^3.11",
+        "laravel/framework": "^12.0",
+        "laravel/reverb": "^1.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/scout": "*",
+        "laravel/tinker": "^2.10",
+        "laravel/ui": "*",
         "livewire/livewire": "^3.5",
-        "laravel/sanctum": "^2.14",
-        "laravel/scout": "^10.6",
-        "laravel/tinker": "^2.7",
-        "laravel/ui": "^3.4",
-        "laravelcollective/html": "^6.3",
-        "razorpay/razorpay": "^2.8",
-        "spatie/laravel-permission": "^5.0",
-        "stevebauman/location": "^6.6"
-
+        "razorpay/razorpay": "*",
+        "spatie/laravel-permission": "*",
+        "stevebauman/location": "*"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.8",
-        "dipeshsukhia/laravel-country-state-city-data": "^2.0",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
-
+        "barryvdh/laravel-debugbar": "*",
+        "dipeshsukhia/laravel-country-state-city-data": "*",
+        "fakerphp/faker": "*",
+        "laravel/sail": "*",
+        "mockery/mockery": "*",
+        "nunomaduro/collision": "*",
+        "phpunit/phpunit": "*",
+        "spatie/laravel-ignition": "*"
     },
     "autoload": {
         "psr-4": {
@@ -38,9 +39,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-
             "app/Helpers/helpers.php"
-
         ]
     },
     "autoload-dev": {

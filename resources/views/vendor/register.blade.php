@@ -34,7 +34,8 @@
                   <form class="pt-3" action="{{ url('vendor/register') }}" method="post">
                     @csrf
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-lg" name="username" placeholder="Username" value="{{ old('username') }}" autocomplete="off">
+                      <input type="text" class="form-control form-control-lg" name="username" placeholder="Username (optional)" value="{{ old('username') }}" autocomplete="off">
+                      <small class="form-text text-muted">Leave blank to generate a unique username automatically.</small>
                       @if ($errors->has('username'))
                         <span class="text-danger">{{ $errors->first('username') }}</span>
                     @endif

@@ -279,6 +279,20 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label">Company Website</label>
+                                                <div class="pass-group group-img">
+                                                    <span class="lock-icon"><i class="fa-solid fa-globe"></i></span>
+                                                    <input type="url" class="form-control" name="website_url" value="{{ $profile->website_url ?? '' }}" placeholder="https://example.com">
+                                                </div>
+                                                @error('website_url')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="form-group col-12">
                                             <label for="services">Our Services</label>
                                             <div class="mb-3">

@@ -19,6 +19,7 @@ use App\Http\Controllers\Vendor\VendorController;
 use Illuminate\Http\Request;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,17 @@ Route::get('/clear-cache', function () {
     return 'Cache cleared successfully';
 });
 
+
+
 Route::group(['middleware' => 'prevent-back-history'], function () {
+
+    // Chat Routes (accessible by both users and vendors)
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/contacts', [ChatController::class, 'getContacts']);
+    Route::get('/chat/messages/{receiverType}/{receiverId}', [ChatController::class, 'fetchMessages']);
+    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+    Route::post('/chat/seen', [ChatController::class, 'markAsSeen']);
+    Route::get('/chat/attachment/{message}', [ChatController::class, 'downloadAttachment'])->name('chat.attachment');
     // Route::get('/', function () {
     //     return view('index');
     // });
@@ -103,8 +114,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::match(['get', 'post'], 'update-vendor-password', 'updateVendorPassword');
         // Vendor update Detail
         Route::match(['get', 'post'], 'profession', 'updateProfession');
+        // Vendor business hours
+        Route::match(['get', 'post'], 'business-hours', 'businessHours');
         // Vendor update Detail
-        Route::match(['get', 'post'], 'update-personal_detail', 'updatePersonalDetail');
+        Route::match(['get', 'post'], 'update-personal-detail', 'updatePersonalDetail');
         //check Vendor current Password
         // Vendor update Detail
         //   Route::match(['get','post'],'enquiry','enquiryOfUser');

@@ -21,6 +21,7 @@ class Profile extends Model
         'ranking_id',
         'price_per_hour',
         'address',
+        'website_url',
         'country_id',
         'state_id',
         'city_id',

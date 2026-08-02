@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
-class RegisterController extends Controller
+class RegisteredUserController extends Controller
 {
     /*
     |--------------------------------------------------------------------------

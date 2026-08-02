@@ -14,6 +14,11 @@
             <i class="fa-solid fa-user-tie"></i> <span>Profession</span>
         </a>
     </li>
+    <li class="{{ request()->is('vendor/business-hours') ? 'active' : '' }}">
+        <a href="{{ url('vendor/business-hours') }}">
+            <i class="fa-solid fa-clock"></i> <span>Business Hours</span>
+        </a>
+    </li>
     {{-- <li class="{{ request()->is('vendor/listing') ? 'active' : '' }}">
         <a href="{{ url('vendor/listing') }}">
             <i class="feather-list"></i> <span>My Listing</span>

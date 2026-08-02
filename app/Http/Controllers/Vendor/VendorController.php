@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use App\Models\Admin;
 use App\Models\Vendor;
 use App\Models\Occupation;
@@ -20,6 +21,7 @@ use App\Models\EnquiryUser;
 use App\Models\Favorite;
 use App\Models\Review;
 use App\Models\Notification;
+use App\Models\BusinessHour;
 use Illuminate\Support\Facades\Validator;
 use Stevebauman\Location\Facades\Location;
 
@@ -96,16 +98,42 @@ class VendorController extends Controller
     {
 
         $request->validate([
-            'username' => 'required|min:3',
+            'username' => 'nullable|min:3|unique:vendors,username',
             'name' => 'required|min:3',
             'email' => 'required|email|unique:vendors',
             'password' => 'required|confirmed|min:6'
         ]);
 
         $data = $request->all();
+
+        if (empty($data['username'])) {
+            $data['username'] = $this->generateUniqueVendorUsername($data['name'], $data['email']);
+        }
+
         $check = $this->create($data);
 
         return redirect("vendor/login")->with('message', 'You have signed-in');
+    }
+
+    protected function generateUniqueVendorUsername($name, $email)
+    {
+        $base = Str::slug($name, '_');
+        if (empty($base)) {
+            $base = Str::slug(explode('@', $email)[0], '_');
+        }
+
+        $base = preg_replace('/[^A-Za-z0-9_]/', '', $base);
+        if (empty($base)) {
+            $base = 'vendor';
+        }
+
+        $username = $base;
+        $counter = 1;
+        while (Vendor::where('username', $username)->exists()) {
+            $username = $base . '_' . $counter++;
+        }
+
+        return $username;
     }
 
     public function create(array $data)
@@ -137,41 +165,52 @@ class VendorController extends Controller
 
             $rules = [
                 'name'     => 'required|regex:/^[\pL\s\-]+$/u',
-                'mobile'   => 'required|numeric|digits:10',
+                'mobile'   => 'required|digits_between:10,15',
                 'avatar'    => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+                'dob' => 'nullable|date|before:today',
+                'gender' => 'nullable|in:male,female,other',
+                'introduction' => 'nullable|string|max:1000',
+                'facebook' => 'nullable|url',
+                'twitter' => 'nullable|url',
+                'youtube' => 'nullable|url',
+                'instagram' => 'nullable|url'
             ];
 
             $this->validate($request, $rules);
 
-            // Get current profile Image
-            $image = Vendor::where('id', Auth()->guard('vendor')->user()->id)->value('avatar');
+            $vendor = Auth::guard('vendor')->user();
+            $currentAvatar = $vendor->avatar;
+            $username = $vendor->username;
 
-            // Get Update profile Image
             if ($files = $request->file('avatar')) {
                 $destinationPath = 'vendor/vendor_image'; // upload path
                 $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
                 $files->move($destinationPath, $profileImage);
-                if (file_exists($destinationPath . '/' . $image)) {
-                    unlink($destinationPath . '/' . $image);
+
+                if (!empty($currentAvatar) && file_exists($destinationPath . '/' . $currentAvatar)) {
+                    unlink($destinationPath . '/' . $currentAvatar);
                 }
-                $image = "$profileImage";
+
+                $currentAvatar = $profileImage;
             }
 
-            //Update Vendor Detail
+            if (empty($username)) {
+                $username = $this->generateUniqueVendorUsername($request->name, $vendor->email);
+            }
 
-            Vendor::where('id', Auth()->guard('vendor')->user()->id)
-                ->update([
-                    'name' => $request->name,
-                    'mobile' => $request->mobile,
-                    'dob' => $request->dob,
-                    'gender' => $request->gender,
-                    'introduction' => $request->introduction,
-                    'facebook' => $request->facebook,
-                    'twitter' => $request->twitter,
-                    'youtube' => $request->youtube,
-                    'instagram' => $request->instagram,
-                    'avatar' => $image
-                ]);
+            $vendor->fill([
+                'name' => $request->name,
+                'mobile' => $request->mobile,
+                'dob' => $request->dob,
+                'gender' => $request->gender,
+                'introduction' => $request->introduction,
+                'facebook' => $request->facebook,
+                'twitter' => $request->twitter,
+                'youtube' => $request->youtube,
+                'instagram' => $request->instagram,
+                'avatar' => $currentAvatar,
+                'username' => $username,
+            ])->save();
 
             return redirect()->back()->with('success', 'Update Details Successfully');
         }
@@ -250,6 +289,7 @@ class VendorController extends Controller
             $rules = [
                 'occupation_id' => 'required',
                 'address' => 'required|max:400',
+                'website_url' => 'nullable|url|max:255',
             ];
             $tags = explode(",", $request->tags);
             $validator = Validator::make(request()->all(), $rules);
@@ -316,6 +356,7 @@ class VendorController extends Controller
                 'services' => $request->services,
                 'price_per_hour' => $request->price_per_hour,
                 'address' => $request->address,
+                'website_url' => $request->website_url,
                 // 'state_id' => $request->state_id,
                 // 'city_id' => $request->city_id,
                 // 'pincode' => $request->pincode,
@@ -330,6 +371,340 @@ class VendorController extends Controller
         $occupations = Occupation::where('status', 1)->orderBy('occupation_name', 'ASC')->get();
         $profile = Profile::with('vendor', 'occupation')->where('profile_status', 1)->where('vendor_id', Auth::guard('vendor')->id())->first();
         return view('vendor.profession', compact('profile', 'occupations', 'states', 'cities'));
+    }
+
+    public function businessHours(Request $request)
+    {
+        $vendor = Auth::guard('vendor')->user();
+
+        $days = [
+            0 => 'Sunday',
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
+        ];
+
+        if ($request->isMethod('post')) {
+            $validator = Validator::make($request->all(), [
+                'weekly' => 'required|array',
+                'weekly.*.slots' => 'nullable|array',
+                'weekly.*.slots.*.open_time' => 'nullable|date_format:H:i',
+                'weekly.*.slots.*.close_time' => 'nullable|date_format:H:i',
+                'weekly.*.slots.*.capacity' => 'nullable|integer|min:1',
+                'weekly.*.is_closed' => 'sometimes|boolean',
+                'special' => 'sometimes|array',
+                'special.*.from_date' => 'nullable|date_format:Y-m-d|after_or_equal:today',
+                'special.*.to_date' => 'nullable|date_format:Y-m-d|after_or_equal:today',
+                'special.*.slots' => 'nullable|array',
+                'special.*.slots.*.open_time' => 'nullable|date_format:H:i',
+                'special.*.slots.*.close_time' => 'nullable|date_format:H:i',
+                'special.*.slots.*.capacity' => 'nullable|integer|min:1',
+                'special.*.is_closed' => 'sometimes|boolean',
+            ]);
+
+            $validator->after(function ($validator) use ($request, $days) {
+                foreach ($days as $dayIndex => $label) {
+                    $slots = $request->input("weekly.$dayIndex.slots", []);
+                    $validSlots = [];
+
+                    foreach ($slots as $slotIndex => $slot) {
+                        $openTime = trim($slot['open_time'] ?? '');
+                        $closeTime = trim($slot['close_time'] ?? '');
+
+                        if ($openTime === '' && $closeTime === '') {
+                            continue;
+                        }
+                        if ($openTime === '' || $closeTime === '') {
+                            if ($openTime === '') {
+                                $validator->errors()->add("weekly.$dayIndex.slots.$slotIndex.open_time", 'Open time is required when a close time is set.');
+                            }
+                            if ($closeTime === '') {
+                                $validator->errors()->add("weekly.$dayIndex.slots.$slotIndex.close_time", 'Close time is required when an open time is set.');
+                            }
+                            continue;
+                        }
+                        if ($openTime >= $closeTime) {
+                            $validator->errors()->add("weekly.$dayIndex.slots.$slotIndex.close_time", 'End time must be later than start time.');
+                        }
+
+                        $validSlots[] = ['open_time' => $openTime, 'close_time' => $closeTime, 'slotIndex' => $slotIndex];
+                    }
+
+                    usort($validSlots, function ($a, $b) {
+                        return strcmp($a['open_time'], $b['open_time']);
+                    });
+
+                    $lastClose = null;
+                    foreach ($validSlots as $slot) {
+                        if ($lastClose !== null && $slot['open_time'] < $lastClose) {
+                            $validator->errors()->add("weekly.$dayIndex.slots.{$slot['slotIndex']}.open_time", 'Weekly slots must not overlap and must be in chronological order.');
+                        }
+                        $lastClose = $slot['close_time'];
+                    }
+                }
+
+                $specialRanges = [];
+                foreach ((array)$request->input('special', []) as $index => $special) {
+                    $fromDate = trim($special['from_date'] ?? '');
+                    $toDate = trim($special['to_date'] ?? '');
+                    $slots = $special['slots'] ?? [];
+
+                    if ($fromDate === '' && $toDate === '' && empty($slots)) {
+                        continue;
+                    }
+
+                    if ($fromDate === '' || $toDate === '') {
+                        if ($fromDate === '') {
+                            $validator->errors()->add("special.$index.from_date", 'From date is required when using a date range.');
+                        }
+                        if ($toDate === '') {
+                            $validator->errors()->add("special.$index.to_date", 'To date is required when using a date range.');
+                        }
+                        continue;
+                    }
+
+                    if ($fromDate > $toDate) {
+                        $validator->errors()->add("special.$index.to_date", 'The to date must be the same or after the from date.');
+                    }
+
+                    $rangeKey = $fromDate . '|' . $toDate;
+                    if (in_array($rangeKey, $specialRanges, true)) {
+                        $validator->errors()->add("special.$index.from_date", 'This date range is duplicate and will not be saved.');
+                    } else {
+                        $specialRanges[] = $rangeKey;
+                    }
+
+                    $validSlots = [];
+                    foreach ($slots as $slotIndex => $slot) {
+                        $openTime = trim($slot['open_time'] ?? '');
+                        $closeTime = trim($slot['close_time'] ?? '');
+
+                        if ($openTime === '' && $closeTime === '') {
+                            continue;
+                        }
+                        if ($openTime === '' || $closeTime === '') {
+                            if ($openTime === '') {
+                                $validator->errors()->add("special.$index.slots.$slotIndex.open_time", 'Open time is required when a close time is set.');
+                            }
+                            if ($closeTime === '') {
+                                $validator->errors()->add("special.$index.slots.$slotIndex.close_time", 'Close time is required when an open time is set.');
+                            }
+                            continue;
+                        }
+                        if ($openTime >= $closeTime) {
+                            $validator->errors()->add("special.$index.slots.$slotIndex.close_time", 'End time must be later than start time.');
+                        }
+
+                        $validSlots[] = ['open_time' => $openTime, 'close_time' => $closeTime, 'slotIndex' => $slotIndex];
+                    }
+
+                    usort($validSlots, function ($a, $b) {
+                        return strcmp($a['open_time'], $b['open_time']);
+                    });
+                    $lastClose = null;
+                    foreach ($validSlots as $slot) {
+                        if ($lastClose !== null && $slot['open_time'] < $lastClose) {
+                            $validator->errors()->add("special.$index.slots.{$slot['slotIndex']}.open_time", 'Special slots must not overlap and must be in chronological order.');
+                        }
+                        $lastClose = $slot['close_time'];
+                    }
+                }
+            });
+
+            $validator->validate();
+
+            $weekly = [];
+            foreach ($days as $dayIndex => $label) {
+                $schedule = $request->input('weekly.' . $dayIndex, []);
+                $isClosed = isset($schedule['is_closed']) && $schedule['is_closed'];
+                $slots = $schedule['slots'] ?? [];
+
+                if ($isClosed) {
+                    $weekly[] = [
+                        'day_of_week' => $dayIndex,
+                        'label' => $label,
+                        'is_closed' => true,
+                        'slots' => [],
+                    ];
+                    continue;
+                }
+
+                $slots = array_values(array_filter(array_map(function ($slot) {
+                    $openTime = trim($slot['open_time'] ?? '');
+                    $closeTime = trim($slot['close_time'] ?? '');
+                    $capacity = isset($slot['capacity']) ? (int) $slot['capacity'] : 1;
+
+                    if ($openTime === '' && $closeTime === '') {
+                        return null;
+                    }
+
+                    return [
+                        'open_time' => $openTime ?: null,
+                        'close_time' => $closeTime ?: null,
+                        'capacity' => $capacity,
+                    ];
+                }, $slots), function ($slot) {
+                    return $slot !== null;
+                }));
+
+                if (empty($slots)) {
+                    $slots = [
+                        ['open_time' => '00:00', 'close_time' => '23:59', 'capacity' => 1],
+                    ];
+                }
+
+                $weekly[] = [
+                    'day_of_week' => $dayIndex,
+                    'label' => $label,
+                    'is_closed' => false,
+                    'slots' => $slots,
+                ];
+            }
+
+            $specialEntries = array_values(array_filter((array) $request->input('special', []), function ($special) {
+                return trim($special['from_date'] ?? '') !== ''
+                    || trim($special['to_date'] ?? '') !== '';
+            }));
+
+            $specialDates = [];
+            foreach ($specialEntries as $special) {
+                $fromDate = trim($special['from_date'] ?? '');
+                $toDate = trim($special['to_date'] ?? '');
+
+                if ($fromDate === '' && $toDate === '') {
+                    continue;
+                }
+
+                $isClosed = isset($special['is_closed']) && $special['is_closed'];
+                $slots = $special['slots'] ?? [];
+
+                if ($isClosed) {
+                    $specialDates[] = [
+                        'from_date' => $fromDate ?: null,
+                        'to_date' => $toDate ?: null,
+                        'is_closed' => true,
+                        'slots' => [],
+                    ];
+                    continue;
+                }
+
+                $slots = array_values(array_filter(array_map(function ($slot) {
+                    $openTime = trim($slot['open_time'] ?? '');
+                    $closeTime = trim($slot['close_time'] ?? '');
+                    $capacity = isset($slot['capacity']) ? (int) $slot['capacity'] : 1;
+
+                    if ($openTime === '' && $closeTime === '') {
+                        return null;
+                    }
+
+                    return [
+                        'open_time' => $openTime ?: null,
+                        'close_time' => $closeTime ?: null,
+                        'capacity' => $capacity,
+                    ];
+                }, $slots), function ($slot) {
+                    return $slot !== null;
+                }));
+
+                if (empty($slots)) {
+                    $slots = [
+                        ['open_time' => '09:00', 'close_time' => '18:00', 'capacity' => 1],
+                    ];
+                }
+
+                $specialDates[] = [
+                    'from_date' => $fromDate ?: null,
+                    'to_date' => $toDate ?: null,
+                    'is_closed' => false,
+                    'slots' => $slots,
+                ];
+            }
+
+            BusinessHour::updateOrCreate(
+                ['vendor_id' => $vendor->id],
+                [
+                    'weekly_hours' => $weekly,
+                    'special_dates' => $specialDates,
+                ]
+            );
+
+            return redirect()->back()->with('success', 'Business hours updated successfully.');
+        }
+
+        $record = BusinessHour::where('vendor_id', $vendor->id)->first();
+        $weekly = [];
+        $specialDates = [];
+
+        if ($record) {
+            $storedWeekly = $record->weekly_hours ?? [];
+            foreach ($days as $dayIndex => $label) {
+                $item = $storedWeekly[$dayIndex] ?? null;
+                if (! is_array($item)) {
+                    $item = [
+                        'day_of_week' => $dayIndex,
+                        'label' => $label,
+                        'is_closed' => false,
+                        'slots' => [
+                            ['open_time' => '00:00', 'close_time' => '23:59', 'capacity' => 1],
+                        ],
+                    ];
+                }
+
+                $weekly[] = [
+                    'day_of_week' => $dayIndex,
+                    'label' => $label,
+                    'is_closed' => isset($item['is_closed']) ? (bool) $item['is_closed'] : false,
+                    'slots' => array_values($item['slots'] ?? [['open_time' => '00:00', 'close_time' => '23:59', 'capacity' => 1]]),
+                ];
+            }
+
+            $specialDates = array_values(array_map(function ($entry) {
+                return [
+                    'from_date' => $entry['from_date'] ?? null,
+                    'to_date' => $entry['to_date'] ?? null,
+                    'is_closed' => isset($entry['is_closed']) ? (bool) $entry['is_closed'] : false,
+                    'slots' => array_values(array_map(function ($slot) {
+                        return [
+                            'open_time' => $slot['open_time'] ?? '09:00',
+                            'close_time' => $slot['close_time'] ?? '18:00',
+                            'capacity' => $slot['capacity'] ?? 1,
+                        ];
+                    }, $entry['slots'] ?? [])),
+                ];
+            }, $record->special_dates ?? []));
+        }
+
+        if (empty($weekly)) {
+            $weekly = [];
+            foreach ($days as $dayIndex => $label) {
+                $weekly[] = [
+                    'day_of_week' => $dayIndex,
+                    'label' => $label,
+                    'is_closed' => false,
+                    'slots' => [
+                        ['open_time' => '00:00', 'close_time' => '23:59', 'capacity' => 1],
+                    ],
+                ];
+            }
+        }
+
+        if (empty($specialDates)) {
+            $specialDates = [
+                [
+                    'from_date' => null,
+                    'to_date' => null,
+                    'is_closed' => false,
+                    'slots' => [
+                        ['open_time' => '09:00', 'close_time' => '18:00', 'capacity' => 1],
+                    ],
+                ],
+            ];
+        }
+
+        return view('vendor.business_hours', compact('weekly', 'specialDates'));
     }
 
     /**
@@ -680,8 +1055,15 @@ class VendorController extends Controller
 
             $rules = [
                 'name'     => 'required|regex:/^[\pL\s\-]+$/u',
-                'mobile'   => 'required|numeric|digits:10',
+                'mobile'   => 'required|digits_between:10,15',
                 'avatar'    => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+                'dob' => 'nullable|date|before:today',
+                'gender' => 'nullable|in:male,female,other',
+                'introduction' => 'nullable|string|max:1000',
+                'facebook' => 'nullable|url',
+                'twitter' => 'nullable|url',
+                'youtube' => 'nullable|url',
+                'instagram' => 'nullable|url'
             ];
 
             $this->validate($request, $rules);
@@ -694,7 +1076,7 @@ class VendorController extends Controller
                 $destinationPath = 'vendor/vendor_image'; // upload path
                 $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
                 $files->move($destinationPath, $profileImage);
-                if (file_exists($destinationPath . '/' . $image)) {
+                if (!empty($image) && file_exists($destinationPath . '/' . $image)) {
                     unlink($destinationPath . '/' . $image);
                 }
                 $image = "$profileImage";

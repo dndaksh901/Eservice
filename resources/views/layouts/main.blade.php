@@ -80,6 +80,7 @@
     <script src="{{ url('admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
     <script src="{{ url('admin/js/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('assets/js/location.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <script>
     $(document).ready(function() {

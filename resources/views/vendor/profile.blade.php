@@ -50,7 +50,7 @@
                         </div>
                     @endif
                     <div class="col-lg-9">
-                        <form action="{{ url('vendor/update-personal_detail') }}" method="post" class="forms-sample"
+                        <form action="{{ url('vendor/update-personal-detail') }}" method="post" class="forms-sample"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="card dash-cards">
@@ -109,11 +109,11 @@
                                                     <label class="col-form-label">Phone Number</label>
                                                     <div class="pass-group group-img">
                                                         <span class="lock-icon"><i class="feather-phone-call"></i></span>
-                                                        <input type="tel" class="form-control" name="mobile"
-                                                            value="{{ Auth::guard('vendor')->user()->mobile }}">
+                                                        <input type="tel" class="form-control @error('mobile') is-invalid @enderror" name="mobile"
+                                                            value="{{ old('mobile', Auth::guard('vendor')->user()->mobile) }}">
                                                     </div>
                                                     @error('mobile')
-                                                        <span class="invalid-feedback" role="alert">
+                                                        <span class="invalid-feedback d-block" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
@@ -132,10 +132,10 @@
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="dob">Date of Birth</label>
-                                                    <input type="date" class="form-control" name="dob"
-                                                        value="{{ Auth::guard('vendor')->user()->dob }}" id="dob">
+                                                    <input type="date" class="form-control @error('dob') is-invalid @enderror" name="dob"
+                                                        value="{{ old('dob', Auth::guard('vendor')->user()->dob) }}" id="dob">
                                                     @error('dob')
-                                                        <span class="invalid-feedback" role="alert">
+                                                        <span class="invalid-feedback d-block" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
@@ -148,33 +148,33 @@
                                                     <div class="d-flex justify-content-between">
                                                         <!-- Default inline 1-->
                                                         <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" class="custom-control-input"
+                                                            <input type="radio" class="custom-control-input @error('gender') is-invalid @enderror"
                                                                 id="gender1" name="gender" value="male"
-                                                                {{ Auth::guard('vendor')->user()->gender == 'male' ? 'checked' : '' }}>
+                                                                {{ old('gender', Auth::guard('vendor')->user()->gender) == 'male' ? 'checked' : '' }}>
                                                             <label class="custom-control-label"
                                                                 for="gender1">Male</label>
                                                         </div>
 
                                                         <!-- Default inline 2-->
                                                         <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" class="custom-control-input"
+                                                            <input type="radio" class="custom-control-input @error('gender') is-invalid @enderror"
                                                                 id="gender2" name="gender" value="female"
-                                                                {{ Auth::guard('vendor')->user()->gender == 'female' ? 'checked' : '' }}>
+                                                                {{ old('gender', Auth::guard('vendor')->user()->gender) == 'female' ? 'checked' : '' }}>
                                                             <label class="custom-control-label"
                                                                 for="gender2">Female</label>
                                                         </div>
 
                                                         <!-- Default inline 3-->
                                                         <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" class="custom-control-input"
+                                                            <input type="radio" class="custom-control-input @error('gender') is-invalid @enderror"
                                                                 id="gender3" name="gender" value="other"
-                                                                {{ Auth::guard('vendor')->user()->gender == 'other' ? 'checked' : '' }}>
+                                                                {{ old('gender', Auth::guard('vendor')->user()->gender) == 'other' ? 'checked' : '' }}>
                                                             <label class="custom-control-label"
                                                                 for="gender3">Other</label>
                                                         </div>
                                                     </div>
                                                     @error('gender')
-                                                        <span class="invalid-feedback" role="alert">
+                                                        <span class="invalid-feedback d-block" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
@@ -184,8 +184,14 @@
                                         <div class="form-group">
                                             <label class="col-form-label">Describe Yourself</label>
                                             <div class="pass-group group-img">
-                                                <textarea rows="4" class="form-control" id="introduction" name="introduction">{{ Auth::guard('vendor')->user()->introduction ?? '' }}</textarea>
+                                                <textarea rows="4" class="form-control @error('introduction') is-invalid @enderror" id="introduction" name="introduction" maxlength="1000">{{ old('introduction', Auth::guard('vendor')->user()->introduction ?? '') }}</textarea>
                                             </div>
+                                            <small id="introduction_count" class="form-text text-muted">Max 1000 characters. Used: 0. Remaining: 1000.</small>
+                                            @error('introduction')
+                                                <span class="invalid-feedback d-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                         <div class="row socialmedia-info">
                                             <div class="col-lg-6 col-md-6">
@@ -338,9 +344,20 @@
         });
 
         $(document).ready(function(){
-        // Hide flash messages after the specified duration
-        $('.flash-message').delay($('.flash-message').data('duration')).fadeOut(500);
-    });
+            // Hide flash messages after the specified duration
+            $('.flash-message').delay($('.flash-message').data('duration')).fadeOut(500);
+
+            function updateIntroductionCounter() {
+                var max = 1000;
+                var value = $('#introduction').val() || '';
+                var used = value.length;
+                var remaining = max - used;
+                $('#introduction_count').text(`Max ${max} characters. Used: ${used}. Remaining: ${remaining}.`);
+            }
+
+            $('#introduction').on('input', updateIntroductionCounter);
+            updateIntroductionCounter();
+        });
 
         //Check current password
         function checkCurrentPassword(password) {

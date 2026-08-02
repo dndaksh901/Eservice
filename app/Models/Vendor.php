@@ -31,7 +31,13 @@ class Vendor extends Authenticatable
     public function profileImage(){
         return $this->hasMany('App\Models\ProfileImage');
     }
+
     public function profile(){
         return $this->hasOne('App\Models\Profile');
+    }
+
+    public function businessHours()
+    {
+        return $this->hasMany('App\Models\BusinessHour');
     }
 }
