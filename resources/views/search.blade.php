@@ -8,8 +8,25 @@
     text-decoration: none;
 }
 
-.card-link:hover .card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.vendor-card-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+.vendor-card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card-actions .btn {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.card-actions .btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
 }
 
 .star-rating {
@@ -157,20 +174,16 @@
                         @if(isset($profiles))
                         @forelse ($profiles as $key=>$profile)
                         @php
-                        if (Auth::guard('admin')->check()) {
-                            $link = route('login');
-                        } elseif (Auth::guard('vendor')->check() || Auth::guard('web')->check()) {
-                            $link = route('vendor.detail', ['id' => $profile->id]);
-                        } else {
-                            $link = route('login');
-                        }
-                    @endphp
-                        <a href="{{ $link }}" class="card-link">
-                            <div class="card">
+                            $link = vendorProfileUrl($profile);
+                        @endphp
+                            <div class="card mb-4 vendor-card-item">
                                 <div class="blog-widget">
                                     <div class="blog-img">
-
-                                        <img src="{{ asset('vendor/vendor_image/'.$profile->vendor->avatar ?? 'avatar.jpg' )}}" class="img-fluid" alt="blog-img" oncontextmenu="return false;" >
+                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer">
+                                            <img src="{{ asset('vendor/vendor_image/' . (!empty($profile->vendor->avatar) ? $profile->vendor->avatar : 'avatar.jpg')) }}" 
+                                                 onerror="this.onerror=null;this.src='{{ asset('vendor/vendor_image/avatar.jpg') }}';" 
+                                                 class="img-fluid" alt="{{ $profile->vendor->name ?? 'Vendor' }}" oncontextmenu="return false;" loading="lazy">
+                                        </a>
 
                                         <div class="fav-item">
                                             @if(Auth::guard('web')->check() && !empty($profile->favorite))
@@ -189,12 +202,18 @@
                                             <div class="blogfeaturelink">
                                                 <div class="blog-author">
                                                     <div class="blog-author-img">
-                                                        <img src="{{ asset('vendor/vendor_image/'.$profile->vendor->avatar ?? 'avatar.jpg' )}}" alt="author">
+                                                        <img src="{{ asset('vendor/vendor_image/' . (!empty($profile->vendor->avatar) ? $profile->vendor->avatar : 'avatar.jpg')) }}" 
+                                                             onerror="this.onerror=null;this.src='{{ asset('vendor/vendor_image/avatar.jpg') }}';" 
+                                                             alt="author" loading="lazy">
                                                     </div>
                                                     <a href="javascript:void(0);">{{ $profile->experience_year }} Years, {{ $profile->experience_month }} Months</a>
                                                 </div>
                                             </div>
-                                            <h6>{{ $profile->vendor->name ?? $profile->vendor->username }}</h6>
+                                            <h6>
+                                                <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="text-dark hover-primary" style="text-decoration:none;">
+                                                    {{ $profile->vendor->name ?? $profile->vendor->username }}
+                                                </a>
+                                            </h6>
                                             <div class="blog-location-details">
                                                 <div class="location-info">
                                                     <i class="feather-map-pin"></i> {{ $profile->vendor->profile->address ?? '' }}
@@ -224,17 +243,29 @@
                                                 <span class="rating-value">{{ number_format($profile->rating, 1) }}</span>
                                                 ( 50 Reviews )
                                             </p>
-                                            <div class="amount-details">
+                                            <div class="amount-details d-flex justify-content-between align-items-center mt-3 flex-wrap" style="gap:10px;">
                                                 <div class="amount">
                                                     <span class="validrate">₹ {{ $profile->price_per_hour }}</span>
-                                                    <span>₹ {{ $profile->price_per_hour + rand(10, 100) }}</span>
+                                                    <small class="text-muted">/hr</small>
+                                                </div>
+                                                <div class="card-actions d-flex flex-wrap" style="gap:8px;">
+                                                    <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary text-white" style="background:#c10037;border-color:#c10037;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(193,0,55,0.25);text-decoration:none;">
+                                                        <i class="feather-eye"></i> View Details
+                                                    </a>
+                                                    <a href="{{ route('chat.index', ['vendor_id' => $profile->vendor_id]) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success text-white" style="background:#25d366;border-color:#25d366;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(37,211,102,0.25);text-decoration:none;">
+                                                        <i class="fas fa-comment-dots"></i> Chat
+                                                    </a>
+                                                    @if(!empty($profile->vendor->mobile))
+                                                        <a href="tel:{{ $profile->vendor->mobile }}" class="btn btn-sm btn-outline-primary" style="border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;text-decoration:none;">
+                                                            <i class="feather-phone-call"></i> Call
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </a>
                             @empty
                                 <p>No profiles found</p>
                             @endforelse

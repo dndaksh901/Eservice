@@ -37,8 +37,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-12 mx-auto">
                     <div class="section-search aos" data-aos="fade-up">
-                        <h1>SkilledWorker - The Experts You Need</h1>
-                        <p>Providing skilled workers for all your needs</p>
+                        <h1 class="visually-hidden">SkilledWorker - All Home & Professional Services in One Place</h1>
                         <div class="search-box">
                             @if (count($errors) > 0)
                                 @foreach ($errors->all() as $error)

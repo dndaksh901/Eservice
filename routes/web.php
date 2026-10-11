@@ -19,6 +19,8 @@ use App\Http\Controllers\Vendor\VendorController;
 use Illuminate\Http\Request;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,14 +34,29 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Route::get('/clear-cache', function () {
-    $exitCode = Artisan::call('config:clear');
-    $exitCode = Artisan::call('view:clear');
-    $exitCode = Artisan::call('route:clear');
-    $exitCode = Artisan::call('cache:clear');
+    if (!Auth::guard('admin')->check()) {
+        abort(403, 'Unauthorized access');
+    }
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    Artisan::call('cache:clear');
     return 'Cache cleared successfully';
 });
 
+// Dynamic SEO Sitemap and Robots
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [App\Http\Controllers\SitemapController::class, 'robots'])->name('robots');
+
 Route::group(['middleware' => 'prevent-back-history'], function () {
+
+    // Chat Routes (accessible by both users and vendors)
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/contacts', [ChatController::class, 'getContacts']);
+    Route::get('/chat/messages/{receiverType}/{receiverId}', [ChatController::class, 'fetchMessages']);
+    Route::post('/chat/send', [ChatController::class, 'sendMessage'])->middleware('throttle:30,1');
+    Route::post('/chat/seen', [ChatController::class, 'markAsSeen']);
+    Route::get('/chat/attachment/{message}', [ChatController::class, 'downloadAttachment'])->name('chat.attachment');
     // Route::get('/', function () {
     //     return view('index');
     // });
@@ -65,7 +82,7 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::view('/test', 'testpage');
     // Route::view('/contact-us', 'contact');
     Route::get('/contact-us', [UserController::class, 'contactUs']);
-    Route::post('/contact-us', [UserController::class, 'ContactUsForm'])->name('contact.store');
+    Route::post('/contact-us', [UserController::class, 'ContactUsForm'])->name('contact.store')->middleware('throttle:10,1');
     Route::view('/about-us', 'about-us');
 
 
@@ -74,20 +91,17 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::get('/admin/register', [RegisterController::class, 'showAdminRegisterForm']);
     Route::get('/vendor/register', [RegisterController::class, 'showVendorRegisterForm']);
 
-    Route::post('/admin/login', [LoginController::class, 'adminLogin']);
-    Route::post('/admin/register', [RegisterController::class, 'createAdmin']);
+    Route::post('/admin/login', [LoginController::class, 'adminLogin'])->middleware('throttle:10,1');
+    Route::post('/admin/register', [RegisterController::class, 'createAdmin'])->middleware('throttle:10,1');
     Route::middleware(['middleware' => 'vendor.status'])->group(function () {
-        Route::post('/vendor/login', [LoginController::class, 'vendorLogin']);
+        Route::post('/vendor/login', [LoginController::class, 'vendorLogin'])->middleware('throttle:10,1');
     });
-    Route::post('/vendor/register', [RegisterController::class, 'createVendor']);
+    Route::post('/vendor/register', [RegisterController::class, 'createVendor'])->middleware('throttle:10,1');
 
 
 
     //Search Skilled Workers
-    // Route::get('search', [VendorController::class, 'searchView']);
-    // Route::get('search/{occupation_slug?}/{city_id?}/{state_id?}', [VendorController::class, 'search']);
-    // Route::get('category/{occupation?}/{city_id?}/{state_id?}/{min_price?}/{max_price?}', [VendorController::class, 'searchByName']);
-    Route::get('search', [VendorController::class, 'SearchProfile']);
+    Route::get('search', [VendorController::class, 'SearchProfile'])->name('search')->middleware('throttle:60,1');
     Route::controller(VendorController::class)->prefix('vendor')->middleware(['middleware' => 'auth:vendor', 'vendor.status'])->group(function () {
         // Route::view('/vendor', 'vendor.vendor');
         // Profile images show and delete
@@ -103,8 +117,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::match(['get', 'post'], 'update-vendor-password', 'updateVendorPassword');
         // Vendor update Detail
         Route::match(['get', 'post'], 'profession', 'updateProfession');
+        // Vendor business hours
+        Route::match(['get', 'post'], 'business-hours', 'businessHours');
         // Vendor update Detail
-        Route::match(['get', 'post'], 'update-personal_detail', 'updatePersonalDetail');
+        Route::match(['get', 'post'], 'update-personal-detail', 'updatePersonalDetail');
         //check Vendor current Password
         // Vendor update Detail
         //   Route::match(['get','post'],'enquiry','enquiryOfUser');
@@ -118,6 +134,10 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::get('read-status-update/{id}', 'notificationStatusUpdate');
 
         Route::view('profile', 'vendor.profile');
+        // Vendor Bookings
+        Route::get('bookings', [BookingController::class, 'vendorBookings'])->name('vendor.bookings');
+        Route::post('bookings/{id}/status', [BookingController::class, 'updateStatus'])->name('vendor.bookings.status');
+        Route::delete('bookings/{id}', [BookingController::class, 'destroy'])->name('vendor.bookings.destroy');
         //   Route::get('reviews', 'reviewList');
     });
 
@@ -168,10 +188,12 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
         Route::delete('/occupations/{occupation}', [OccupationController::class, 'destroy'])->name('occupations.destroy');
     });
 
+    // Public Vendor Profile (Accessible to Guests and Search Engines)
+    Route::get('vendor-profile/{id}', [VendorController::class, 'vendorDetail'])->name('vendor.detail');
+
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('vendor-profile/{id}', [VendorController::class, 'vendorDetail'])->name('vendor.detail');
         Route::post('reviews', [ReviewController::class, 'index']);
-        Route::post('create-review', [ReviewController::class, 'CreateReview']);
+        Route::post('create-review', [ReviewController::class, 'CreateReview'])->middleware('throttle:15,1');
     });
 
     Route::get('logout', [LoginController::class, 'logout']);
@@ -183,8 +205,12 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::get('ip-address', [UserController::class, 'getIpDetail']);
     Route::get('userdata', [UserController::class, 'showUser']);
     Route::get('country', [VendorController::class, 'countrydata']);
-    Route::post('notification', [NotificationController::class, 'store'])->name('notification.store');
-    Route::post('favorite', [VendorController::class, 'favorite']);
+    Route::post('notification', [NotificationController::class, 'store'])->name('notification.store')->middleware('throttle:15,1');
+    Route::post('favorite', [VendorController::class, 'favorite'])->middleware('throttle:30,1');
+
+    // Advance Booking Module
+    Route::post('/book-appointment', [BookingController::class, 'store'])->name('booking.store')->middleware('throttle:20,1');
+    Route::get('/vendor-available-slots/{vendor_id}/{date}', [BookingController::class, 'getAvailableSlots'])->name('booking.slots');
 
     //razorpay
     Route::get('razorpay-payment', [RazorpayController::class, 'index']);

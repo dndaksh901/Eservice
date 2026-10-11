@@ -74,6 +74,8 @@ test creds
 user    http://localhost:8000/login
 user901@hmail.com
 123456
+usernew@gmail.com
+123456789
 
 vendor  http://localhost:8000/vendor/login
 vendor@gmail.com
@@ -85,5 +87,9 @@ dnd.aksh901@gmail.com
 
 
 
-git command
-git add . && git commit -m "code update on index and search" && git pull && git push
+#git command
+git remote set-url origin https://[EMAIL_ADDRESS]/dndaksh901/Eservice.git
+
+git remote set-url origin https://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@github.com/dndaksh901/Eservice.git
+
+git push origin main --force

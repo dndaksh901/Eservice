@@ -29,22 +29,35 @@ class RazorpayController extends Controller
     {
         $input = $request->all();
 
-        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+        $key = config('services.razorpay.key');
+        $secret = config('services.razorpay.secret');
 
-        $payment = $api->payment->fetch($input['razorpay_payment_id']);
-
-        if(count($input)  && !empty($input['razorpay_payment_id'])) {
-            try {
-                $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$payment['amount']));
-
-            } catch (Exception $e) {
-                return  $e->getMessage();
-                Session::put('error',$e->getMessage());
-                return redirect()->back();
-            }
+        if (empty($input['razorpay_payment_id'])) {
+            Session::put('error', 'Payment ID missing.');
+            return redirect()->back();
         }
 
-        Session::put('success', 'Payment successful');
+        $api = new Api($key, $secret);
+
+        try {
+            $payment = $api->payment->fetch($input['razorpay_payment_id']);
+            $response = $payment->capture(['amount' => $payment['amount']]);
+
+            \App\Models\Payment::create([
+                'r_payment_id'  => $payment['id'],
+                'method'        => $payment['method'] ?? 'unknown',
+                'currency'      => $payment['currency'] ?? 'INR',
+                'vendor_email'  => $payment['email'] ?? 'customer@example.com',
+                'amount'        => ($payment['amount'] / 100),
+                'json_response' => json_encode((array) $response),
+            ]);
+
+            Session::put('success', 'Payment successful');
+        } catch (Exception $e) {
+            Session::put('error', $e->getMessage());
+            return redirect()->back();
+        }
+
         return redirect()->back();
     }
 }
