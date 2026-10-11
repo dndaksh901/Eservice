@@ -481,14 +481,47 @@ document.addEventListener('DOMContentLoaded', function() {
         contactList.innerHTML = '<div class="chat-loader">'+text+'</div>';
     }
 
+    var initialContact = @json($initialContact ?? null);
+
     fetch('/chat/contacts')
         .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
         .then(function(data){
             $('contactsLoader').style.display = 'none';
-            allContacts = data;
-            drawContacts(data);
+            allContacts = Array.isArray(data) ? data : [];
+
+            if (initialContact && initialContact.id) {
+                var found = allContacts.find(function(c){ return c.id === initialContact.id; });
+                if (!found) {
+                    allContacts.unshift({
+                        id: initialContact.id,
+                        name: initialContact.name,
+                        unread_count: 0,
+                        last_message_at: null
+                    });
+                }
+            }
+
+            drawContacts(allContacts);
+
+            if (initialContact && initialContact.id) {
+                openChat(initialContact.id, initialContact.name, initialContact.type);
+            }
         })
-        .catch(function(){ setError('Unable to load contacts.'); });
+        .catch(function(){
+            if (initialContact && initialContact.id) {
+                $('contactsLoader').style.display = 'none';
+                allContacts = [{
+                    id: initialContact.id,
+                    name: initialContact.name,
+                    unread_count: 0,
+                    last_message_at: null
+                }];
+                drawContacts(allContacts);
+                openChat(initialContact.id, initialContact.name, initialContact.type);
+            } else {
+                setError('Unable to load contacts.');
+            }
+        });
 
     $('searchContacts').addEventListener('input', function(){
         var q = this.value.toLowerCase();
@@ -727,6 +760,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
     }
+
+    // Polling fallback every 6 seconds to ensure messages sync smoothly even if WebSockets disconnect
+    setInterval(function() {
+        if (!activeId || !activeType) return;
+        fetch('/chat/messages/' + activeType + '/' + activeId)
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(msgs) {
+                if (!msgs || !Array.isArray(msgs)) return;
+                var currentRows = chatMessages.querySelectorAll('.chat-row');
+                if (msgs.length > currentRows.length) {
+                    chatMessages.innerHTML = '';
+                    msgs.forEach(function(m) { addMsg(m); });
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    markSeen(activeId);
+                }
+            })
+            .catch(function() {});
+    }, 6000);
 });
 </script>
 @endpush

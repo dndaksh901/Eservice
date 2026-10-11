@@ -23,6 +23,7 @@ use App\Models\Review;
 use App\Models\Notification;
 use App\Models\BusinessHour;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 use Stevebauman\Location\Facades\Location;
 
 class VendorController extends Controller
@@ -863,41 +864,62 @@ class VendorController extends Controller
             'max_price' => 'nullable|numeric|min:1|max:10000000',
             'rating' => 'nullable|numeric|min:0|max:5',
         ]);
-// return $request->all();
+
         // Retrieve input values
-        $latitude = $request->input('latitude');
-        $longitude = $request->input('longitude');
-        $occupation_id = $request->input('occupation_id');
-        $radius = $request->input('radius');
-        $min_price = $request->input('min_price', 0);
-        $max_price = $request->input('max_price', 1000000); // Default max price
-        $rating = $request->input('rating', 0); // Default rating to 0 (any rating)
+        $latitude = (float) $request->input('latitude');
+        $longitude = (float) $request->input('longitude');
+        $occupation_id = (int) $request->input('occupation_id');
+        $radius = (float) $request->input('radius');
+        $min_price = (float) $request->input('min_price', 0);
+        $max_price = (float) $request->input('max_price', 1000000);
+        $rating = (float) $request->input('rating', 0);
         $city = $request->input('city');
         $state = $request->input('state');
         $country = $request->input('country');
 
-        // Fetch occupations for the filter form
-        $occupations = Occupation::orderBy('occupation_name', 'ASC')->get();
+        // Fetch occupations (cached for 24h to avoid hitting DB repeatedly)
+        $occupations = Cache::remember('all_occupations', 86400, function () {
+            return Occupation::where('status', 1)->orderBy('occupation_name', 'ASC')->get();
+        });
 
-        // Calculate distance using the Haversine formula and apply filters
-        $profiles = Profile::selectRaw(
-                "*, (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance",
+        // Calculate bounding box deltas to pre-filter rows and leverage DB indexes before trigonometric math
+        $latDelta = $radius / 111.0;
+        $cosLat = cos(deg2rad($latitude));
+        $lngDelta = $radius / (111.0 * max(0.01, abs($cosLat)));
+
+        $currentUserId = Auth::id();
+
+        // Calculate distance using the Haversine formula and eager-load relationships to prevent N+1 queries
+        $profiles = Profile::with([
+                'vendor',
+                'occupation',
+                'favorite' => function ($q) use ($currentUserId) {
+                    if ($currentUserId) {
+                        $q->where('user_id', $currentUserId);
+                    }
+                }
+            ])
+            ->where('profile_status', 1)
+            ->where('occupation_id', $occupation_id)
+            ->whereBetween('latitude', [$latitude - $latDelta, $latitude + $latDelta])
+            ->whereBetween('longitude', [$longitude - $lngDelta, $longitude + $lngDelta])
+            ->selectRaw(
+                "*, (6371 * acos(LEAST(1, GREATEST(-1, cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))))) AS distance",
                 [$latitude, $longitude, $latitude]
             )
-            ->where('occupation_id', $occupation_id)
-            ->having('distance', '<', $radius)
+            ->having('distance', '<=', $radius)
             ->whereBetween('price_per_hour', [$min_price, $max_price])
             ->when($rating > 0, function ($query) use ($rating) {
                 return $query->where('rating', '>=', $rating);
             })
             ->orderBy('distance')
-            ->paginate(10); // Change the number to whatever fits your requirement
+            ->paginate(10);
 
         // Prepare a message if no profiles are found
         $message = $profiles->isEmpty() ? 'No profiles found.' : null;
 
-        // Find the selected occupation details (if needed)
-        $search_occupation = Occupation::find($occupation_id);
+        // Find the selected occupation details
+        $search_occupation = $occupations->firstWhere('id', $occupation_id) ?? Occupation::find($occupation_id);
 
         return view('search', compact(
             'profiles', 'occupations', 'latitude', 'longitude', 'radius',
@@ -909,10 +931,17 @@ class VendorController extends Controller
 
     public function countrydata()
     {
+        $apiKey = config('services.rapidapi.key');
+        $apiHost = config('services.rapidapi.host', 'referential.p.rapidapi.com');
+
+        if (empty($apiKey)) {
+            return response()->json(['error' => 'RapidAPI key not configured'], 500);
+        }
+
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://referential.p.rapidapi.com/v1/country?fields=currency%2Ccurrency_num_code%2Ccurrency_code%2Ccontinent_code%2Ccurrency%2Ciso_a3%2Cdial_code&limit=250",
+            CURLOPT_URL => "https://" . $apiHost . "/v1/country?fields=currency%2Ccurrency_num_code%2Ccurrency_code%2Ccontinent_code%2Ccurrency%2Ciso_a3%2Cdial_code&limit=250",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -920,8 +949,8 @@ class VendorController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => [
-                "X-RapidAPI-Host: referential.p.rapidapi.com",
-                "X-RapidAPI-Key: af6b2b7d8amsh1faa58492f171bcp1aab95jsn9731526f6e9b"
+                "X-RapidAPI-Host: " . $apiHost,
+                "X-RapidAPI-Key: " . $apiKey
             ],
         ]);
 
@@ -931,10 +960,10 @@ class VendorController extends Controller
         curl_close($curl);
 
         if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            echo $response;
+            return response()->json(['error' => 'cURL Error: ' . $err], 500);
         }
+
+        return response($response, 200)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -943,24 +972,43 @@ class VendorController extends Controller
 
     public function vendorDetail($id)
     {
-        $userReview = '';
+        // Decode secure identifier or direct ID
+        $profileId = decodeVendorId($id);
+
+        if (!$profileId) {
+            abort(404, 'Vendor profile not found');
+        }
+
+        $profile = Profile::with(['vendor', 'occupation', 'city', 'state'])
+            ->where(['id' => $profileId, 'profile_status' => 1])
+            ->first();
+
+        if (!$profile) {
+            abort(404, 'Vendor profile not found');
+        }
+
+        // If user accessed via raw numeric ID (e.g. /vendor-profile/2), 301 redirect to the secure URL
+        $secureUrl = vendorProfileUrl($profile);
+        $expectedSlug = basename($secureUrl);
+
+        if ((string)$id !== $expectedSlug) {
+            return redirect($secureUrl, 301);
+        }
+
         $reviews = Review::with('user', 'profile')
-            ->where('profile_id', $id)
+            ->where('profile_id', $profileId)
             ->orderBy('id', 'desc')
             ->paginate(2);
 
         $userReview = Review::with('user', 'profile')
-            ->where('profile_id', $id)
+            ->where('profile_id', $profileId)
             ->where('user_id', Auth::id())
             ->select('review', 'rating')
             ->first();
-        $profile = Profile::where(['id' => $id, 'profile_status' => 1])->first();
 
-        if ($profile) {
-            return view('detail', compact('profile', 'reviews', 'userReview'));
-        } else {
-            return response()->back();
-        }
+        $businessHour = BusinessHour::where('vendor_id', $profile->vendor_id)->first();
+
+        return view('detail', compact('profile', 'reviews', 'userReview', 'businessHour'));
     }
 
 
@@ -1015,30 +1063,40 @@ class VendorController extends Controller
     }
     public function notificationStatusUpdate($id)
     {
-        $statusUpdate = Notification::where('id', $id)->update(['is_read' => 1]);
+        $vendorId = Auth::guard('vendor')->id();
+        if (!$vendorId) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        Notification::where('id', $id)
+            ->where('vendor_id', $vendorId)
+            ->update(['is_read' => 1]);
+
         return 1;
     }
 
     public function favorite(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        $userId = Auth::id();
+        $profileId = (int) $request->input('profile_id');
+        $vendorId = (int) $request->input('vendor_id');
 
         if ($request->status == 'fav') {
-
-            $fav = Favorite::create([
-                'profile_id' => $request->profile_id,
-                'vendor_id' => $request->vendor_id,
-                'user_id' => $request->user_id
+            Favorite::firstOrCreate([
+                'profile_id' => $profileId,
+                'vendor_id' => $vendorId,
+                'user_id' => $userId
             ]);
-
-            if (isset($fav)) {
-                return 1;
-            }
-            return 'failed';
+            return 1;
         } else {
-            $fav = Favorite::where([
-                'profile_id' => $request->profile_id,
-                'vendor_id' => $request->vendor_id,
-                'user_id' => $request->user_id
+            Favorite::where([
+                'profile_id' => $profileId,
+                'vendor_id' => $vendorId,
+                'user_id' => $userId
             ])->delete();
             return 1;
         }

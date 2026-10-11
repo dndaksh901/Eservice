@@ -3,8 +3,14 @@
 
 @section('content')
 <style>
+    .breadcrumb-bar {
+        display: none !important;
+    }
+    .dashboard-content {
+        padding: 120px 0 70px !important;
+    }
     .invalid-feedback {
-        position: absolute;
+        position: relative;
     }
 </style>
 

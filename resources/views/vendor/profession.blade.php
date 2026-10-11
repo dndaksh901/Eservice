@@ -2,6 +2,12 @@
 
 @section('content')
 <style>
+    .breadcrumb-bar {
+        display: none !important;
+    }
+    .dashboard-content {
+        padding: 120px 0 70px !important;
+    }
     .settings-upload-img,
     .settings-upload-img img {
         object-fit: cover;

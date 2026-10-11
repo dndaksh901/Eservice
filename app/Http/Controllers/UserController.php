@@ -26,11 +26,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        $states = State::where(['status' => 1, 'country_id' => 101])->get();
-        $cities = City::where(['status' => 1, 'state_id' => $states[0]->id])->orderBy('name', 'ASC')->get();
-        $occupations = Occupation::where('status', 1)->orderBy('occupation_name', 'ASC')->get();
+        $states = \Illuminate\Support\Facades\Cache::remember('home_states_101', 86400, function () {
+            return State::where(['status' => 1, 'country_id' => 101])->orderBy('name', 'ASC')->get();
+        });
 
-        $data = [];
+        $firstStateId = $states->isNotEmpty() ? $states[0]->id : null;
+        $cities = $firstStateId ? \Illuminate\Support\Facades\Cache::remember('home_cities_' . $firstStateId, 86400, function () use ($firstStateId) {
+            return City::where(['status' => 1, 'state_id' => $firstStateId])->orderBy('name', 'ASC')->get();
+        }) : collect();
+
+        $occupations = \Illuminate\Support\Facades\Cache::remember('home_occupations', 86400, function () {
+            return Occupation::where('status', 1)->orderBy('occupation_name', 'ASC')->get();
+        });
+
         $data = [
             'states' => $states,
             'cities' => $cities,
@@ -41,14 +49,33 @@ class UserController extends Controller
 
     public function getIpDetail()
     {
-        $ip = request()->ip(); // Dynamic IP address
-        $ip = '103.223.9.47'; // Static IP address of  jalandhar
-        //$ip = '101.0.49.116'; // Static IP address of mohali
-         $data = \Location::get($ip);
+        if (Session::has('ip_details')) {
+            return Session::get('ip_details');
+        }
 
-          // Store the IP details in the session
-         Session::put('ip_details', $data);
-         return $data;
+        $ip = request()->ip();
+        // If testing on localhost, use fallback public IP
+        if (in_array($ip, ['127.0.0.1', '::1', 'localhost']) || str_starts_with($ip, '192.168.')) {
+            $ip = '103.223.9.47';
+        }
+
+        try {
+            $data = \Location::get($ip);
+            if ($data) {
+                Session::put('ip_details', $data);
+                return response()->json($data);
+            }
+        } catch (\Exception $e) {
+            // Fail silently
+        }
+
+        return response()->json([
+            'cityName' => 'Mohali',
+            'regionName' => 'Punjab',
+            'countryName' => 'India',
+            'latitude' => 30.7046,
+            'longitude' => 76.7179,
+        ]);
     }
 
     // public function showUser()
@@ -102,15 +129,19 @@ class UserController extends Controller
     // Store Contact Form data
     public function ContactUsForm(Request $request)
     {
-        // Form validation
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'subject' => 'required',
-            'message' => 'required'
+        $validated = $request->validate([
+            'name'    => 'required|string|max:100',
+            'email'   => 'required|email|max:150',
+            'subject' => 'required|string|max:200',
+            'message' => 'required|string|max:3000'
         ]);
-        //  Store data in database
-        Contact::create($request->all());
+
+        Contact::create([
+            'name'    => strip_tags($validated['name']),
+            'email'   => $validated['email'],
+            'subject' => strip_tags($validated['subject']),
+            'message' => strip_tags($validated['message']),
+        ]);
         //  Send mail to admin
         // \Mail::send('mail', array(
         //     'name' => $request->get('name'),

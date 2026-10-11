@@ -28,9 +28,33 @@ class ChatController extends Controller
         });
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('chat');
+        $targetVendorId = $request->query('vendor_id');
+        $targetUserId = $request->query('user_id');
+        $initialContact = null;
+
+        if ($targetVendorId && !Auth::guard('vendor')->check()) {
+            $vendor = Vendor::find($targetVendorId);
+            if ($vendor) {
+                $initialContact = [
+                    'id' => (int) $vendor->id,
+                    'name' => $vendor->name ?? $vendor->username,
+                    'type' => 'vendor'
+                ];
+            }
+        } elseif ($targetUserId && Auth::guard('vendor')->check()) {
+            $user = User::find($targetUserId);
+            if ($user) {
+                $initialContact = [
+                    'id' => (int) $user->id,
+                    'name' => $user->name,
+                    'type' => 'user'
+                ];
+            }
+        }
+
+        return view('chat', compact('initialContact'));
     }
 
     public function getContacts()
@@ -117,12 +141,14 @@ class ChatController extends Controller
     public function sendMessage(Request $request)
     {
         $request->validate([
-            'receiver_id' => 'required|integer',
-            'receiver_type' => 'required|string',
-            'message' => 'nullable|string',
-            'attachment' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx,zip|max:10240',
-            'location' => 'nullable|string'
+            'receiver_id'   => 'required|integer',
+            'receiver_type' => 'required|string|in:vendor,user',
+            'message'       => 'nullable|string|max:5000',
+            'attachment'    => 'nullable|file|mimes:jpeg,png,jpg,webp,pdf,doc,docx|max:10240',
+            'location'      => 'nullable|string|max:1000'
         ]);
+
+        $sanitizedMessage = $request->filled('message') ? strip_tags($request->message) : null;
 
         $senderId = Auth::guard('vendor')->check() ? Auth::guard('vendor')->id() : Auth::id();
         $senderClass = Auth::guard('vendor')->check() ? Vendor::class : User::class;
@@ -159,7 +185,7 @@ class ChatController extends Controller
             'sender_type' => $senderClass,
             'receiver_id' => $request->receiver_id,
             'receiver_type' => $receiverClass,
-            'message' => $request->message,
+            'message' => $sanitizedMessage,
             'attachment' => $attachmentPath,
             'attachment_type' => $attachmentType,
             'is_seen' => false,

@@ -22,28 +22,37 @@ class ReviewController extends Controller
     }
     public function CreateReview(Request $request)
     {
-        $request->validate([]);
         $validator = Validator::make($request->all(), [
-            'review' => 'required|min:5|max:255',
-            'rating' => 'min:1|max:5',
+            'profile_id' => 'required|integer|exists:profiles,id',
+            'vendor_id'  => 'required|integer|exists:vendors,id',
+            'review'     => 'required|string|min:5|max:500',
+            'rating'     => 'required|numeric|min:1|max:5',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors()->all()
-            ]);
+            ], 422);
         }
 
-        Review::updateOrCreate([
-            'user_id' => Auth::id(),
-            'profile_id' => $request->profile_id,
-            'vendor_id' => $request->vendor_id
-        ],
-        [
-            'review' => $request->review,
-            'rating' => $request->rating,
-        ]);
+        $userId = Auth::id();
 
-        return response()->json(['success' => 'Post created successfully.']);
+        Review::updateOrCreate(
+            [
+                'user_id'    => $userId,
+                'profile_id' => $request->profile_id,
+                'vendor_id'  => $request->vendor_id
+            ],
+            [
+                'review' => strip_tags($request->review),
+                'rating' => (float) $request->rating,
+            ]
+        );
+
+        // Recalculate and sync aggregate rating in Profile
+        $avgRating = Review::where('profile_id', $request->profile_id)->avg('rating');
+        Profile::where('id', $request->profile_id)->update(['rating' => round($avgRating, 1)]);
+
+        return response()->json(['success' => 'Review submitted successfully.']);
     }
 }
