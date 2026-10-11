@@ -101,11 +101,12 @@
                                 <span>{{ Auth::guard('vendor')->user()->name }}</span><i class="fas fa-chevron-down"></i>
                             </a>
                             <ul class="submenu">
-                                <li><a  href="{{ url('vendor/profile') }}">Profile</a></li>
-
-                                <li><a  href="{{ url('vendor/logout') }}"
+                                <li><a href="{{ url('vendor/profile') }}"><i class="feather-user me-2"></i>Profile</a></li>
+                                <li><a href="{{ route('vendor.bookings') }}"><i class="feather-calendar me-2"></i>Manage Bookings</a></li>
+                                <li><a href="{{ url('chat') }}"><i class="feather-message-square me-2"></i>Messages</a></li>
+                                <li><a href="{{ url('vendor/logout') }}"
                                     onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">Logout</a></li>
+                                    document.getElementById('logout-form').submit();"><i class="feather-log-out me-2"></i>Logout</a></li>
                                 <form id="logout-form" action="{{ url('vendor/logout') }}" method="get"
                                     class="d-none">
                                     @csrf
@@ -114,15 +115,19 @@
                         </li>
                     @elseif(Auth::check())
                     <li class="has-submenu">
-                        <a href="#" class="profile-userlink" >
-
-                            {{ Auth::guard('web')->user()->name }}<i class="fas fa-chevron-down"></i>
+                        <a href="javascript:void(0);" class="profile-userlink d-flex align-items-center">
+                            <span class="user-avatar-circle me-2 d-inline-flex align-items-center justify-content-center rounded-circle text-danger fw-bold" style="width: 32px; height: 32px; font-size: 14px; background: #fee2e2; border: 1px solid #fecaca;">
+                                {{ strtoupper(substr(Auth::guard('web')->user()->name ?? 'U', 0, 1)) }}
+                            </span>
+                            <span>{{ Auth::guard('web')->user()->name }}</span>
+                            <i class="fas fa-chevron-down ms-1"></i>
                         </a>
                         <ul class="submenu">
-
-                            <li><a  href="{{ url('logout') }}"
+                            <li><a href="{{ route('user.bookings') }}"><i class="feather-calendar me-2"></i>My Bookings</a></li>
+                            <li><a href="{{ url('chat') }}"><i class="feather-message-square me-2"></i>Messages</a></li>
+                            <li><a href="{{ url('logout') }}"
                                 onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">Logout</a></li>
+                                document.getElementById('logout-form').submit();"><i class="feather-log-out me-2"></i>Logout</a></li>
                             <form id="logout-form" action="{{ url('logout') }}" method="get"
                                 class="d-none">
                                 @csrf

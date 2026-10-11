@@ -211,6 +211,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     // Advance Booking Module
     Route::post('/book-appointment', [BookingController::class, 'store'])->name('booking.store')->middleware('throttle:20,1');
     Route::get('/vendor-available-slots/{vendor_id}/{date}', [BookingController::class, 'getAvailableSlots'])->name('booking.slots');
+    Route::get('/my-bookings', [BookingController::class, 'userBookings'])->name('user.bookings');
+    Route::post('/my-bookings/{id}/cancel', [BookingController::class, 'userCancelBooking'])->name('user.bookings.cancel');
 
     //razorpay
     Route::get('razorpay-payment', [RazorpayController::class, 'index']);

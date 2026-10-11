@@ -2196,6 +2196,22 @@
                             $slotSelect.append('<option value="">Vendor is unavailable / closed on this date</option>');
                             $note.html('<span class="text-danger fw-bold"><i class="feather-alert-triangle me-1"></i> ' + (resp.reason || 'Closed on this day') + '</span>');
                             $submitBtn.prop('disabled', true);
+                        } else if (resp.all_full || (resp.slots && resp.slots.length === 0)) {
+                            $slotSelect.append('<option value="">All time slots are fully booked for this date</option>');
+                            $note.html('<span class="text-danger fw-bold"><i class="feather-alert-octagon me-1"></i> ' + (resp.reason || 'All slots for this date are fully booked') + '</span>');
+                            $submitBtn.prop('disabled', true);
+                        } else if (resp.all_slots && resp.all_slots.length > 0) {
+                            $slotSelect.append('<option value="">-- Choose a convenient time slot --</option>');
+                            $.each(resp.all_slots, function(idx, s) {
+                                if (s.is_full) {
+                                    $slotSelect.append('<option value="' + s.slot + '" disabled style="color:#94a3b8; background:#f8fafc;">' + s.slot + ' — [FULLY BOOKED ' + s.booked + '/' + s.capacity + ']</option>');
+                                } else {
+                                    var capacityBadge = s.capacity > 1 ? ' (' + s.remaining + ' seats left)' : '';
+                                    $slotSelect.append('<option value="' + s.slot + '">' + s.slot + capacityBadge + '</option>');
+                                }
+                            });
+                            $note.html('<span class="text-success fw-bold"><i class="feather-check-circle me-1"></i> ' + resp.slots.length + ' available time slots (' + (resp.slot_duration || 30) + ' min each)</span>');
+                            $submitBtn.prop('disabled', false);
                         } else if (resp.slots && resp.slots.length > 0) {
                             $slotSelect.append('<option value="">-- Choose a convenient time slot --</option>');
                             $.each(resp.slots, function(idx, slot) {
@@ -2244,7 +2260,7 @@
 
                 var slotVal = $("#modal_booking_slot").val();
                 if (!slotVal) {
-                    $errorBox.show().find("ul").html('<li>Please choose a time slot.</li>');
+                    $errorBox.show().find("ul").html('<li>Please choose an available time slot.</li>');
                     return;
                 }
 
@@ -2264,9 +2280,22 @@
                                 title: "Appointment Requested!",
                                 text: "Booking Reference: " + resp.reference + "\n\nThe vendor has been notified and will confirm your booking shortly.",
                                 icon: "success",
-                                button: "Understood"
-                            }).then(function() {
-                                location.reload();
+                                buttons: {
+                                    viewBookings: {
+                                        text: "View My Bookings",
+                                        value: "view",
+                                    },
+                                    stay: {
+                                        text: "Done",
+                                        value: "stay",
+                                    }
+                                }
+                            }).then(function(val) {
+                                if (val === "view") {
+                                    window.location.href = "{{ route('user.bookings') }}";
+                                } else {
+                                    location.reload();
+                                }
                             });
                         } else if (resp.error) {
                             $errorBox.show();

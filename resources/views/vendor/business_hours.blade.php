@@ -56,6 +56,74 @@
 
                         <form action="{{ url('vendor/business-hours') }}" method="post" class="forms-sample">
                             @csrf
+
+                            <!-- Appointment Slot Duration Setting -->
+                            <div class="card dash-cards mb-4" style="border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                <div class="card-header bg-white" style="border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                        <div>
+                                            <h4 class="mb-1 fw-bold text-dark d-flex align-items-center gap-2">
+                                                <i class="feather-clock text-primary"></i> Appointment Slot Duration
+                                            </h4>
+                                            <p class="text-muted mb-0 small">
+                                                Configure how your open business hours are divided into bookable appointment slots (e.g., 30 mins).
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-primary-subtle text-primary border border-primary px-3 py-2 rounded-pill fs-7 fw-semibold" id="duration-summary-badge">
+                                                Current: {{ old('slot_duration', $slotDuration ?? 30) }} Minutes
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-12 col-md-5">
+                                            <label class="form-label fw-bold small text-dark mb-1">
+                                                Slot Duration (1 min to 1440 mins / 24 hours)*
+                                            </label>
+                                            <div class="input-group">
+                                                <input type="number" 
+                                                    id="slot_duration_input" 
+                                                    name="slot_duration" 
+                                                    class="form-control form-control-lg @error('slot_duration') is-invalid @enderror" 
+                                                    min="1" 
+                                                    max="1440" 
+                                                    value="{{ old('slot_duration', $slotDuration ?? 30) }}" 
+                                                    required 
+                                                    placeholder="30"
+                                                    style="border-radius: 10px 0 0 10px; font-weight: 600;">
+                                                <span class="input-group-text bg-light text-muted fw-semibold" style="border-radius: 0 10px 10px 0;">
+                                                    Minutes
+                                                </span>
+                                                @error('slot_duration')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <small class="text-muted d-block mt-1" id="duration-helper-text">
+                                                Default is 30 minutes. Allowed range: 1 min to 1440 min (24 hrs).
+                                            </small>
+                                        </div>
+                                        <div class="col-12 col-md-7">
+                                            <label class="form-label fw-bold small text-muted mb-1">Quick Presets:</label>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill duration-preset-btn" data-minutes="15">15 min</button>
+                                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill duration-preset-btn fw-bold" data-minutes="30">30 min (Default)</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill duration-preset-btn" data-minutes="45">45 min</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill duration-preset-btn" data-minutes="60">60 min (1 hr)</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill duration-preset-btn" data-minutes="90">90 min (1.5 hr)</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill duration-preset-btn" data-minutes="120">120 min (2 hr)</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-light border mt-3 mb-0 p-3 rounded-3" style="background: #f8fafc; font-size: 13.5px;">
+                                        <i class="feather-info text-info me-1"></i>
+                                        <strong>How it works:</strong> If you set working hours from <strong>09:00 AM to 01:00 PM</strong> and <strong>02:00 PM to 06:00 PM</strong> with a <strong>30-minute</strong> duration, clients will see individual booking slots like <em>09:00 AM - 09:30 AM</em>, <em>09:30 AM - 10:00 AM</em>, etc. Each slot supports your configured capacity.
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="card dash-cards">
                                 <div class="card-header">
                                     <h4>Weekly Business Hours</h4>
@@ -468,7 +536,36 @@
                     input.value = '23:59';
                 }
             });
-        });
+        // Duration Presets & Input Synchronization
+        var durationInput = document.getElementById('slot_duration_input');
+        var durationBadge = document.getElementById('duration-summary-badge');
+        if (durationInput && durationBadge) {
+            function updateDurationUI(val) {
+                val = parseInt(val) || 30;
+                durationBadge.textContent = 'Current: ' + val + ' Minutes';
+                document.querySelectorAll('.duration-preset-btn').forEach(function(btn) {
+                    if (parseInt(btn.getAttribute('data-minutes')) === val) {
+                        btn.classList.remove('btn-outline-secondary');
+                        btn.classList.add('btn-outline-primary', 'fw-bold');
+                    } else {
+                        btn.classList.remove('btn-outline-primary', 'fw-bold');
+                        btn.classList.add('btn-outline-secondary');
+                    }
+                });
+            }
+
+            durationInput.addEventListener('input', function() {
+                updateDurationUI(this.value);
+            });
+
+            document.querySelectorAll('.duration-preset-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var mins = this.getAttribute('data-minutes');
+                    durationInput.value = mins;
+                    updateDurationUI(mins);
+                });
+            });
+        }
     });
 </script>
 @endpush

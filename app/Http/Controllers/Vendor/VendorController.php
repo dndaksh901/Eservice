@@ -390,11 +390,12 @@ class VendorController extends Controller
 
         if ($request->isMethod('post')) {
             $validator = Validator::make($request->all(), [
+                'slot_duration' => 'nullable|integer|min:1|max:1440',
                 'weekly' => 'required|array',
                 'weekly.*.slots' => 'nullable|array',
                 'weekly.*.slots.*.open_time' => 'nullable|date_format:H:i',
                 'weekly.*.slots.*.close_time' => 'nullable|date_format:H:i',
-                'weekly.*.slots.*.capacity' => 'nullable|integer|min:1',
+                'weekly.*.slots.*.capacity' => 'nullable|integer|min:1|max:100',
                 'weekly.*.is_closed' => 'sometimes|boolean',
                 'special' => 'sometimes|array',
                 'special.*.from_date' => 'nullable|date_format:Y-m-d|after_or_equal:today',
@@ -402,8 +403,12 @@ class VendorController extends Controller
                 'special.*.slots' => 'nullable|array',
                 'special.*.slots.*.open_time' => 'nullable|date_format:H:i',
                 'special.*.slots.*.close_time' => 'nullable|date_format:H:i',
-                'special.*.slots.*.capacity' => 'nullable|integer|min:1',
+                'special.*.slots.*.capacity' => 'nullable|integer|min:1|max:100',
                 'special.*.is_closed' => 'sometimes|boolean',
+            ], [
+                'slot_duration.min' => 'Slot duration must be at least 1 minute.',
+                'slot_duration.max' => 'Slot duration cannot exceed 1440 minutes (24 hours).',
+                'slot_duration.integer' => 'Slot duration must be a valid whole number in minutes.',
             ]);
 
             $validator->after(function ($validator) use ($request, $days) {
@@ -624,15 +629,18 @@ class VendorController extends Controller
                 ];
             }
 
+            $slotDuration = max(1, min(1440, (int) $request->input('slot_duration', 30)));
+
             BusinessHour::updateOrCreate(
                 ['vendor_id' => $vendor->id],
                 [
                     'weekly_hours' => $weekly,
                     'special_dates' => $specialDates,
+                    'slot_duration' => $slotDuration,
                 ]
             );
 
-            return redirect()->back()->with('success', 'Business hours updated successfully.');
+            return redirect()->back()->with('success', 'Business hours and appointment slot settings updated successfully.');
         }
 
         $record = BusinessHour::where('vendor_id', $vendor->id)->first();
@@ -705,7 +713,9 @@ class VendorController extends Controller
             ];
         }
 
-        return view('vendor.business_hours', compact('weekly', 'specialDates'));
+        $slotDuration = $record && !empty($record->slot_duration) ? (int) $record->slot_duration : 30;
+
+        return view('vendor.business_hours', compact('weekly', 'specialDates', 'slotDuration'));
     }
 
     /**

@@ -501,8 +501,16 @@
                             });
                         }
                     },
-                    error: function() {
-                        swal("Error", "Could not update status. Please try again.", "error");
+                    error: function(xhr) {
+                        var errMsg = "Could not update status. Please try again.";
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            if (Array.isArray(xhr.responseJSON.error)) {
+                                errMsg = xhr.responseJSON.error.join("\n");
+                            } else {
+                                errMsg = xhr.responseJSON.error;
+                            }
+                        }
+                        swal("Cannot Update Status", errMsg, "error");
                     }
                 });
             }

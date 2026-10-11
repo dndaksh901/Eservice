@@ -13,11 +13,13 @@ class BusinessHour extends Model
         'vendor_id',
         'weekly_hours',
         'special_dates',
+        'slot_duration',
     ];
 
     protected $casts = [
         'weekly_hours' => 'array',
         'special_dates' => 'array',
+        'slot_duration' => 'integer',
     ];
 
     public function vendor()
